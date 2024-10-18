@@ -21,3 +21,6 @@ frontend.DS_Store
 npm-debu g.log*
 yarn-debug.log*
 yarn-error.log*
+
+.DS_Store
+frontend/.DS_Store
