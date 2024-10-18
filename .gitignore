@@ -18,6 +18,6 @@ frontend.DS_Store
 .env.test.local
 .env.production.local
 
-npm-debug.log*
+npm-debu g.log*
 yarn-debug.log*
 yarn-error.log*
