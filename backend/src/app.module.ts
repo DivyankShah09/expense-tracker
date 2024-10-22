@@ -3,6 +3,8 @@ import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './user/user.module';
 import { IncomeModule } from './income/income.module';
+import { ExpenseModule } from './expense/expense.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -10,6 +12,8 @@ import { IncomeModule } from './income/income.module';
     DatabaseModule,
     UsersModule,
     IncomeModule,
+    ExpenseModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],

@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Expense } from 'src/expense/entities/expense.entity';
+import { Income } from 'src/income/entities/income.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -20,7 +22,15 @@ export class User {
   @Column()
   gender: string;
 
-  constructor(user: Partial<User>){
-    Object.assign(this, user);  
+  // One user can have many incomes.
+  @OneToMany(() => Income, (income) => income.user, { cascade: true })
+  incomes: Income[];
+
+  // One user can have many expenses.
+  @OneToMany(() => Expense, (expense) => expense.user, { cascade: true })
+  expenses: Expense[];
+
+  constructor(user: Partial<User>) {
+    Object.assign(this, user);
   }
 }
