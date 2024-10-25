@@ -1,29 +1,29 @@
 import React from "react";
 
-export interface TextInputProps {
+export interface NumberInputProps {
   label?: string;
   labelPosition: "top" | "left";
   placeholderText?: string;
-  value?: string;
+  value?: number;
   type?: React.HTMLInputTypeAttribute | undefined;
   divClassName?: string;
   inputClassName?: string;
-  onChange?: (value: string) => void;
+  onChange?: (value: number) => void;
   disabled?: boolean;
 }
 
-export const TextInput = ({
+export const NumberInput = ({
   label,
   labelPosition,
   value,
   placeholderText,
   divClassName = "",
   inputClassName = "",
-  type = "text",
+  type = "number",
   onChange,
   disabled = false,
   ...props
-}: TextInputProps) => {
+}: NumberInputProps) => {
   return (
     <div
       className={`py-2 flex ${
@@ -44,7 +44,12 @@ export const TextInput = ({
         placeholder={placeholderText}
         value={value}
         onChange={(e) => {
-          onChange && onChange(e.target.value);
+          const numberValue = parseFloat(e.target.value);
+          if (!isNaN(numberValue)) {
+            onChange && onChange(numberValue);
+          } else {
+            onChange && onChange(0); // or handle empty input as needed
+          }
         }}
         disabled={disabled}
       ></input>
