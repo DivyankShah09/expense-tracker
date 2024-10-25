@@ -26,6 +26,16 @@ const Signup = () => {
       return false;
     }
 
+    if (!age) {
+      toast.error("Age is requied");
+      return false;
+    }
+
+    if (!gender) {
+      toast.error("Gender is required");
+      return false;
+    }
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return false;
