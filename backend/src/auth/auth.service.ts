@@ -5,6 +5,7 @@ import { SignupCredentialsDto } from './dto/signup-credentials.dto';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from '../common/utils/api-response.util';
+import { LoginCredentialsDto } from './dto/login-credentials.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
+  
   async signup(signupCredentialsDto: SignupCredentialsDto) {
     const existingUser = await this.userService.findByEmail(
       signupCredentialsDto.email,
@@ -39,6 +41,39 @@ export class AuthService {
     return ApiResponse({
       statusCode: 201,
       message: 'User successfully created.',
+      data: { access_token: token },
+    });
+  }
+
+  async login(loginCredentialsDto: LoginCredentialsDto) {
+    const user = await this.userService.findByEmail(loginCredentialsDto.email);
+
+    if (!user) {
+      return ApiResponse({
+        statusCode: 401,
+        message: 'Invalid login credentials.',
+        data: null,
+      });
+    }
+
+    const isPasswordValid = await bcrypt.compare(
+      loginCredentialsDto.password,
+      user.password,
+    );
+    if (!isPasswordValid) {
+      return ApiResponse({
+        statusCode: 401,
+        message: 'Invalid login credentials.',
+        data: null,
+      });
+    }
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    // Return custom response for successful signup
+    return ApiResponse({
+      statusCode: 201,
+      message: 'Login Successful',
       data: { access_token: token },
     });
   }
