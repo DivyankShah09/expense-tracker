@@ -13,7 +13,7 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
   ) {}
-  
+
   async signup(signupCredentialsDto: SignupCredentialsDto) {
     const existingUser = await this.userService.findByEmail(
       signupCredentialsDto.email,
@@ -21,7 +21,7 @@ export class AuthService {
     if (existingUser) {
       return ApiResponse({
         statusCode: 409,
-        message: 'User already exists with the provided email.',
+        statusMessage: 'User already exists with the provided email.',
         data: null,
       });
     }
@@ -40,8 +40,8 @@ export class AuthService {
     // Return custom response for successful signup
     return ApiResponse({
       statusCode: 201,
-      message: 'User successfully created.',
-      data: { access_token: token },
+      statusMessage: 'User successfully created.',
+      data: { name: user.name, email: user.email, access_token: token },
     });
   }
 
@@ -51,7 +51,7 @@ export class AuthService {
     if (!user) {
       return ApiResponse({
         statusCode: 401,
-        message: 'Invalid login credentials.',
+        statusMessage: 'Invalid login credentials.',
         data: null,
       });
     }
@@ -63,7 +63,7 @@ export class AuthService {
     if (!isPasswordValid) {
       return ApiResponse({
         statusCode: 401,
-        message: 'Invalid login credentials.',
+        statusMessage: 'Invalid login credentials.',
         data: null,
       });
     }
@@ -73,7 +73,7 @@ export class AuthService {
     // Return custom response for successful signup
     return ApiResponse({
       statusCode: 201,
-      message: 'Login Successful',
+      statusMessage: 'Login Successful',
       data: { access_token: token },
     });
   }

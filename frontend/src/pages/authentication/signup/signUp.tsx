@@ -1,19 +1,24 @@
 import { useState } from "react";
-import { TextInput } from "../../components/input/TextInput";
-import { HeaderText } from "../../components/text/HeaderText";
+import { TextInput } from "../../../components/input/TextInput";
+import { HeaderText } from "../../../components/text/HeaderText";
 import { Link, useNavigate } from "react-router-dom";
-import { PrimaryButton } from "../../components/button/PrimaryButton";
-import { NumberInput } from "../../components/input/NumberInput";
-import { toast } from "react-toastify";
+import { PrimaryButton } from "../../../components/button/PrimaryButton";
+import { NumberInput } from "../../../components/input/NumberInput";
+import { toast, ToastContainer } from "react-toastify";
+import { useSignUp } from "./hook/signUpHook";
 
-const Signup = () => {
+const SignUp = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [confirmPassword, setConfirmPassword] = useState<string>();
-  const [age, setAge] = useState<number>();
-  const [gender, setGender] = useState<string>();
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [age, setAge] = useState<number>(10);
+  const [gender, setGender] = useState<string>("");
+  const { mutateAsync } = useSignUp();
+
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,15}$/;
 
   const validateForm = () => {
     if (!name) {
@@ -23,6 +28,21 @@ const Signup = () => {
 
     if (!email) {
       toast.error("Email is required");
+      return false;
+    }
+
+    if (!emailRegex.test(email)) {
+      toast.error("Email is not in valid format");
+      return false;
+    }
+
+    if (!age) {
+      toast.error("Age is requied");
+      return false;
+    }
+
+    if (!gender) {
+      toast.error("Gender is required");
       return false;
     }
 
@@ -36,6 +56,21 @@ const Signup = () => {
       return false;
     }
 
+    if (!passwordRegex.test(password)) {
+      toast.error(
+        <div>
+          <p>Password must fullfil following conditions: </p>
+          <ul>
+            <li>Minimum 1 uppercase alphabet.</li>
+            <li>Minimum 1 lowercase alphabet.</li>
+            <li>Minimum 1 number.</li>
+            <li>Minimum 1 special character (!@#$%^&*).</li>
+          </ul>
+        </div>
+      );
+      return false;
+    }
+
     if (!confirmPassword) {
       toast.error("Confirm Password is required");
       return false;
@@ -43,14 +78,24 @@ const Signup = () => {
     return true;
   };
 
-  const callSignup = () => {
+  const callSignup = async () => {
     if (validateForm()) {
-      console.log("Name: ", name);
-      console.log("Email: ", email);
-      console.log("Password: ", password);
-      console.log("Confirm Password: ", confirmPassword);
-      console.log("Gender: ", gender);
-      console.log("Age: ", age);
+      const response = await mutateAsync({
+        name: name,
+        email: email,
+        password: password,
+        gender: gender,
+        age: age,
+      });
+      console.log(response.statusMessage);
+      if (response.statusCode === 201) {
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("email", response.data.email);
+        localStorage.setItem("name", response.data.name);
+      } else if (response.statusCode === 409) {
+        toast.error(response.statusMessage);
+        return false;
+      }
     }
   };
 
@@ -131,4 +176,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignUp;
