@@ -2,12 +2,12 @@ import { ApiResponseInterface } from '../interfaces/api-response.interface';
 
 export function ApiResponse({
   statusCode,
-  message,
+  statusMessage,
   data,
 }: ApiResponseInterface) {
   return {
     statusCode,
-    message,
+    statusMessage,
     data,
   };
 }
