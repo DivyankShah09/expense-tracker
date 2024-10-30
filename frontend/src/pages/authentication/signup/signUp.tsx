@@ -4,7 +4,7 @@ import { HeaderText } from "../../../components/text/HeaderText";
 import { Link, useNavigate } from "react-router-dom";
 import { PrimaryButton } from "../../../components/button/PrimaryButton";
 import { NumberInput } from "../../../components/input/NumberInput";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useSignUp } from "./hook/signUpHook";
 
 const SignUp = () => {
