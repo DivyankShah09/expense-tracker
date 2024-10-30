@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { TextInput } from "../../components/input/TextInput";
-import { HeaderText } from "../../components/text/HeaderText";
+import { TextInput } from "../../../components/input/TextInput";
+import { HeaderText } from "../../../components/text/HeaderText";
 import { useNavigate } from "react-router-dom";
-import { PrimaryButton } from "../../components/button/PrimaryButton";
+import { PrimaryButton } from "../../../components/button/PrimaryButton";
 import { toast } from "react-toastify";
+import { useLogin } from "./hook/loginHook";
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const { mutateAsync } = useLogin();
 
   const navigate = useNavigate();
 
@@ -25,9 +27,23 @@ const Login = () => {
   };
 
   const callLogin = async () => {
+    console.log("in call login");
+
     if (validateForm()) {
-      console.log("Email: ", email);
-      console.log("Password: ", password);
+      const response = await mutateAsync({
+        email: email,
+        password: password,
+      });
+
+      if (response.statusCode === 201) {
+        localStorage.setItem("token", response.data.access_token);
+        localStorage.setItem("email", response.data.email);
+        localStorage.setItem("name", response.data.name);
+        // navigate here
+      } else {
+        toast.error(response.statusMessage);
+        return false;
+      }
     }
   };
 
