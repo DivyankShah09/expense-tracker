@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Login from "./pages/authentication/login";
+import Login from "./pages/authentication/login/login";
 import { Header } from "./views/Header";
 import Footer from "./views/Footer";
 import { ToastContainer } from "react-toastify";

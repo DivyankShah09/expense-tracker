@@ -56,6 +56,11 @@ const SignUp = () => {
       return false;
     }
 
+    if (!confirmPassword) {
+      toast.error("Confirm Password is required");
+      return false;
+    }
+
     if (!passwordRegex.test(password)) {
       toast.error(
         <div>
@@ -71,10 +76,6 @@ const SignUp = () => {
       return false;
     }
 
-    if (!confirmPassword) {
-      toast.error("Confirm Password is required");
-      return false;
-    }
     return true;
   };
 
@@ -87,12 +88,12 @@ const SignUp = () => {
         gender: gender,
         age: age,
       });
-      console.log(response.statusMessage);
       if (response.statusCode === 201) {
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("email", response.data.email);
         localStorage.setItem("name", response.data.name);
-      } else if (response.statusCode === 409) {
+        // navigate here
+      } else {
         toast.error(response.statusMessage);
         return false;
       }
@@ -168,7 +169,7 @@ const SignUp = () => {
         <p className="text-center cursor-pointer">
           Already a User?{" "}
           <Link to={"/login"}>
-            <span className="cursor-pointer underline">Signup</span>
+            <span className="cursor-pointer underline">Login</span>
           </Link>
         </p>
       </div>
