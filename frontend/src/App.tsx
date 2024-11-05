@@ -6,6 +6,7 @@ import Footer from "./views/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignUp from "./pages/authentication/signup/signUp";
+import AddIncome from "./pages/income/addIncome";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/add-income" element={<AddIncome />} />
             </Routes>
           </div>
         </div>

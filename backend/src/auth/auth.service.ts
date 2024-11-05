@@ -74,7 +74,7 @@ export class AuthService {
     return ApiResponse({
       statusCode: 201,
       statusMessage: 'Login Successful',
-      data: { access_token: token },
+      data: { name: user.name, email: user.email, access_token: token },
     });
   }
 }
