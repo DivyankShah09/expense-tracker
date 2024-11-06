@@ -15,7 +15,7 @@ export class Income {
   @Column()
   amount: number;
 
-  @Column()
+  @Column({ type: Date })
   date: Date;
 
   // Many incomes belong to one user
