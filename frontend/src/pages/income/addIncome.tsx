@@ -6,7 +6,6 @@ import { NumberInput } from "../../components/input/NumberInput";
 import { useAddIncome } from "./hook/addIncomeHook";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePickerInput from "../../components/input/DatePickerInput";
 
@@ -56,7 +55,6 @@ const AddIncome = () => {
         } else {
           toast.error("Unkonw error occured !!");
         }
-        //   console.log("response: ", response);
         // navigate based on the response status code
       }
     }
@@ -98,14 +96,6 @@ const AddIncome = () => {
             onChange={(value) => setDate(value)}
           />
 
-          {/* // <label>Date</label>
-          // <DatePicker */}
-          {/* //   selected={date}
-          //   onChange={(date: Date | null) => setDate(date)}
-          //   dateFormat="yyyy-MM-dd"
-          //   placeholderText="Select a date"
-          //   className="input-field" // Add a custom class for styling if needed
-          // /> */}
           <PrimaryButton
             buttonText="Add Income"
             onClick={async () => {
