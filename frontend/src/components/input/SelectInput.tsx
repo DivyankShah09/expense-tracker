@@ -33,7 +33,7 @@ const SelectInput = ({
           {label}
         </h1>
         <select
-          className="h-12 w-full rounded-md border-2 border-blue-300 px-2 disabled:border-blue-200"
+          className="h-12 w-full rounded-md border-2 border-gray-400 px-2 disabled:border-gray-200"
           value={value}
           onChange={(e) => {
             onChange && onChange(e.target.value);

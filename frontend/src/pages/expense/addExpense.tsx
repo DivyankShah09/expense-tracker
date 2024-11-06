@@ -5,6 +5,9 @@ import { PrimaryButton } from "../../components/button/PrimaryButton";
 import { NumberInput } from "../../components/input/NumberInput";
 import DatePickerInput from "../../components/input/DatePickerInput";
 import SelectInput from "../../components/input/SelectInput";
+import { toast } from "react-toastify";
+import { AxiosError } from "axios";
+import { useAddExpense } from "./hook/addExpenseHook";
 
 const AddExpense = () => {
   const [title, setTitle] = useState<string>("");
@@ -12,13 +15,30 @@ const AddExpense = () => {
   const [amount, setAmount] = useState<number>(0);
   const [date, setDate] = useState<string>("");
   const [category, setCategory] = useState<string>("");
+  const { mutateAsync } = useAddExpense();
 
-  const callAddExpense = () => {
+  const callAddExpense = async () => {
     console.log("title: ", title);
     console.log("description: ", description);
     console.log("amount: ", amount);
     console.log("date: ", date);
     console.log("category: ", category);
+    try {
+      const response = await mutateAsync({
+        title: title,
+        description: description,
+        amount: amount,
+        date: date,
+        category: category,
+      });
+      console.log(response);
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.statusText);
+      } else {
+        toast.error("Unkonw error occured !!");
+      }
+    }
   };
 
   return (
@@ -67,7 +87,7 @@ const AddExpense = () => {
           />
 
           <PrimaryButton
-            buttonText="Add Income"
+            buttonText="Add Expense"
             onClick={async () => {
               await callAddExpense();
             }}
