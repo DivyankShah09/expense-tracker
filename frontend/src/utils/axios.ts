@@ -55,6 +55,31 @@ export function getRequest<T>(
 }
 
 // Post Request
+// export function postRequest<T>(
+//   endPoint: string,
+//   parameters: unknown = {},
+//   header: HeadersDefaults & Record<string, AxiosHeaderValue> = axios.defaults
+//     .headers,
+//   requestConfig: AxiosRequestConfig | undefined = undefined
+// ) {
+//   axios.defaults.headers = {
+//     ...header,
+//   };
+
+//   return new Promise<AxiosResponse<T>>((resolve, reject) => {
+//     axios
+//       .post(endPoint, parameters, requestConfig)
+//       .then((response: AxiosResponse<T>) => {
+//         resolve(response);
+//       })
+//       .catch((error: AxiosError) => {
+//         console.log("Error: ", error);
+
+//         reject(error);
+//       });
+//   });
+// }
+
 export function postRequest<T>(
   endPoint: string,
   parameters: unknown = {},

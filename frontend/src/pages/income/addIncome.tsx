@@ -5,6 +5,7 @@ import { PrimaryButton } from "../../components/button/PrimaryButton";
 import { NumberInput } from "../../components/input/NumberInput";
 import { useAddIncome } from "./hook/addIncomeHook";
 import { toast } from "react-toastify";
+import { AxiosError } from "axios";
 
 const AddIncome = () => {
   const [title, setTitle] = useState<string>("");
@@ -38,14 +39,23 @@ const AddIncome = () => {
 
   const callAddIncome = async () => {
     if (validate()) {
-      const response = await mutateAsync({
-        title: title,
-        description: description,
-        amount: amount,
-        date: date,
-      });
-      console.log("response: ", response);
-      // navigate based on the response status code
+      try {
+        const response = await mutateAsync({
+          title: title,
+          description: description,
+          amount: amount,
+          date: date,
+        });
+        console.log(response);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.statusText);
+        } else {
+          toast.error("Unkonw error occured !!");
+        }
+        //   console.log("response: ", response);
+        // navigate based on the response status code
+      }
     }
   };
   return (
