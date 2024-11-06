@@ -6,6 +6,9 @@ import { NumberInput } from "../../components/input/NumberInput";
 import { useAddIncome } from "./hook/addIncomeHook";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePickerInput from "../../components/input/DatePickerInput";
 
 const AddIncome = () => {
   const [title, setTitle] = useState<string>("");
@@ -88,14 +91,21 @@ const AddIncome = () => {
             type="number"
           />
 
-          <TextInput
+          <DatePickerInput
             label="Date"
             labelPosition="top"
-            placeholderText="Date"
             value={date}
             onChange={(value) => setDate(value)}
-            type="string"
           />
+
+          {/* // <label>Date</label>
+          // <DatePicker */}
+          {/* //   selected={date}
+          //   onChange={(date: Date | null) => setDate(date)}
+          //   dateFormat="yyyy-MM-dd"
+          //   placeholderText="Select a date"
+          //   className="input-field" // Add a custom class for styling if needed
+          // /> */}
           <PrimaryButton
             buttonText="Add Income"
             onClick={async () => {

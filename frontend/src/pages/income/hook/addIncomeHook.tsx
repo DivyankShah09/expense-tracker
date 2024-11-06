@@ -16,7 +16,7 @@ interface AddIncomeResponse {
   title: string;
   description: string;
   amount: number;
-  date: Date;
+  date: string;
 }
 
 const callAddIncomeApi = async (request: AddIncomeRequest) => {
