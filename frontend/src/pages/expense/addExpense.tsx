@@ -17,26 +17,52 @@ const AddExpense = () => {
   const [category, setCategory] = useState<string>("");
   const { mutateAsync } = useAddExpense();
 
+  const validate = () => {
+    if (!title) {
+      toast.error("Title is required");
+      return false;
+    }
+
+    if (!description) {
+      toast.error("Description is required");
+      return false;
+    }
+
+    if (amount <= 0) {
+      toast.error("Amount should be greater than 0");
+      return false;
+    }
+
+    if (!date) {
+      toast.error("Date is required");
+      return false;
+    }
+
+    if (!category) {
+      toast.error("Category is required");
+      return false;
+    }
+
+    return true;
+  };
+
   const callAddExpense = async () => {
-    console.log("title: ", title);
-    console.log("description: ", description);
-    console.log("amount: ", amount);
-    console.log("date: ", date);
-    console.log("category: ", category);
-    try {
-      const response = await mutateAsync({
-        title: title,
-        description: description,
-        amount: amount,
-        date: date,
-        category: category,
-      });
-      console.log(response);
-    } catch (error: unknown) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.statusText);
-      } else {
-        toast.error("Unkonw error occured !!");
+    if (validate()) {
+      try {
+        const response = await mutateAsync({
+          title: title,
+          description: description,
+          amount: amount,
+          date: date,
+          category: category,
+        });
+        console.log(response);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.statusText);
+        } else {
+          toast.error("Unkonw error occured !!");
+        }
       }
     }
   };
