@@ -153,7 +153,7 @@ const SignUp = () => {
           type="password"
         />
         <p
-          className="text-right underline cursor-pointer hover:text-gray-400"
+          className="text-right underline cursor-pointer hover:text-primary"
           onClick={() => {
             navigate("/forgot-password");
           }}
@@ -169,7 +169,9 @@ const SignUp = () => {
         <p className="text-center cursor-pointer">
           Already a User?{" "}
           <Link to={"/login"}>
-            <span className="cursor-pointer underline">Login</span>
+            <span className="cursor-pointer underline hover:text-primary">
+              Login
+            </span>
           </Link>
         </p>
       </div>

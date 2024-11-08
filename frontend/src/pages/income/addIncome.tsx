@@ -61,7 +61,7 @@ const AddIncome = () => {
   };
   return (
     <>
-      <div className="my-5 text-center">
+      <div className="my-5 text-center w-full">
         <HeaderText label="Add Income" />
         <div className="w-1/3 text-center p-2 mx-auto my-2">
           <TextInput

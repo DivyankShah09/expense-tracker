@@ -70,7 +70,7 @@ const Login = () => {
           type="password"
         />
         <p
-          className="text-right underline cursor-pointer hover:text-gray-400"
+          className="text-right underline cursor-pointer hover:text-primary"
           onClick={() => {
             navigate("/forgot-password");
           }}
@@ -86,7 +86,7 @@ const Login = () => {
         <p className="text-center">
           Do not have an account?{" "}
           <span
-            className="underline cursor-pointer hover:text-gray-400"
+            className="underline cursor-pointer hover:text-primary"
             onClick={() => {
               navigate("/signup");
             }}

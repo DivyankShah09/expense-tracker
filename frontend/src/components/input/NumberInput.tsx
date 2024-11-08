@@ -39,7 +39,7 @@ export const NumberInput = ({
       </h1>
       <input
         {...props}
-        className={`border-gray-400 border-2 rounded-md h-12 px-2 disabled:border-gray-200 ${inputClassName}`}
+        className={`border-primaryHover border-2 rounded-md h-12 px-2 focus:outline-primary ${inputClassName}`}
         type={type}
         placeholder={placeholderText}
         value={value}

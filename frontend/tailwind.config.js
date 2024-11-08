@@ -5,14 +5,17 @@ module.exports = {
     extend: {
       colors: {
         transparent: 'transparent',
-        primary: '#c3e1f6',
+        primary: '#b189fa',
         header: '#E6E6E6',
         footer: '#c3e1f6',
-        buttonColor: '#4063ff',
+        primaryHover: '#4C3C82',
+        selected: '#f5e8ff'
       },
       textColor: {
-        primary: '#000000',
-        secondary: '#FFFFFF',
+        logo: '#b189fa',
+        primary: '#595298',
+        buttonText: '#ffffff',
+        secondary: '#7F8C8D',
       },
       borderRadius: {
         none: '0',
@@ -41,6 +44,9 @@ module.exports = {
         bold: 700,
         extrabold: 800,
         black: 900,
+      },
+      boxShadow: {
+        'right': '6px 0px 5px 0px rgba(177, 137, 250, 0.4)',  // Right side shadow
       },
     },
   },
