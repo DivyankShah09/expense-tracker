@@ -3,6 +3,7 @@
 # dependencies
 frontend/node_modules
 frontend/.pnp
+frontend/src/.DS_Store
 frontend.pnp.js
 backend/node_modules
 backend/.env
@@ -26,3 +27,4 @@ yarn-error.log*
 
 .DS_Store
 frontend/.DS_Store
+frontend/src/.DS_Store

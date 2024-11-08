@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignUp from "./pages/authentication/signup/signUp";
 import AddIncome from "./pages/income/addIncome";
+import AddExpense from "./pages/expense/addExpense";
 import Dashboard from "./pages/dashboard/dashboard";
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/add-income" element={<AddIncome />} />
+              <Route path="/add-expense" element={<AddExpense />} />
               <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </div>
