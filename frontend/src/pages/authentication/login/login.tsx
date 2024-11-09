@@ -41,7 +41,8 @@ const Login = () => {
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("email", response.data.email);
         localStorage.setItem("name", response.data.name);
-        // navigate here
+
+        navigate("/dashbboard");
       } else {
         toast.error(response.statusMessage);
         return false;
@@ -70,7 +71,7 @@ const Login = () => {
           type="password"
         />
         <p
-          className="text-right underline cursor-pointer hover:text-gray-400"
+          className="text-right underline cursor-pointer hover:text-primary"
           onClick={() => {
             navigate("/forgot-password");
           }}
@@ -86,7 +87,7 @@ const Login = () => {
         <p className="text-center">
           Do not have an account?{" "}
           <span
-            className="underline cursor-pointer hover:text-gray-400"
+            className="underline cursor-pointer hover:text-primary"
             onClick={() => {
               navigate("/signup");
             }}

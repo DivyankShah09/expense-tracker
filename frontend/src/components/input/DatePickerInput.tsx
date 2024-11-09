@@ -38,7 +38,7 @@ const DatePickerInput = ({
           {label}
         </h1>
         <DatePicker
-          className={`border-gray-400 border-2 rounded-md h-12 px-2 disabled:border-gray-200 w-full ${inputClassName}`}
+          className={`border-primaryHover border-2 rounded-md h-12 px-2 disabled:border-gray-200 w-full focus:outline-primary ${inputClassName}`}
           value={value}
           onChange={handleChange}
           dateFormat="yyyy-MM-dd"

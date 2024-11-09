@@ -15,7 +15,7 @@ export const PrimaryButton = ({
 }: PrimaryButtonProps) => {
   return (
     <button
-      className={`w-fit px-4 h-12 text-1xl hover:bg-blue-950 z-5 shadow-md text-white bg-blue-500 disabled:bg-blue-400 ${className} ${rounded}`}
+      className={`w-fit px-4 h-12 text-1xl text-buttonText font-bold bg-primary hover:bg-primaryHover z-5 shadow-md ${className} ${rounded}`}
       onClick={() => {
         onClick();
       }}
