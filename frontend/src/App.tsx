@@ -24,18 +24,8 @@ function App() {
           <ConditionalHeader />
           <div className="w-screen h-screen bg-white flex flex-col overflow-y-auto">
             <ToastContainer />
-            {/* <div className="flex flex-col flex-1">
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/add-income" element={<AddIncome />} />
-                <Route path="/add-expense" element={<AddExpense />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Routes>
-            </div> */}
             <div className="relative flex flex-row h-full">
               <ConditionalSideBar />
-
               <div className="w-full">
                 <Routes>
                   <Route path="/login" element={<Login />} />
@@ -57,31 +47,29 @@ function App() {
 const ConditionalHeader = () => {
   const location = useLocation();
 
-  // Specify the pages where you want to show the header
-  const includedRoutes = ["/login", "/signup"];
+  const includedRoutes = ["/login", "/signup", "/", "/about-us"];
 
   if (!includedRoutes.includes(location.pathname)) {
-    return null; // Don't render header on these routes
+    return null;
   }
 
-  return <Header />; // Render header on all other routes
+  return <Header />;
 };
 
 const ConditionalSideBar = () => {
   const location = useLocation();
 
-  // Specify the pages where you want to show the header
-  const excludedRoutes = ["/login", "/signup"];
+  const excludedRoutes = ["/login", "/signup", "/", "/about-us"];
 
   if (excludedRoutes.includes(location.pathname)) {
-    return null; // Don't render header on these routes
+    return null;
   }
 
   return (
     <div className="w-[11%] h-full">
       <SideBar />
     </div>
-  ); // Render header on all other routes
+  );
 };
 
 export default App;

@@ -1,14 +1,13 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { PrimaryButton } from "../components/button/PrimaryButton";
 import { ReactTyped } from "react-typed";
 
 export const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleLogout = () => {
-    navigate("/login");
-  };
+  const isActive = (path: string) => location.pathname === path;
 
   return (
     <div className="sticky top-0">
@@ -32,44 +31,38 @@ export const Header = () => {
           </a>
         </div>
         <div className="flex justify-end w-full">
-          {/* {loginResponse ? ( */}
-          <>
-            <PrimaryButton
-              className={`mr-4`}
-              rounded="rounded-full"
+          <ul className="relative flex flex-row p-1">
+            <li
+              className={`text-xl font-medium px-2 py-2 mx-3 rounded-lg cursor-pointer ${
+                isActive("/") ? "bg-selected text-primary" : "hover:bg-selected"
+              }`}
               onClick={() => {
-                navigate("/modify-profile");
+                navigate("/");
               }}
-              buttonText="My Account"
-            />
-
-            <PrimaryButton
-              rounded="rounded-full"
+            >
+              Home
+            </li>
+            <li
+              className={`text-xl font-medium px-2 py-2 mx-3 rounded-lg cursor-pointer ${
+                isActive("/about-us")
+                  ? "bg-selected text-primary"
+                  : "hover:bg-selected"
+              }`}
               onClick={() => {
-                handleLogout();
+                navigate("/about-us");
               }}
-              buttonText="Logout"
-            />
-          </>
-          {/* ) : (
-            <>
-              <PrimaryButton
-                className={`mr-4`}
-                rounded="rounded-full"
-                onClick={() => {
-                  navigate("/login");
-                }}
-                buttonText="Login"
-              />
-              <PrimaryButton
-                rounded="rounded-full"
-                onClick={() => {
-                  navigate("/signup");
-                }}
-                buttonText="Signup"
-              />
-            </>
-          )} */}
+            >
+              About Us
+            </li>
+          </ul>
+          <PrimaryButton
+            className={`mr-4`}
+            rounded="rounded-lg"
+            onClick={() => {
+              navigate("/login");
+            }}
+            buttonText="Login"
+          />
         </div>
       </div>
     </div>
