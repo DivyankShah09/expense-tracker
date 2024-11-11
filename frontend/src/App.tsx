@@ -24,7 +24,7 @@ function App() {
           <ConditionalHeader />
           <div className="w-screen h-screen bg-white flex flex-col overflow-y-auto">
             <ToastContainer />
-            <div className="relative flex flex-row h-full">
+            <div className="relative flex flex-row">
               <ConditionalSideBar />
               <div className="w-full">
                 <Routes>
