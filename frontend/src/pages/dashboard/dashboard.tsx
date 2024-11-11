@@ -1,15 +1,9 @@
+import { ExpenseCategoryYearlyBarChart } from "../../components/chart/ExpenseCategoryYearlyBarChart";
+import { IncomeExpenseYearlyBarChart } from "../../components/chart/IncomeExpenseYearlyBarChart";
+import { ExpenseTable } from "../../components/table/ExpenseTable";
+import { IncomeTable } from "../../components/table/IncomeTable";
 import { Header2Text } from "../../components/text/Header2Text";
 import { SubHeaderText } from "../../components/text/SubHeaderText";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from "recharts";
 
 const Dashboard = () => {
   // dummy data - for overall income and expense
@@ -43,7 +37,7 @@ const Dashboard = () => {
   // monthly expense chart
   const overallMonthlyExpenseData = [
     {
-      month: "December - 2023",
+      month: "December",
       Bills: 301.81,
       Food: 43.98,
       Grocery: 184.43,
@@ -54,7 +48,7 @@ const Dashboard = () => {
       Entertainment: 31.79,
     },
     {
-      month: "January - 2024",
+      month: "January",
       Bills: 290.98,
       Food: 63.11,
       Grocery: 43.4,
@@ -65,7 +59,7 @@ const Dashboard = () => {
       Entertainment: 0,
     },
     {
-      month: "February - 2024",
+      month: "February",
       Bills: 541.46,
       Food: 105.69,
       Grocery: 49.57,
@@ -76,7 +70,7 @@ const Dashboard = () => {
       Entertainment: 308.22,
     },
     {
-      month: "March - 2024",
+      month: "March",
       Bills: 349.1,
       Food: 70.17,
       Grocery: 110.65,
@@ -87,7 +81,7 @@ const Dashboard = () => {
       Entertainment: 37.04,
     },
     {
-      month: "July - 2024",
+      month: "July",
       Bills: 764.18,
       Food: 73.1,
       Grocery: 52.21,
@@ -96,6 +90,88 @@ const Dashboard = () => {
       Electronics: 0,
       "Home Appliances": 0,
       Entertainment: 0,
+    },
+  ];
+
+  // Expense dumy data
+  const expenseAllData = [
+    {
+      id: 1,
+      title: "Milk",
+      description: "Monday milk",
+      amount: 7,
+      date: "2024-11-11",
+      category: "Groceries",
+    },
+    {
+      id: 2,
+      title: "Netflix Subscription",
+      description: "Monthly subscription fee",
+      amount: 15,
+      date: "2024-11-05",
+      category: "Entertainment",
+    },
+    {
+      id: 3,
+      title: "Electricity Bill",
+      description: "Monthly electricity bill payment",
+      amount: 120,
+      date: "2024-11-01",
+      category: "Utilities",
+    },
+    {
+      id: 4,
+      title: "Gym Membership",
+      description: "Monthly gym subscription",
+      amount: 50,
+      date: "2024-11-03",
+      category: "Health & Fitness",
+    },
+    {
+      id: 5,
+      title: "Coffee",
+      description: "Coffee at the café",
+      amount: 5,
+      date: "2024-11-10",
+      category: "Dining Out",
+    },
+  ];
+
+  const incomeAllData = [
+    {
+      id: 1,
+      title: "Salary",
+      description: "Nov week 2",
+      amount: 500,
+      date: "2024-11-11",
+    },
+    {
+      id: 2,
+      title: "Interest",
+      description: "Nov interest",
+      amount: 15,
+      date: "2024-11-05",
+    },
+    {
+      id: 3,
+      title: "Cashback",
+      description: "Tshirt return cashback",
+      amount: 120,
+      date: "2024-11-01",
+    },
+    {
+      id: 4,
+      title: "Rent",
+      description: "Nov rent",
+      amount: 1150,
+      date: "2024-11-03",
+    },
+    {
+      id: 5,
+      title: "Reward",
+      description: "Lottery",
+      amount: 455,
+      date: "2024-11-10",
     },
   ];
 
@@ -143,67 +219,31 @@ const Dashboard = () => {
             </p>
           </div>
         </div>
-        <div className="flex">
-          <div className="border-2 rounded-lg m-2 w-1/2">
-            <Header2Text
-              label="Yearly Income and Expense"
-              className="mx-5 my-3 text-center"
-            />
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart
-                data={overallIncomeExpenseData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-
-                {/* Bar for Income */}
-                <Bar
-                  dataKey="income"
-                  fill="#7bed9f"
-                  name="Income"
-                  barSize={20}
-                />
-
-                {/* Bar for Expense */}
-                <Bar
-                  dataKey="expense"
-                  fill="#e74c3c"
-                  name="Expense"
-                  barSize={20}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="border-2 rounded-lg m-2 w-1/2">
-            <Header2Text
-              label="Yearly Expense Statistics"
-              className="mx-5 my-3 text-center"
-            />
-            <ResponsiveContainer width="100%" height={400}>
-              <BarChart
-                data={overallMonthlyExpenseData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                {categories.map((key) => (
-                  <Bar
-                    key={key}
-                    dataKey={key}
-                    stackId="a"
-                    fill={COLORS[key]}
-                    barSize={50}
-                  />
-                ))}
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+        <div className="flex p-2 gap-4">
+          <IncomeExpenseYearlyBarChart
+            overallIncomeExpenseData={overallIncomeExpenseData}
+          />
+          <ExpenseCategoryYearlyBarChart
+            overallMonthlyExpenseData={overallMonthlyExpenseData}
+            categories={categories}
+            colors={COLORS}
+          />
+        </div>
+        <div className="p-2">
+          <ExpenseTable
+            expenseAllData={expenseAllData}
+            headerRequired={true}
+            headerLabel="Latest Transactions - Expense"
+            colSpan={5}
+          />
+        </div>
+        <div className="p-2">
+          <IncomeTable
+            incomeAllData={incomeAllData}
+            headerRequired={true}
+            headerLabel="Latest Transactions - Income"
+            colSpan={4}
+          />
         </div>
       </div>
     </>
