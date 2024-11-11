@@ -28,7 +28,7 @@ const SideBar = () => {
       {/* TO DO: Add Icons */}
       <ul>
         <li
-          className={`my-2 p-2 font-medium text-base cursor-pointer rounded-2xl ${
+          className={`my-2 p-2 font-medium text-base cursor-pointer rounded-2xl${
             isActive("/dashboard")
               ? "bg-selected text-primary"
               : "hover:bg-selected"
