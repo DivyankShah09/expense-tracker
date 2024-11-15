@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateIncomeDto } from './dto/create-income.dto';
+import { IncomeDto } from './dto/income.dto';
 import { Income } from './entities/income.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityManager, Repository } from 'typeorm';
@@ -16,8 +16,8 @@ export class IncomeService {
     private readonly entityManager: EntityManager,
   ) {}
 
-  async addIncome(createIncomeDto: CreateIncomeDto, user: User) {
-    const { title, description, amount, date } = createIncomeDto;
+  async addIncome(incomeDto: IncomeDto, user: User) {
+    const { title, description, amount, date } = incomeDto;
     const currentUser = await this.userService.findByEmail(user.email);
 
     const income = this.incomeRepository.create({
@@ -34,6 +34,26 @@ export class IncomeService {
       statusCode: 201,
       statusMessage: 'Income Added Successfully',
       data: { incomeId: response.id },
+    });
+  }
+
+  async getIncomeByUserId(userId: number) {
+    const incomeRecords = await this.incomeRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+
+    const incomeData: IncomeDto[] = incomeRecords.map((record) => ({
+      title: record.title,
+      description: record.description,
+      amount: record.amount,
+      date: record.date,
+    }));
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Income Records Retrieved Successfully',
+      data: incomeData,
     });
   }
 }

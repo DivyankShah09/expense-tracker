@@ -41,7 +41,12 @@ export class AuthService {
     return ApiResponse({
       statusCode: 201,
       statusMessage: 'User successfully created.',
-      data: { name: user.name, email: user.email, access_token: token },
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        access_token: token,
+      },
     });
   }
 
@@ -74,7 +79,12 @@ export class AuthService {
     return ApiResponse({
       statusCode: 201,
       statusMessage: 'Login Successful',
-      data: { name: user.name, email: user.email, access_token: token },
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        access_token: token,
+      },
     });
   }
 }

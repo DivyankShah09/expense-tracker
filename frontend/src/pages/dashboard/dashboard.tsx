@@ -2,11 +2,37 @@ import { ExpenseCategoryYearlyBarChart } from "../../components/chart/ExpenseCat
 import { IncomeExpenseYearlyBarChart } from "../../components/chart/IncomeExpenseYearlyBarChart";
 import { ExpenseTable } from "../../components/table/ExpenseTable";
 import { IncomeTable } from "../../components/table/IncomeTable";
-import { Header2Text } from "../../components/text/Header2Text";
 import { SubHeaderText } from "../../components/text/SubHeaderText";
+import { useGetIncome } from "./hook/getIncomeHook";
+import { useGetExpense } from "./hook/getExpenseHook";
 
 const Dashboard = () => {
-  // dummy data - for overall income and expense
+  const userId = localStorage.getItem("userId") || "0";
+
+  // Get Income api
+  const { data: incomeData, isLoading: incomeLoading } = useGetIncome(
+    userId,
+    true
+  );
+  console.log("income data: ", incomeData?.data);
+
+  // Get Expense api
+  const { data: expenseData, isLoading: expenseLoading } = useGetExpense(
+    userId,
+    true
+  );
+  console.log("expense data: ", expenseData);
+
+  const monthlySums = new Array(12).fill(0);
+
+  // Process the income data
+  incomeData?.data.forEach((entry) => {
+    const date = new Date(entry.date);
+    const month = date.getMonth(); // 0-11 for Jan-Dec
+    monthlySums[month] += entry.amount;
+  });
+
+  console.log(incomeLoading, expenseLoading);
   const months = [
     "Jan",
     "Feb",
@@ -21,16 +47,14 @@ const Dashboard = () => {
     "Nov",
     "Dec",
   ];
-  const income = [
-    4000, 3000, 5000, 4780, 3890, 4390, 5490, 6000, 7000, 6700, 5400, 6100,
-  ];
+
   const expense = [
     2400, 1398, 4300, 2900, 2100, 2500, 3300, 4200, 4700, 3900, 2800, 3200,
   ];
 
   const overallIncomeExpenseData = months.map((month, index) => ({
     month,
-    income: income[index],
+    income: monthlySums[index],
     expense: expense[index],
   }));
 

@@ -10,6 +10,7 @@ interface LoginRequest {
 }
 
 interface LoginResponse {
+  id: string;
   name: string;
   email: string;
   access_token: string;

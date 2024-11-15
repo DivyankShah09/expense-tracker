@@ -4,7 +4,7 @@ import { Expense } from './entities/expense.entity';
 import { EntityManager, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { CategoryService } from 'src/category/category.service';
-import { CreateExpenseDto } from './dto/create-expense.dto';
+import { ExpenseDto } from './dto/expense.dto';
 import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from 'src/common/utils/api-response.util';
 
@@ -18,8 +18,8 @@ export class ExpenseService {
     private readonly entityManager: EntityManager,
   ) {}
 
-  async addExpense(createExpenseDto: CreateExpenseDto, user: User) {
-    const { title, description, amount, date, category } = createExpenseDto;
+  async addExpense(expenseDto: ExpenseDto, user: User) {
+    const { title, description, amount, date, category } = expenseDto;
     const currentUser = await this.userService.findByEmail(user.email);
     const expenseCategory = await this.categoryService.findByName(category);
 
@@ -38,6 +38,27 @@ export class ExpenseService {
       statusCode: 201,
       statusMessage: 'Expense Added Successfully',
       data: { expenseId: response.id },
+    });
+  }
+
+  async getExpenseByUserId(userId: number) {
+    const expenseRecords = await this.expenseRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user', 'category'],
+    });
+
+    const expenseData: ExpenseDto[] = expenseRecords.map((record) => ({
+      title: record.title,
+      description: record.description,
+      amount: record.amount,
+      date: record.date,
+      category: record.category.name,
+    }));
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'expense Records Retrieved Successfully',
+      data: expenseData,
     });
   }
 }
