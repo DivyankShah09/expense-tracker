@@ -3,24 +3,38 @@ import { IncomeExpenseYearlyBarChart } from "../../components/chart/IncomeExpens
 import { ExpenseTable } from "../../components/table/ExpenseTable";
 import { IncomeTable } from "../../components/table/IncomeTable";
 import { SubHeaderText } from "../../components/text/SubHeaderText";
-import { useGetIncome } from "./hook/getIncomeHook";
-import { useGetExpense } from "./hook/getExpenseHook";
-import { useGetExpenseByMonthCategory } from "./hook/getExpenseByCategoryMonthHook";
+// import { useGetIncome } from "./hook/getIncomeHook";
 import { MonthEnum } from "../../enums/monthEnum";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
+import {
+  useGetExpenseByMonthCategory,
+  useGetExpenseByYear,
+} from "../../hooks/getExpenseHook";
+import { useGetIncome, useGetIncomeByYear } from "../../hooks/getIncomeHook";
+
+const dateFormat = (date: Date): string => {
+  const d = new Date(date); // Ensure it's a Date object
+  const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(d.getDate()).padStart(2, "0");
+  const year = d.getFullYear();
+
+  return `${month}-${day}-${year}`;
+};
 
 const Dashboard = () => {
   const userId = localStorage.getItem("userId") || "0";
 
   // Get Income api
-  const { data: incomeData, isLoading: incomeLoading } = useGetIncome(
+  const { data: incomeData, isLoading: incomeLoading } = useGetIncomeByYear(
     userId,
+    "2023", // TODO: change the year to current year
     true
   );
 
   // Get Expense api
-  const { data: expenseData, isLoading: expenseLoading } = useGetExpense(
+  const { data: expenseData, isLoading: expenseLoading } = useGetExpenseByYear(
     userId,
+    "2023", // TODO: change the year to current year
     true
   );
 
@@ -28,12 +42,11 @@ const Dashboard = () => {
   const {
     data: expenseDataByMonthCategory,
     isLoading: expenseMonthCategoryLoading,
-  } = useGetExpenseByMonthCategory(userId, true);
+  } = useGetExpenseByMonthCategory(userId, "2023", true); // TODO: change 2023 to current year
 
   const monthlyIncomeSum = new Array(12).fill(0);
   const monthlyExpenseSum = new Array(12).fill(0);
 
-  // Process the income data
   incomeData?.data.forEach((entry) => {
     const date = new Date(entry.date);
     const month = date.getMonth(); // 0-11 for Jan-Dec
@@ -56,31 +69,12 @@ const Dashboard = () => {
     return total + entry.amount; // Assuming `entry.amount` contains the expense amount
   }, 0);
 
-  const dateFormat = (date: Date): string => {
-    const d = new Date(date); // Ensure it's a Date object
-    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-    const day = String(d.getDate()).padStart(2, "0");
-    const year = d.getFullYear();
-
-    return `${month}-${day}-${year}`;
-  };
-
   const months = Object.keys(MonthEnum).filter((key) => isNaN(Number(key)));
 
   const overallIncomeExpenseData = months.map((month, index) => ({
     month,
     income: monthlyIncomeSum[index],
     expense: monthlyExpenseSum[index],
-  }));
-
-  const formattedExpenseData = expenseData?.data?.map((item) => ({
-    ...item,
-    date: dateFormat(new Date(item.date)), // Apply dateFormat to the date field
-  }));
-
-  const formattedIncomeData = incomeData?.data?.map((item) => ({
-    ...item,
-    date: dateFormat(new Date(item.date)), // Apply dateFormat to the date field
   }));
 
   const overallMonthlyExpenseData: any = [];
@@ -97,7 +91,6 @@ const Dashboard = () => {
           .replace(/_/g, " ")
           .replace(/\b\w/g, (char) => char.toUpperCase())
       ] = expense.amount;
-      console.log("monthly data in if: ", monthlyData);
     } else {
       overallMonthlyExpenseData.push(monthlyData);
       startMonth += 1;
@@ -107,7 +100,6 @@ const Dashboard = () => {
           .replace(/_/g, " ")
           .replace(/\b\w/g, (char) => char.toUpperCase())
       ] = expense.amount;
-      console.log("monthly data in else: ", monthlyData);
     }
   });
 
@@ -119,8 +111,6 @@ const Dashboard = () => {
   const categories = Object.values(ExpenseCategoryEnum).map((category) =>
     category.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
   );
-
-  console.log("categories: ", categories);
 
   const COLORS: Record<string, string> = {};
   categories.forEach((category) => {
@@ -167,7 +157,7 @@ const Dashboard = () => {
         </div>
         <div className="p-2">
           <ExpenseTable
-            expenseAllData={formattedExpenseData
+            expenseAllData={expenseData?.data
               ?.sort(
                 (a, b) =>
                   new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -180,7 +170,7 @@ const Dashboard = () => {
         </div>
         <div className="p-2">
           <IncomeTable
-            incomeAllData={formattedIncomeData
+            incomeAllData={incomeData?.data
               ?.sort(
                 (a, b) =>
                   new Date(b.date).getTime() - new Date(a.date).getTime()

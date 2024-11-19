@@ -23,6 +23,15 @@ export class IncomeController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/:id/:year')
+  async getIncomeByUserIdAndYear(
+    @Param('id') id: number,
+    @Param('year') year: number,
+  ) {
+    return this.incomeService.getIncomeByUserIdAndYear(id, year);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getIncomeByUserId(@Param('id') id: number) {
     return this.incomeService.getIncomeByUserId(id);

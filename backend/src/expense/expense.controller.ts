@@ -23,9 +23,21 @@ export class ExpenseController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/expense-month-category')
-  async getExpenseByMonthAndCategory() {
-    return this.expenseService.getGroupedExpenseData();
+  @Get('/expense-month-category/:id/:year')
+  async getExpenseByMonthAndCategory(
+    @Param('id') id: number,
+    @Param('year') year: number,
+  ) {
+    return this.expenseService.getGroupedExpenseData(id, year);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id/:year')
+  async getExpenseByUserIdAndYear(
+    @Param('id') id: number,
+    @Param('year') year: number,
+  ) {
+    return this.expenseService.getExpenseByUserIdAndYear(id, year);
   }
 
   @UseGuards(JwtAuthGuard)

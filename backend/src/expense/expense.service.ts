@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Expense } from './entities/expense.entity';
-import { EntityManager, Repository } from 'typeorm';
+import { Between, EntityManager, Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { CategoryService } from 'src/category/category.service';
 import { ExpenseDto } from './dto/expense.dto';
@@ -62,12 +62,37 @@ export class ExpenseService {
     });
   }
 
-  async getGroupedExpenseData() {
-    const userId = 1;
+  async getExpenseByUserIdAndYear(userId: number, year: number) {
+    const expenseRecords = await this.expenseRepository.find({
+      where: {
+        user: { id: userId },
+        date: Between(
+          new Date(`${year}-01-01T00:00:00.000Z`),
+          new Date(`${year}-12-31T23:59:59.999Z`),
+        ),
+      },
+      relations: ['user', 'category'],
+    });
+
+    const expenseData: ExpenseDto[] = expenseRecords.map((record) => ({
+      title: record.title,
+      description: record.description,
+      amount: record.amount,
+      date: record.date,
+      category: record.category.name,
+    }));
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: `Expense Records for ${year} Retrieved Successfully`,
+      data: expenseData,
+    });
+  }
+
+  async getGroupedExpenseData(userId: number, year: number) {
     const queryBuilder = this.expenseRepository
       .createQueryBuilder('expense')
       .select([
-        'YEAR(expense.date) AS year',
         'MONTH(expense.date) AS month',
         'expense.categoryID',
         'category.name AS categoryName', // Select category name
@@ -75,19 +100,18 @@ export class ExpenseService {
       ])
       .leftJoin('expense.category', 'category') // Join with category table
       .where('expense.userId = :userId', { userId })
-      .groupBy('YEAR(expense.date)')
-      .addGroupBy('MONTH(expense.date)')
+      .andWhere('YEAR(expense.date) = :year', { year }) // Filter by year
+      .groupBy('MONTH(expense.date)')
       .addGroupBy('expense.categoryID')
       .addGroupBy('category.name') // Group by category name as well
-      .orderBy('year', 'ASC')
-      .addOrderBy('month', 'ASC');
+      .orderBy('month', 'ASC');
 
     // Execute the query
     const expenseData = await queryBuilder.getRawMany();
 
     return ApiResponse({
       statusCode: 200,
-      statusMessage: 'Grouped Expense Data Retrieved Successfully',
+      statusMessage: `Expense Data for Year ${year} Retrieved Successfully`,
       data: expenseData,
     });
   }
