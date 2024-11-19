@@ -10,16 +10,7 @@ import {
   useGetExpenseByMonthCategory,
   useGetExpenseByYear,
 } from "../../hooks/getExpenseHook";
-import { useGetIncome, useGetIncomeByYear } from "../../hooks/getIncomeHook";
-
-const dateFormat = (date: Date): string => {
-  const d = new Date(date); // Ensure it's a Date object
-  const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-  const day = String(d.getDate()).padStart(2, "0");
-  const year = d.getFullYear();
-
-  return `${month}-${day}-${year}`;
-};
+import { useGetIncomeByYear } from "../../hooks/getIncomeHook";
 
 const Dashboard = () => {
   const userId = localStorage.getItem("userId") || "0";
@@ -84,7 +75,7 @@ const Dashboard = () => {
     month: MonthEnum[startMonth - 1],
   };
 
-  expenseDataByMonthCategory?.data?.map((expense) => {
+  expenseDataByMonthCategory?.data?.forEach((expense) => {
     if (expense.month === startMonth) {
       monthlyData[
         expense.categoryName
@@ -102,6 +93,11 @@ const Dashboard = () => {
       ] = expense.amount;
     }
   });
+
+  // push the last month's data after the loop
+  if (Object.keys(monthlyData).length > 1) {
+    overallMonthlyExpenseData.push(monthlyData);
+  }
 
   // Function to generate random hex color
   const getRandomColor = () => {
