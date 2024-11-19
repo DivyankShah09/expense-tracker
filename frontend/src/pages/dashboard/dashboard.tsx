@@ -5,6 +5,9 @@ import { IncomeTable } from "../../components/table/IncomeTable";
 import { SubHeaderText } from "../../components/text/SubHeaderText";
 import { useGetIncome } from "./hook/getIncomeHook";
 import { useGetExpense } from "./hook/getExpenseHook";
+import { useGetExpenseByMonthCategory } from "./hook/getExpenseByCategoryMonthHook";
+import { MonthEnum } from "../../enums/monthEnum";
+import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 
 const Dashboard = () => {
   const userId = localStorage.getItem("userId") || "0";
@@ -14,25 +17,47 @@ const Dashboard = () => {
     userId,
     true
   );
-  console.log("income data: ", incomeData?.data);
 
   // Get Expense api
   const { data: expenseData, isLoading: expenseLoading } = useGetExpense(
     userId,
     true
   );
-  console.log("expense data: ", expenseData);
 
-  const monthlySums = new Array(12).fill(0);
+  const {
+    data: expenseDataByMonthCategory,
+    isLoading: expenseMonthCategoryLoading,
+  } = useGetExpenseByMonthCategory(userId, true);
+
+  console.log("expense data - Month: ", expenseDataByMonthCategory);
+
+  const monthlyIncomeSum = new Array(12).fill(0);
+  const monthlyExpenseSum = new Array(12).fill(0);
 
   // Process the income data
   incomeData?.data.forEach((entry) => {
     const date = new Date(entry.date);
     const month = date.getMonth(); // 0-11 for Jan-Dec
-    monthlySums[month] += entry.amount;
+    monthlyIncomeSum[month] += entry.amount;
   });
 
-  console.log(incomeLoading, expenseLoading);
+  expenseData?.data.forEach((entry) => {
+    const date = new Date(entry.date);
+    const month = date.getMonth(); // 0-11 for Jan-Dec
+    monthlyExpenseSum[month] += entry.amount;
+  });
+
+  console.log(incomeLoading, expenseLoading, expenseMonthCategoryLoading);
+
+  const dateFormat = (date: Date): string => {
+    const d = new Date(date); // Ensure it's a Date object
+    const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+    const day = String(d.getDate()).padStart(2, "0");
+    const year = d.getFullYear();
+
+    return `${month}-${day}-${year}`;
+  };
+
   const months = [
     "Jan",
     "Feb",
@@ -48,156 +73,124 @@ const Dashboard = () => {
     "Dec",
   ];
 
-  const expense = [
-    2400, 1398, 4300, 2900, 2100, 2500, 3300, 4200, 4700, 3900, 2800, 3200,
-  ];
-
   const overallIncomeExpenseData = months.map((month, index) => ({
     month,
-    income: monthlySums[index],
-    expense: expense[index],
+    income: monthlyIncomeSum[index],
+    expense: monthlyExpenseSum[index],
   }));
 
+  const formattedExpenseData = expenseData?.data?.map((item) => ({
+    ...item,
+    date: dateFormat(new Date(item.date)), // Apply dateFormat to the date field
+  }));
+
+  const formattedIncomeData = incomeData?.data?.map((item) => ({
+    ...item,
+    date: dateFormat(new Date(item.date)), // Apply dateFormat to the date field
+  }));
+
+  // const abc = formattedExpenseData?.map((expense) => {
+
+  //   Object.values(ExpenseCategoryEnum).forEach((category) => {
+  //     console.log(category); // Logs each category in the enum for each expense
+  //   });
+
+  //   return expense;
+  // });
+
+  // const abc = Object.values(MonthEnum).forEach((category) => {
+
+  // })
+  // const overallMonthlyExpenseData = [
+  //   {
+  //     month: "December",
+  //     Bills: 301.81,
+  //     Food: 43.98,
+  //     Grocery: 184.43,
+  //     "Grocery - Personal": 46.16,
+  //     "Clothing, Shoes & Jewelry": 0,
+  //     Electronics: 0,
+  //     "Home Appliances": 0,
+  //     Entertainment: 31.79,
+  //   },
+  //   {
+  //     month: "January",
+  //     Bills: 290.98,
+  //     Food: 63.11,
+  //     Grocery: 43.4,
+  //     "Grocery - Personal": 26.15,
+  //     "Clothing, Shoes & Jewelry": 0,
+  //     Electronics: 0,
+  //     "Home Appliances": 0,
+  //     Entertainment: 0,
+  //   },
+  //   {
+  //     month: "February",
+  //     Bills: 541.46,
+  //     Food: 105.69,
+  //     Grocery: 49.57,
+  //     "Grocery - Personal": 35.93,
+  //     "Clothing, Shoes & Jewelry": 0,
+  //     Electronics: 0,
+  //     "Home Appliances": 0,
+  //     Entertainment: 308.22,
+  //   },
+  //   {
+  //     month: "March",
+  //     Bills: 349.1,
+  //     Food: 70.17,
+  //     Grocery: 110.65,
+  //     "Grocery - Personal": 22.63,
+  //     "Clothing, Shoes & Jewelry": 0,
+  //     Electronics: 0,
+  //     "Home Appliances": 0,
+  //     Entertainment: 37.04,
+  //   },
+  //   {
+  //     month: "July",
+  //     Bills: 764.18,
+  //     Food: 73.1,
+  //     Grocery: 52.21,
+  //     "Grocery - Personal": 34.5,
+  //     "Clothing, Shoes & Jewelry": 2.26,
+  //     Electronics: 0,
+  //     "Home Appliances": 0,
+  //     Entertainment: 0,
+  //   },
+  // ];
+
+  const overallMonthlyExpenseData: any = [];
+
+  let startMonth = 1;
+  let monthlyData: { month: string; [key: string]: any } = {
+    month: MonthEnum[startMonth - 1],
+  };
+
+  expenseDataByMonthCategory?.data?.map((expense) => {
+    if (expense.month === startMonth) {
+      monthlyData[
+        expense.categoryName
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      ] = expense.amount;
+      console.log("monthly data in if: ", monthlyData);
+    } else {
+      overallMonthlyExpenseData.push(monthlyData);
+      startMonth += 1;
+      monthlyData = { month: MonthEnum[startMonth - 1] };
+      monthlyData[
+        expense.categoryName
+          .replace(/_/g, " ")
+          .replace(/\b\w/g, (char) => char.toUpperCase())
+      ] = expense.amount;
+      console.log("monthly data in else: ", monthlyData);
+    }
+  });
+
   // monthly expense chart
-  const overallMonthlyExpenseData = [
-    {
-      month: "December",
-      Bills: 301.81,
-      Food: 43.98,
-      Grocery: 184.43,
-      "Grocery - Personal": 46.16,
-      "Clothing, Shoes & Jewelry": 0,
-      Electronics: 0,
-      "Home Appliances": 0,
-      Entertainment: 31.79,
-    },
-    {
-      month: "January",
-      Bills: 290.98,
-      Food: 63.11,
-      Grocery: 43.4,
-      "Grocery - Personal": 26.15,
-      "Clothing, Shoes & Jewelry": 0,
-      Electronics: 0,
-      "Home Appliances": 0,
-      Entertainment: 0,
-    },
-    {
-      month: "February",
-      Bills: 541.46,
-      Food: 105.69,
-      Grocery: 49.57,
-      "Grocery - Personal": 35.93,
-      "Clothing, Shoes & Jewelry": 0,
-      Electronics: 0,
-      "Home Appliances": 0,
-      Entertainment: 308.22,
-    },
-    {
-      month: "March",
-      Bills: 349.1,
-      Food: 70.17,
-      Grocery: 110.65,
-      "Grocery - Personal": 22.63,
-      "Clothing, Shoes & Jewelry": 0,
-      Electronics: 0,
-      "Home Appliances": 0,
-      Entertainment: 37.04,
-    },
-    {
-      month: "July",
-      Bills: 764.18,
-      Food: 73.1,
-      Grocery: 52.21,
-      "Grocery - Personal": 34.5,
-      "Clothing, Shoes & Jewelry": 2.26,
-      Electronics: 0,
-      "Home Appliances": 0,
-      Entertainment: 0,
-    },
-  ];
-
-  // Expense dumy data
-  const expenseAllData = [
-    {
-      id: 1,
-      title: "Milk",
-      description: "Monday milk",
-      amount: 7,
-      date: "2024-11-11",
-      category: "Groceries",
-    },
-    {
-      id: 2,
-      title: "Netflix Subscription",
-      description: "Monthly subscription fee",
-      amount: 15,
-      date: "2024-11-05",
-      category: "Entertainment",
-    },
-    {
-      id: 3,
-      title: "Electricity Bill",
-      description: "Monthly electricity bill payment",
-      amount: 120,
-      date: "2024-11-01",
-      category: "Utilities",
-    },
-    {
-      id: 4,
-      title: "Gym Membership",
-      description: "Monthly gym subscription",
-      amount: 50,
-      date: "2024-11-03",
-      category: "Health & Fitness",
-    },
-    {
-      id: 5,
-      title: "Coffee",
-      description: "Coffee at the café",
-      amount: 5,
-      date: "2024-11-10",
-      category: "Dining Out",
-    },
-  ];
-
-  const incomeAllData = [
-    {
-      id: 1,
-      title: "Salary",
-      description: "Nov week 2",
-      amount: 500,
-      date: "2024-11-11",
-    },
-    {
-      id: 2,
-      title: "Interest",
-      description: "Nov interest",
-      amount: 15,
-      date: "2024-11-05",
-    },
-    {
-      id: 3,
-      title: "Cashback",
-      description: "Tshirt return cashback",
-      amount: 120,
-      date: "2024-11-01",
-    },
-    {
-      id: 4,
-      title: "Rent",
-      description: "Nov rent",
-      amount: 1150,
-      date: "2024-11-03",
-    },
-    {
-      id: 5,
-      title: "Reward",
-      description: "Lottery",
-      amount: 455,
-      date: "2024-11-10",
-    },
-  ];
+  console.log("====================================");
+  console.log(JSON.stringify(overallMonthlyExpenseData));
+  console.log("====================================");
 
   // Function to generate random hex color
   const getRandomColor = () => {
@@ -205,16 +198,21 @@ const Dashboard = () => {
   };
 
   // Generate random colors for each category
-  const categories = [
-    "Bills",
-    "Food",
-    "Grocery",
-    "Grocery - Personal",
-    "Clothing, Shoes & Jewelry",
-    "Electronics",
-    "Home Appliances",
-    "Entertainment",
-  ];
+  // const categories = [
+  //   "Bills",
+  //   "Food",
+  //   "Grocery",
+  //   "Grocery - Personal",
+  //   "Clothing, Shoes & Jewelry",
+  //   "Electronics",
+  //   "Home Appliances",
+  //   "Entertainment",
+  // ];
+  const categories = Object.values(ExpenseCategoryEnum).map((category) =>
+    category.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+  );
+
+  console.log("categories: ", categories);
 
   const COLORS: Record<string, string> = {};
   categories.forEach((category) => {
@@ -247,15 +245,25 @@ const Dashboard = () => {
           <IncomeExpenseYearlyBarChart
             overallIncomeExpenseData={overallIncomeExpenseData}
           />
-          <ExpenseCategoryYearlyBarChart
-            overallMonthlyExpenseData={overallMonthlyExpenseData}
-            categories={categories}
-            colors={COLORS}
-          />
+
+          {overallMonthlyExpenseData.length > 0 ? (
+            <ExpenseCategoryYearlyBarChart
+              overallMonthlyExpenseData={overallMonthlyExpenseData}
+              categories={categories}
+              colors={COLORS}
+            />
+          ) : (
+            <div>{overallMonthlyExpenseData.length}</div>
+          )}
         </div>
         <div className="p-2">
           <ExpenseTable
-            expenseAllData={expenseAllData}
+            expenseAllData={formattedExpenseData
+              ?.sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )
+              ?.slice(0, 5)}
             headerRequired={true}
             headerLabel="Latest Transactions - Expense"
             colSpan={5}
@@ -263,7 +271,12 @@ const Dashboard = () => {
         </div>
         <div className="p-2">
           <IncomeTable
-            incomeAllData={incomeAllData}
+            incomeAllData={formattedIncomeData
+              ?.sort(
+                (a, b) =>
+                  new Date(b.date).getTime() - new Date(a.date).getTime()
+              )
+              ?.slice(0, 5)}
             headerRequired={true}
             headerLabel="Latest Transactions - Income"
             colSpan={4}

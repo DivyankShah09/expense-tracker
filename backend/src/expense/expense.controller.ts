@@ -23,8 +23,14 @@ export class ExpenseController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/expense-month-category')
+  async getExpenseByMonthAndCategory() {
+    return this.expenseService.getGroupedExpenseData();
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
-  async getIncomeByUserId(@Param('id') id: number) {
+  async getExpenseByUserId(@Param('id') id: number) {
     return this.expenseService.getExpenseByUserId(id);
   }
 }

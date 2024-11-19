@@ -4,14 +4,24 @@ import { ApiEndpoints } from "../../../utils/api-endpoints";
 import { getRequest } from "../../../utils/axios";
 import { ReactQueryNames } from "../../../utils/react-query-names";
 
-interface GetExpenseResponse {}
+interface GetExpenseResponse {
+  title: string;
+  description: string;
+  amount: number;
+  date: string;
+  category: string;
+}
 
 const callGetExpenseApi = async (id: string) => {
-  const response = await getRequest<ApiSuccessResponse<GetExpenseResponse>>(
-    ApiEndpoints.GET_EXPENSE + "/" + id
-  );
+  try {
+    const response = await getRequest<ApiSuccessResponse<GetExpenseResponse[]>>(
+      ApiEndpoints.GET_EXPENSE + "/" + id
+    );
 
-  return response.data;
+    return response.data;
+  } catch (error) {
+    console.log("Expense Api error: ", error);
+  }
 };
 
 export const useGetExpense = (id: string, enabled: boolean) => {

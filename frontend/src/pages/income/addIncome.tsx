@@ -48,7 +48,6 @@ const AddIncome = () => {
           amount: amount,
           date: date,
         });
-        console.log(response);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.statusText);

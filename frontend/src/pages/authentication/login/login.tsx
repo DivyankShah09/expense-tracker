@@ -27,7 +27,6 @@ const Login = () => {
   };
 
   const callLogin = async () => {
-    console.log("in call login");
 
     if (validateForm()) {
       const response = await mutateAsync({
@@ -36,7 +35,6 @@ const Login = () => {
       });
 
       if (response.statusCode === 201) {
-        console.log(response);
 
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("userId", response.data.id);

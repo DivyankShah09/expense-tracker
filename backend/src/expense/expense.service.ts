@@ -61,4 +61,34 @@ export class ExpenseService {
       data: expenseData,
     });
   }
+
+  async getGroupedExpenseData() {
+    const userId = 1;
+    const queryBuilder = this.expenseRepository
+      .createQueryBuilder('expense')
+      .select([
+        'YEAR(expense.date) AS year',
+        'MONTH(expense.date) AS month',
+        'expense.categoryID',
+        'category.name AS categoryName', // Select category name
+        'SUM(expense.amount) AS amount',
+      ])
+      .leftJoin('expense.category', 'category') // Join with category table
+      .where('expense.userId = :userId', { userId })
+      .groupBy('YEAR(expense.date)')
+      .addGroupBy('MONTH(expense.date)')
+      .addGroupBy('expense.categoryID')
+      .addGroupBy('category.name') // Group by category name as well
+      .orderBy('year', 'ASC')
+      .addOrderBy('month', 'ASC');
+
+    // Execute the query
+    const expenseData = await queryBuilder.getRawMany();
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Grouped Expense Data Retrieved Successfully',
+      data: expenseData,
+    });
+  }
 }

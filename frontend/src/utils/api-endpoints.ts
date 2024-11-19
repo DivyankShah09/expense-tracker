@@ -5,4 +5,5 @@ export const ApiEndpoints = {
   ADD_EXPENSE: "/expense/add-expense",
   GET_INCOME: "/income",
   GET_EXPENSE: "/expense",
+  GET_EXPENSE_BY_MONTH_CATEGORY: "/expense/expense-month-category",
 };

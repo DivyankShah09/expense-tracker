@@ -9,7 +9,7 @@ interface ExpenseTransaction {
 }
 
 interface LatestExpenseTransactionsTableProps {
-  expenseAllData: ExpenseTransaction[];
+  expenseAllData: ExpenseTransaction[] | undefined;
   headerRequired?: boolean;
   headerLabel?: string;
   colSpan?: number | undefined;
@@ -49,7 +49,7 @@ export const ExpenseTable = ({
           </tr>
         </thead>
         <tbody>
-          {expenseAllData.map((expense: ExpenseTransaction, index: number) => (
+          {expenseAllData?.map((expense: ExpenseTransaction, index: number) => (
             <tr key={index} className="bg-white rounded-md shadow-md">
               <td className="text-center p-2">{index + 1}</td>
               <td className="p-2">{expense.title}</td>

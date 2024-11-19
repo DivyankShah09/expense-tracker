@@ -9,7 +9,7 @@ interface IncomeTransaction {
 }
 
 interface LatestIncomeTransactionsTableProps {
-  incomeAllData: IncomeTransaction[];
+  incomeAllData: IncomeTransaction[] | undefined;
   headerRequired?: boolean;
   headerLabel?: string;
   colSpan?: number | undefined;
@@ -53,7 +53,7 @@ export const IncomeTable = ({
           </tr>
         </thead>
         <tbody>
-          {incomeAllData.map((income: IncomeTransaction, index: number) => (
+          {incomeAllData?.map((income: IncomeTransaction, index: number) => (
             <tr key={index} className="bg-white rounded-md shadow-md">
               <td className="text-center p-2">{index + 1}</td>
               <td className="p-2">{income.title}</td>

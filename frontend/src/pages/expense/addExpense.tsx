@@ -56,7 +56,6 @@ const AddExpense = () => {
           date: date,
           category: category,
         });
-        console.log(response);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.statusText);
