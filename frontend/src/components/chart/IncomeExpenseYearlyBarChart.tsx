@@ -9,9 +9,10 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { MonthEnum } from "../../enums/monthEnum";
 
 interface DataPoint {
-  month: string;
+  month: string | MonthEnum;
   income: number;
   expense: number;
 }

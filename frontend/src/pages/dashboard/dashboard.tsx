@@ -24,12 +24,11 @@ const Dashboard = () => {
     true
   );
 
+  // Get Expense by month and category api
   const {
     data: expenseDataByMonthCategory,
     isLoading: expenseMonthCategoryLoading,
   } = useGetExpenseByMonthCategory(userId, true);
-
-  console.log("expense data - Month: ", expenseDataByMonthCategory);
 
   const monthlyIncomeSum = new Array(12).fill(0);
   const monthlyExpenseSum = new Array(12).fill(0);
@@ -49,6 +48,14 @@ const Dashboard = () => {
 
   console.log(incomeLoading, expenseLoading, expenseMonthCategoryLoading);
 
+  const totalExpense = expenseData?.data.reduce((total, entry) => {
+    return total + entry.amount; // Assuming `entry.amount` contains the expense amount
+  }, 0);
+
+  const totalIncome = incomeData?.data.reduce((total, entry) => {
+    return total + entry.amount; // Assuming `entry.amount` contains the expense amount
+  }, 0);
+
   const dateFormat = (date: Date): string => {
     const d = new Date(date); // Ensure it's a Date object
     const month = String(d.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
@@ -58,20 +65,7 @@ const Dashboard = () => {
     return `${month}-${day}-${year}`;
   };
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
+  const months = Object.keys(MonthEnum).filter((key) => isNaN(Number(key)));
 
   const overallIncomeExpenseData = months.map((month, index) => ({
     month,
@@ -88,76 +82,6 @@ const Dashboard = () => {
     ...item,
     date: dateFormat(new Date(item.date)), // Apply dateFormat to the date field
   }));
-
-  // const abc = formattedExpenseData?.map((expense) => {
-
-  //   Object.values(ExpenseCategoryEnum).forEach((category) => {
-  //     console.log(category); // Logs each category in the enum for each expense
-  //   });
-
-  //   return expense;
-  // });
-
-  // const abc = Object.values(MonthEnum).forEach((category) => {
-
-  // })
-  // const overallMonthlyExpenseData = [
-  //   {
-  //     month: "December",
-  //     Bills: 301.81,
-  //     Food: 43.98,
-  //     Grocery: 184.43,
-  //     "Grocery - Personal": 46.16,
-  //     "Clothing, Shoes & Jewelry": 0,
-  //     Electronics: 0,
-  //     "Home Appliances": 0,
-  //     Entertainment: 31.79,
-  //   },
-  //   {
-  //     month: "January",
-  //     Bills: 290.98,
-  //     Food: 63.11,
-  //     Grocery: 43.4,
-  //     "Grocery - Personal": 26.15,
-  //     "Clothing, Shoes & Jewelry": 0,
-  //     Electronics: 0,
-  //     "Home Appliances": 0,
-  //     Entertainment: 0,
-  //   },
-  //   {
-  //     month: "February",
-  //     Bills: 541.46,
-  //     Food: 105.69,
-  //     Grocery: 49.57,
-  //     "Grocery - Personal": 35.93,
-  //     "Clothing, Shoes & Jewelry": 0,
-  //     Electronics: 0,
-  //     "Home Appliances": 0,
-  //     Entertainment: 308.22,
-  //   },
-  //   {
-  //     month: "March",
-  //     Bills: 349.1,
-  //     Food: 70.17,
-  //     Grocery: 110.65,
-  //     "Grocery - Personal": 22.63,
-  //     "Clothing, Shoes & Jewelry": 0,
-  //     Electronics: 0,
-  //     "Home Appliances": 0,
-  //     Entertainment: 37.04,
-  //   },
-  //   {
-  //     month: "July",
-  //     Bills: 764.18,
-  //     Food: 73.1,
-  //     Grocery: 52.21,
-  //     "Grocery - Personal": 34.5,
-  //     "Clothing, Shoes & Jewelry": 2.26,
-  //     Electronics: 0,
-  //     "Home Appliances": 0,
-  //     Entertainment: 0,
-  //   },
-  // ];
 
   const overallMonthlyExpenseData: any = [];
 
@@ -187,27 +111,11 @@ const Dashboard = () => {
     }
   });
 
-  // monthly expense chart
-  console.log("====================================");
-  console.log(JSON.stringify(overallMonthlyExpenseData));
-  console.log("====================================");
-
   // Function to generate random hex color
   const getRandomColor = () => {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   };
 
-  // Generate random colors for each category
-  // const categories = [
-  //   "Bills",
-  //   "Food",
-  //   "Grocery",
-  //   "Grocery - Personal",
-  //   "Clothing, Shoes & Jewelry",
-  //   "Electronics",
-  //   "Home Appliances",
-  //   "Entertainment",
-  // ];
   const categories = Object.values(ExpenseCategoryEnum).map((category) =>
     category.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
   );
@@ -224,21 +132,22 @@ const Dashboard = () => {
       <div className="p-4">
         <div className="flex flex-row w-full gap-4 p-2">
           <div className="w-1/2 p-5 bg-primaryBackground rounded-xl">
-            <p>Current Balance</p>
-            <SubHeaderText label="$ 15000" />
-            <p className="text-sm text-primary">Compared to last month: </p>
+            <p>Overall Balance</p>
+            <SubHeaderText
+              label={
+                totalIncome && totalExpense
+                  ? `$ ${(totalIncome - totalExpense).toString()}`
+                  : "$ 0"
+              }
+            />
           </div>
           <div className="w-1/2 p-5 bg-positiveBackground rounded-xl">
             <p>Total Income</p>
-            <SubHeaderText label="$ 20000" />
-            <p className="text-sm text-positiveText">Compared to last month:</p>
+            <SubHeaderText label={`$ ${totalIncome}`} />
           </div>
           <div className="w-1/2 p-5 bg-negativeBackground rounded-xl">
             <p className="text-xl">Total Expense</p>
-            <SubHeaderText label="$ 5000" />
-            <p className="text-sm text-negativeText">
-              Compared to last month:{" "}
-            </p>
+            <SubHeaderText label={`$ ${totalExpense}`} />
           </div>
         </div>
         <div className="flex p-2 gap-4">
