@@ -18,14 +18,14 @@ const Dashboard = () => {
   // Get Income api
   const { data: incomeData, isLoading: incomeLoading } = useGetIncomeByYear(
     userId,
-    "2023", // TODO: change the year to current year
+    new Date().getFullYear().toString(),
     true
   );
 
   // Get Expense api
   const { data: expenseData, isLoading: expenseLoading } = useGetExpenseByYear(
     userId,
-    "2023", // TODO: change the year to current year
+    new Date().getFullYear().toString(),
     true
   );
 
@@ -33,7 +33,11 @@ const Dashboard = () => {
   const {
     data: expenseDataByMonthCategory,
     isLoading: expenseMonthCategoryLoading,
-  } = useGetExpenseByMonthCategory(userId, "2023", true); // TODO: change 2023 to current year
+  } = useGetExpenseByMonthCategory(
+    userId,
+    new Date().getFullYear().toString(),
+    true
+  );
 
   const monthlyIncomeSum = new Array(12).fill(0);
   const monthlyExpenseSum = new Array(12).fill(0);
