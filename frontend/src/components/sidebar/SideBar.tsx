@@ -9,6 +9,11 @@ const SideBar = () => {
   // Helper function to check if the route is the current path
   const isActive = (path: string) => location.pathname === path;
 
+  const handleSignOut = () => {
+    localStorage.clear();
+    navigate("/");
+  };
+
   return (
     <div className="w-full border-r-primary shadow-right h-full p-2">
       <div className="relative inset-x-0 top-0 flex flex-row items-center p-1">
@@ -75,7 +80,10 @@ const SideBar = () => {
         >
           Profile
         </li>
-        <li className="my-2 p-2 font-medium text-base cursor-pointer">
+        <li
+          className="my-2 p-2 font-medium text-base cursor-pointer"
+          onClick={handleSignOut}
+        >
           Sign Out
         </li>
       </ul>

@@ -26,7 +26,7 @@ function App() {
         <Router>
           <ConditionalHeader />
           <div className="w-screen h-screen bg-white flex flex-col overflow-y-auto">
-            <div className="relative flex flex-row">
+            <div className="relative flex flex-row h-screen">
               <ConditionalSideBar />
               <div className="w-full">
                 <Routes>
