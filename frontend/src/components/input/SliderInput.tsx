@@ -23,9 +23,9 @@ const SliderInput = ({
   };
 
   return (
-    <div className="slider-container flex flex-row gap-2">
+    <div className="slider-container flex flex-row gap-2 py-2">
       <label htmlFor="slider" className="block text-lg font-medium h-12 p-2">
-        Amount:
+        {label}
       </label>
       <span className="py-3">{minValue}</span>
       <div className="relative w-full">

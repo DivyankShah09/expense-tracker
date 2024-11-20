@@ -21,6 +21,9 @@ interface ExpenseByMonthCategory {
 }
 
 export const formatExpenseData = (data: any[]) => {
+  console.log("====================================");
+  console.log(data);
+  console.log("====================================");
   return data?.map((item) => ({
     ...item,
     date: dateFormat(new Date(item.date)), // Format the date

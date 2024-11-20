@@ -21,11 +21,11 @@ import ListAllIncomes from "./pages/income/listAllIncomes";
 function App() {
   return (
     <>
+      <ToastContainer />
       <div className="overflow-x-hidden">
         <Router>
           <ConditionalHeader />
           <div className="w-screen h-screen bg-white flex flex-col overflow-y-auto">
-            <ToastContainer />
             <div className="relative flex flex-row">
               <ConditionalSideBar />
               <div className="w-full">
