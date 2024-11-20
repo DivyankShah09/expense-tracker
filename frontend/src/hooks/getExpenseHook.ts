@@ -18,12 +18,10 @@ interface ExpenseByMonthCategory {
   month: number;
   categoryName: string;
   amount: number;
+  date: string;
 }
 
 export const formatExpenseData = (data: any[]) => {
-  console.log("====================================");
-  console.log(data);
-  console.log("====================================");
   return data?.map((item) => ({
     ...item,
     date: dateFormat(new Date(item.date)), // Format the date
@@ -61,11 +59,39 @@ const callGetExpenseByYearApi = async (id: string, year: string) => {
   }
 };
 
-const callGetExpenseByMonthCategoryApi = async (id: string, year: string) => {
+const callGetExpenseByMonthCategoryApi = async (
+  id: string,
+  year: string,
+  startDate?: string,
+  endDate?: string
+) => {
   try {
+    // Set default startDate to 1st January of the given year if not provided
+    if (!startDate) {
+      startDate = "2024-01-01";
+    }
+
+    // Set default endDate to today's date if not provided
+    if (!endDate) {
+      endDate = "2024-11-20"; // Today's date
+    }
+
+    console.log("Start Date: ", startDate);
+    console.log("End Date: ", endDate);
+
     const response = await getRequest<
       ApiSuccessResponse<ExpenseByMonthCategory[]>
-    >(ApiEndpoints.GET_EXPENSE_BY_MONTH_CATEGORY + "/" + id + "/" + year);
+    >(
+      ApiEndpoints.GET_EXPENSE_BY_MONTH_CATEGORY +
+        "/" +
+        id +
+        "/" +
+        year +
+        "/" +
+        startDate +
+        "/" +
+        endDate
+    );
 
     return response.data;
   } catch (error) {
@@ -96,11 +122,18 @@ export const useGetExpenseByYear = (
 export const useGetExpenseByMonthCategory = (
   id: string,
   year: string,
-  enabled: boolean
+  enabled: boolean,
+  startDate?: string,
+  endDate?: string
 ) => {
   return useQuery({
-    queryFn: () => callGetExpenseByMonthCategoryApi(id, year),
-    queryKey: [ReactQueryNames.GET_EXPENSE_BY_MONTH_CATEGORY],
+    queryFn: () =>
+      callGetExpenseByMonthCategoryApi(id, year, startDate, endDate),
+    queryKey: [
+      ReactQueryNames.GET_EXPENSE_BY_MONTH_CATEGORY,
+      startDate,
+      endDate,
+    ],
     enabled: enabled,
   });
 };

@@ -5,7 +5,7 @@ import { HeaderText } from "../../components/text/HeaderText";
 import { useGetExpense } from "../../hooks/getExpenseHook";
 import SliderInput from "../../components/input/SliderInput";
 import DatePickerInput from "../../components/input/DatePickerInput";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 const ListAllExpenses = () => {
   const userId = localStorage.getItem("userId") || "0";

@@ -42,7 +42,7 @@ const AddIncome = () => {
   const callAddIncome = async () => {
     if (validate()) {
       try {
-        const response = await mutateAsync({
+        await mutateAsync({
           title: title,
           description: description,
           amount: amount,

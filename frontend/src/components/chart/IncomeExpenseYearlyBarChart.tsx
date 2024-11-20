@@ -24,6 +24,9 @@ interface YearlyIncomeExpenseChartProps {
 export const IncomeExpenseYearlyBarChart = ({
   overallIncomeExpenseData,
 }: YearlyIncomeExpenseChartProps) => {
+  console.log("====================================");
+  console.log(overallIncomeExpenseData);
+  console.log("====================================");
   return (
     <>
       <div className="border-2 rounded-lg w-1/2">

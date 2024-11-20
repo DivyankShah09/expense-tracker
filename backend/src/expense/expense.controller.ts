@@ -23,12 +23,19 @@ export class ExpenseController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/expense-month-category/:id/:year')
+  @Get('/expense-month-category/:id/:year/:startDate/:endDate')
   async getExpenseByMonthAndCategory(
     @Param('id') id: number,
     @Param('year') year: number,
+    @Param('startDate') startDate: Date,
+    @Param('endDate') endDate: Date,
   ) {
-    return this.expenseService.getGroupedExpenseData(id, year);
+    return this.expenseService.getGroupedExpenseData(
+      id,
+      year,
+      startDate,
+      endDate,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

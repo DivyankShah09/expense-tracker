@@ -89,7 +89,22 @@ export class ExpenseService {
     });
   }
 
-  async getGroupedExpenseData(userId: number, year: number) {
+  formatDate = (date: string | Date) => {
+    if (!date) return null;
+    const d = new Date(date);
+    return d instanceof Date && !isNaN(d.getTime())
+      ? d.toISOString().split('T')[0]
+      : null; // 'YYYY-MM-DD'
+  };
+
+  async getGroupedExpenseData(
+    userId: number,
+    year: number,
+    startDate: Date,
+    endDate: Date,
+  ) {
+    const formattedStartDate = this.formatDate(startDate);
+    const formattedEndDate = this.formatDate(endDate);
     const queryBuilder = this.expenseRepository
       .createQueryBuilder('expense')
       .select([
@@ -101,7 +116,13 @@ export class ExpenseService {
       .leftJoin('expense.category', 'category') // Join with category table
       .where('expense.userId = :userId', { userId })
       .andWhere('YEAR(expense.date) = :year', { year }) // Filter by year
-      .groupBy('MONTH(expense.date)')
+      .andWhere(formattedStartDate ? 'expense.date >= :startDate' : '1=1', {
+        startDate: formattedStartDate,
+      }) // Add start date filter if valid
+      .andWhere(formattedEndDate ? 'expense.date <= :endDate' : '1=1', {
+        endDate: formattedEndDate,
+      }) // Add end date filter if valid
+      .addGroupBy('MONTH(expense.date)')
       .addGroupBy('expense.categoryID')
       .addGroupBy('category.name') // Group by category name as well
       .orderBy('month', 'ASC');
