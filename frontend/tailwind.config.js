@@ -12,7 +12,8 @@ module.exports = {
         selected: '#f5e8ff',
         positiveBackground: '#EAF8EF',
         negativeBackground: '#FDEDEC',
-        primaryBackground: '#FAF1FF'
+        primaryBackground: '#FAF1FF',
+        slider: '#595298'
       },
       textColor: {
         logo: '#b189fa',

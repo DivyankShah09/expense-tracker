@@ -1,5 +1,6 @@
 import React from "react";
 import { Header2Text } from "../../components/text/Header2Text";
+import { useNavigate } from "react-router-dom";
 
 interface IncomeTransaction {
   title: string;
@@ -21,13 +22,14 @@ export const IncomeTable = ({
   headerLabel = "",
   colSpan = undefined,
 }: LatestIncomeTransactionsTableProps) => {
+  const navigate = useNavigate();
+
+  const handleViewAllClick = () => {
+    navigate("/list-all-incomes");
+  };
   return (
     <>
-      <table
-        className={`table-auto w-full border-separate overflow-hidden ${
-          headerRequired ? "border-2 rounded-lg" : ""
-        }`}
-      >
+      <table className="table-auto w-full border-separate rounded-lg border-2 overflow-hidden">
         <thead>
           {headerRequired && (
             <tr>
@@ -36,7 +38,7 @@ export const IncomeTable = ({
               </th>
 
               <td className="text-right">
-                <p className="m-2">
+                <p className="m-2" onClick={handleViewAllClick}>
                   <u className="font-semibold hover:text-primary cursor-pointer">
                     View All
                   </u>

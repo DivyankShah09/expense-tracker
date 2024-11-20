@@ -15,6 +15,8 @@ import AddIncome from "./pages/income/addIncome";
 import AddExpense from "./pages/expense/addExpense";
 import Dashboard from "./pages/dashboard/dashboard";
 import SideBar from "./components/sidebar/SideBar";
+import ListAllExpenses from "./pages/expense/listAllExpenses";
+import ListAllIncomes from "./pages/income/listAllIncomes";
 
 function App() {
   return (
@@ -33,6 +35,14 @@ function App() {
                   <Route path="/add-income" element={<AddIncome />} />
                   <Route path="/add-expense" element={<AddExpense />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route
+                    path="/list-all-expenses"
+                    element={<ListAllExpenses />}
+                  />
+                  <Route
+                    path="/list-all-incomes"
+                    element={<ListAllIncomes />}
+                  />
                 </Routes>
               </div>
             </div>

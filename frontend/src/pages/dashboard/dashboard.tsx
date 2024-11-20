@@ -3,7 +3,6 @@ import { IncomeExpenseYearlyBarChart } from "../../components/chart/IncomeExpens
 import { ExpenseTable } from "../../components/table/ExpenseTable";
 import { IncomeTable } from "../../components/table/IncomeTable";
 import { SubHeaderText } from "../../components/text/SubHeaderText";
-// import { useGetIncome } from "./hook/getIncomeHook";
 import { MonthEnum } from "../../enums/monthEnum";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 import {
@@ -11,9 +10,11 @@ import {
   useGetExpenseByYear,
 } from "../../hooks/getExpenseHook";
 import { useGetIncomeByYear } from "../../hooks/getIncomeHook";
+import { HeaderText } from "../../components/text/HeaderText";
 
 const Dashboard = () => {
   const userId = localStorage.getItem("userId") || "0";
+  const userName = localStorage.getItem("name") || " ";
 
   // Get Income api
   const { data: incomeData, isLoading: incomeLoading } = useGetIncomeByYear(
@@ -120,6 +121,10 @@ const Dashboard = () => {
   return (
     <>
       <div className="p-4">
+        <div className="px-5 flex flex-row">
+          <h1 className="w-fit text-3xl font-bold mr-1">Hello {userName}</h1>
+        </div>
+
         <div className="flex flex-row w-full gap-4 p-2">
           <div className="w-1/2 p-5 bg-primaryBackground rounded-xl">
             <p>Overall Balance</p>

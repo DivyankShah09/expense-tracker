@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Header2Text } from "../../components/text/Header2Text";
 
 interface ExpenseTransaction {
@@ -20,6 +21,12 @@ export const ExpenseTable = ({
   headerLabel = "",
   colSpan = undefined,
 }: LatestExpenseTransactionsTableProps) => {
+  const navigate = useNavigate();
+
+  const handleViewAllClick = () => {
+    navigate("/list-all-expenses");
+  };
+
   return (
     <>
       <table className="table-auto w-full border-separate rounded-lg border-2 overflow-hidden">
@@ -31,7 +38,7 @@ export const ExpenseTable = ({
               </th>
 
               <td className="text-right">
-                <p className="m-2">
+                <p className="m-2" onClick={handleViewAllClick}>
                   <u className="font-semibold hover:text-primary cursor-pointer">
                     View All
                   </u>
