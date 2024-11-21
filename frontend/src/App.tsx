@@ -25,8 +25,8 @@ function App() {
       <div className="overflow-x-hidden">
         <Router>
           <ConditionalHeader />
-          <div className="w-screen h-screen bg-white flex flex-col overflow-y-auto">
-            <div className="relative flex flex-row h-screen">
+          <div className="w-screen bg-white flex flex-col overflow-y-auto">
+            <div className="relative flex flex-row">
               <ConditionalSideBar />
               <div className="w-full">
                 <Routes>
@@ -76,7 +76,7 @@ const ConditionalSideBar = () => {
   }
 
   return (
-    <div className="w-[11%] h-full">
+    <div className="w-[11%]">
       <SideBar />
     </div>
   );

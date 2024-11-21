@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { ChartColors } from "../../enums/chartColors";
 
 interface YearlyExpenseStatisticsChartProps {
   overallMonthlyExpenseData: {
@@ -16,17 +17,16 @@ interface YearlyExpenseStatisticsChartProps {
     [key: string]: number | string;
   }[];
   categories: string[];
-  colors: Record<string, string>;
 }
 
 export const ExpenseCategoryYearlyBarChart = ({
   overallMonthlyExpenseData,
   categories,
-  colors,
 }: YearlyExpenseStatisticsChartProps) => {
+  const chartColorsArray = Object.values(ChartColors);
   return (
     <>
-      <div className="border-2 rounded-lg w-1/2">
+      <div className="border-2 rounded-lg w-full">
         <Header2Text
           label="Yearly Expense Statistics"
           className="mx-5 my-3 text-center"
@@ -41,12 +41,12 @@ export const ExpenseCategoryYearlyBarChart = ({
             <YAxis />
             <Tooltip />
             <Legend />
-            {categories.map((key: string) => (
+            {categories.map((key: string, index: number) => (
               <Bar
                 key={key}
                 dataKey={key}
                 stackId="a"
-                fill={colors[key]}
+                fill={chartColorsArray[index % chartColorsArray.length]}
                 barSize={45}
               />
             ))}

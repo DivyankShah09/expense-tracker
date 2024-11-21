@@ -66,6 +66,10 @@ const callGetExpenseByMonthCategoryApi = async (
   endDate?: string
 ) => {
   try {
+    const start = startDate ? new Date(startDate).getTime() : null; // Start date as timestamp
+    const end = endDate
+      ? new Date(new Date(endDate).setHours(23, 59, 59, 999) + 1).getTime() // End date set to the end of the day
+      : null;
     // Set default startDate to 1st January of the given year if not provided
     if (!startDate) {
       startDate = "2024-01-01";
@@ -76,8 +80,10 @@ const callGetExpenseByMonthCategoryApi = async (
       endDate = "2024-11-20"; // Today's date
     }
 
-    console.log("Start Date: ", startDate);
-    console.log("End Date: ", endDate);
+    if (start && end && start >= end) {
+      startDate = "2024-01-01";
+      endDate = "2024-11-20";
+    }
 
     const response = await getRequest<
       ApiSuccessResponse<ExpenseByMonthCategory[]>

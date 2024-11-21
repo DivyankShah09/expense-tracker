@@ -24,12 +24,9 @@ interface YearlyIncomeExpenseChartProps {
 export const IncomeExpenseYearlyBarChart = ({
   overallIncomeExpenseData,
 }: YearlyIncomeExpenseChartProps) => {
-  console.log("====================================");
-  console.log(overallIncomeExpenseData);
-  console.log("====================================");
   return (
     <>
-      <div className="border-2 rounded-lg w-1/2">
+      <div className="border-2 rounded-lg w-full">
         <Header2Text
           label="Yearly Income and Expense"
           className="mx-5 my-3 text-center"
@@ -45,9 +42,9 @@ export const IncomeExpenseYearlyBarChart = ({
             <Tooltip />
             <Legend />
 
-            <Bar dataKey="income" fill="#7bed9f" name="Income" barSize={10} />
+            <Bar dataKey="income" fill="#7bed9f" name="Income" barSize={30} />
 
-            <Bar dataKey="expense" fill="#e74c3c" name="Expense" barSize={10} />
+            <Bar dataKey="expense" fill="#e74c3c" name="Expense" barSize={30} />
           </BarChart>
         </ResponsiveContainer>
       </div>
