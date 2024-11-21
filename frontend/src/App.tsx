@@ -76,7 +76,7 @@ const ConditionalSideBar = () => {
   }
 
   return (
-    <div className="w-[11%]">
+    <div className="w-fit">
       <SideBar />
     </div>
   );
