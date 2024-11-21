@@ -42,13 +42,12 @@ const AddIncome = () => {
   const callAddIncome = async () => {
     if (validate()) {
       try {
-        const response = await mutateAsync({
+        await mutateAsync({
           title: title,
           description: description,
           amount: amount,
           date: date,
         });
-        console.log(response);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.statusText);

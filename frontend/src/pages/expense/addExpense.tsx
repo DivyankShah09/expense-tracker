@@ -49,14 +49,13 @@ const AddExpense = () => {
   const callAddExpense = async () => {
     if (validate()) {
       try {
-        const response = await mutateAsync({
+        await mutateAsync({
           title: title,
           description: description,
           amount: amount,
           date: date,
           category: category,
         });
-        console.log(response);
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.statusText);

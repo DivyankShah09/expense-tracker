@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 
 export interface DatePickerInputProps {
   label?: string;
-  labelPosition: "top" | "left";
+  labelPosition?: "top" | "left";
   value?: string;
   divClassName?: string;
   inputClassName?: string;
@@ -30,13 +30,15 @@ const DatePickerInput = ({
           labelPosition === "top" ? "flex-col" : "flex-row"
         } ${divClassName}`}
       >
-        <h1
-          className={`text-primary font-semibold text-lg text-left ${
-            labelPosition === "top" ? "mb-1" : ""
-          }`}
-        >
-          {label}
-        </h1>
+        {label && (
+          <h1
+            className={`text-primary font-semibold text-lg text-left ${
+              labelPosition === "top" ? "mb-1" : ""
+            }`}
+          >
+            {label}
+          </h1>
+        )}
         <DatePicker
           className={`border-primaryHover border-2 rounded-md h-12 px-2 disabled:border-gray-200 w-full focus:outline-primary ${inputClassName}`}
           value={value}
