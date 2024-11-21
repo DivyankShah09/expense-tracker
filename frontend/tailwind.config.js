@@ -9,13 +9,19 @@ module.exports = {
         header: '#E6E6E6',
         footer: '#c3e1f6',
         primaryHover: '#4C3C82',
-        selected: '#f5e8ff'
+        selected: '#f5e8ff',
+        positiveBackground: '#EAF8EF',
+        negativeBackground: '#FDEDEC',
+        primaryBackground: '#FAF1FF',
+        slider: '#595298'
       },
       textColor: {
         logo: '#b189fa',
         primary: '#595298',
         buttonText: '#ffffff',
         secondary: '#7F8C8D',
+        positiveText: '#27AE60',
+        negativeText: '#E74C3C'
       },
       borderRadius: {
         none: '0',

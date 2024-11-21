@@ -15,16 +15,18 @@ import AddIncome from "./pages/income/addIncome";
 import AddExpense from "./pages/expense/addExpense";
 import Dashboard from "./pages/dashboard/dashboard";
 import SideBar from "./components/sidebar/SideBar";
+import ListAllExpenses from "./pages/expense/listAllExpenses";
+import ListAllIncomes from "./pages/income/listAllIncomes";
 
 function App() {
   return (
     <>
+      <ToastContainer />
       <div className="overflow-x-hidden">
         <Router>
           <ConditionalHeader />
-          <div className="w-screen h-screen bg-white flex flex-col overflow-y-auto">
-            <ToastContainer />
-            <div className="relative flex flex-row h-full">
+          <div className="w-screen bg-white flex flex-col overflow-y-auto">
+            <div className="relative flex flex-row">
               <ConditionalSideBar />
               <div className="w-full">
                 <Routes>
@@ -33,6 +35,14 @@ function App() {
                   <Route path="/add-income" element={<AddIncome />} />
                   <Route path="/add-expense" element={<AddExpense />} />
                   <Route path="/dashboard" element={<Dashboard />} />
+                  <Route
+                    path="/list-all-expenses"
+                    element={<ListAllExpenses />}
+                  />
+                  <Route
+                    path="/list-all-incomes"
+                    element={<ListAllIncomes />}
+                  />
                 </Routes>
               </div>
             </div>
@@ -66,7 +76,7 @@ const ConditionalSideBar = () => {
   }
 
   return (
-    <div className="w-[11%] h-full">
+    <div className="w-[11%]">
       <SideBar />
     </div>
   );

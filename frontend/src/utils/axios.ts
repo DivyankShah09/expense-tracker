@@ -9,7 +9,7 @@ import axios, {
 axios.defaults.baseURL = process.env.REACT_APP_BACKEND_URL;
 axios.defaults.timeout = 60000;
 
-// intercept the request and add authorization header
+// Intercept the request and add authorization header
 axios.interceptors.request.use(
   (request) => {
     try {
@@ -19,11 +19,41 @@ axios.interceptors.request.use(
       }
       return request;
     } catch (e) {
+      console.error("Request Interception Error: ", e);
       return request;
     }
   },
-  async (err) => {
-    return Promise.reject(err);
+  (error) => {
+    console.error("Request Error: ", error);
+    return Promise.reject(error);
+  }
+);
+
+// Intercept responses to log errors globally and handle 401
+axios.interceptors.response.use(
+  (response) => {
+    return response; // If the response is successful, return it as-is
+  },
+  (error: AxiosError) => {
+    if (error.response) {
+      const { status } = error.response;
+      console.error("API Error:", {
+        status: error.response.status,
+        statusText: error.response.statusText,
+        data: error.response.data,
+      });
+
+      // Redirect to login if unauthorized
+      if (status === 401) {
+        console.warn("Unauthorized access. Redirecting to login...");
+        window.location.href = "/login"; // Adjust this to your login route
+      }
+    } else if (error.request) {
+      console.error("No Response Received: ", error.request);
+    } else {
+      console.error("Unexpected Error: ", error.message);
+    }
+    return Promise.reject(error); // Re-throw the error for specific handling if needed
   }
 );
 
@@ -45,41 +75,12 @@ export function getRequest<T>(
   return new Promise<AxiosResponse<T>>((resolve, reject) => {
     axios
       .get(endPoint, { params: parameters ?? "" })
-      .then(function (response: AxiosResponse<T>) {
-        resolve(response);
-      })
-      .catch(function (error: AxiosError) {
-        reject(error);
-      });
+      .then((response: AxiosResponse<T>) => resolve(response))
+      .catch((error: AxiosError) => reject(error));
   });
 }
 
 // Post Request
-// export function postRequest<T>(
-//   endPoint: string,
-//   parameters: unknown = {},
-//   header: HeadersDefaults & Record<string, AxiosHeaderValue> = axios.defaults
-//     .headers,
-//   requestConfig: AxiosRequestConfig | undefined = undefined
-// ) {
-//   axios.defaults.headers = {
-//     ...header,
-//   };
-
-//   return new Promise<AxiosResponse<T>>((resolve, reject) => {
-//     axios
-//       .post(endPoint, parameters, requestConfig)
-//       .then((response: AxiosResponse<T>) => {
-//         resolve(response);
-//       })
-//       .catch((error: AxiosError) => {
-//         console.log("Error: ", error);
-
-//         reject(error);
-//       });
-//   });
-// }
-
 export function postRequest<T>(
   endPoint: string,
   parameters: unknown = {},
@@ -94,12 +95,8 @@ export function postRequest<T>(
   return new Promise<AxiosResponse<T>>((resolve, reject) => {
     axios
       .post(endPoint, parameters, requestConfig)
-      .then((response: AxiosResponse<T>) => {
-        resolve(response);
-      })
-      .catch((error: AxiosError) => {
-        reject(error);
-      });
+      .then((response: AxiosResponse<T>) => resolve(response))
+      .catch((error: AxiosError) => reject(error));
   });
 }
 
@@ -111,7 +108,6 @@ export function putRequest<T>(
     .headers,
   requestConfig: AxiosRequestConfig | undefined = undefined
 ) {
-  // set this to token returned by server after user logs in
   axios.defaults.headers = {
     ...header,
   };
@@ -119,12 +115,8 @@ export function putRequest<T>(
   return new Promise<AxiosResponse<T>>((resolve, reject) => {
     axios
       .put(endPoint, parameters, requestConfig)
-      .then((response: AxiosResponse<T>) => {
-        resolve(response);
-      })
-      .catch((error: AxiosError) => {
-        reject(error);
-      });
+      .then((response: AxiosResponse<T>) => resolve(response))
+      .catch((error: AxiosError) => reject(error));
   });
 }
 
@@ -145,14 +137,8 @@ export function deleteRequest<T>(
 
   return new Promise<AxiosResponse<T>>((resolve, reject) => {
     axios
-      .delete(endPoint, {
-        params: parameters ?? "",
-      })
-      .then(function (response: AxiosResponse<T>) {
-        resolve(response);
-      })
-      .catch(function (error: AxiosError) {
-        reject(error);
-      });
+      .delete(endPoint, { params: parameters ?? "" })
+      .then((response: AxiosResponse<T>) => resolve(response))
+      .catch((error: AxiosError) => reject(error));
   });
 }

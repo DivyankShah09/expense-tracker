@@ -3,7 +3,7 @@ import { ApiSuccessResponse } from "../../../model/api-success-response";
 import { ApiEndpoints } from "../../../utils/api-endpoints";
 import { postRequest } from "../../../utils/axios";
 import { ReactQueryNames } from "../../../utils/react-query-names";
-interface addExpenseRequest {
+interface AddExpenseRequest {
   title: string;
   description: string;
   amount: number;
@@ -15,7 +15,7 @@ interface AddExpenseResponse {
   id: number;
 }
 
-const callAddExpenseApi = async (request: addExpenseRequest) => {
+const callAddExpenseApi = async (request: AddExpenseRequest) => {
   const response = await postRequest<ApiSuccessResponse<AddExpenseResponse>>(
     ApiEndpoints.ADD_EXPENSE,
     request

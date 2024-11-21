@@ -1,6 +1,6 @@
 import { Category } from 'src/category/entities/category.entity';
 
-export class CreateExpenseDto {
+export class ExpenseDto {
   title: string;
   description: string;
   amount: number;

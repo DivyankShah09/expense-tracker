@@ -1,5 +1,11 @@
 import { Expense } from 'src/expense/entities/expense.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Category {
@@ -13,7 +19,7 @@ export class Category {
   description: string;
 
   // One category can have many expenses
-  @OneToMany(() => Expense, (expense) => expense.category, { cascade: true })
+  @ManyToMany(() => Expense, (expense) => expense.category, { cascade: true })
   expenses: Expense[];
 
   constructor(category: Partial<Category>) {
