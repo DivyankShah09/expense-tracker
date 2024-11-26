@@ -6,6 +6,15 @@ import { useGetExpense } from "../../hooks/getExpenseHook";
 import SliderInput from "../../components/input/SliderInput";
 import DatePickerInput from "../../components/input/DatePickerInput";
 import { toast } from "react-toastify";
+import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
+
+interface Expense {
+  title: string;
+  description: string;
+  amount: number;
+  date: string;
+  category: string;
+}
 
 const ListAllExpenses = () => {
   const userId = localStorage.getItem("userId") || "0";
@@ -25,7 +34,7 @@ const ListAllExpenses = () => {
     ? new Date(new Date(endDate).setHours(23, 59, 59, 999) + 1).getTime() // End date set to the end of the day
     : null;
 
-  let filteredData;
+  let filteredData: any;
 
   // Check if start date is after end date
   if (start && end && start > end) {
@@ -51,25 +60,57 @@ const ListAllExpenses = () => {
         );
       })
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  } // Sort by date descending}
+  }
+
+  const categories = Object.values(ExpenseCategoryEnum).map((category) =>
+    category.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+  );
+
+  const overallExpenseCategoryData: any[] = [];
+
+  categories.forEach((category) => {
+    const pieChartEntry = {
+      name: category,
+      value: 0,
+    };
+    expenseData?.data.forEach((expense: Expense) => {
+      if (expense.category === category) {
+        pieChartEntry.value += expense.amount;
+      }
+    });
+    overallExpenseCategoryData.push(pieChartEntry);
+  });
 
   return (
     <>
       <div className="my-5 text-center">
+        <div className="my-3">
+          <HeaderText label="Total Expense per Category" />
+          <div className="px-5 flex flex-wrap justify-center gap-4 my-3">
+            {overallExpenseCategoryData.map((data, index) => (
+              <div
+                key={index}
+                className="bg-white border border-gray-200 rounded-lg shadow-md p-5 w-64 text-center hover:scale-105 transform transition-transform duration-200"
+              >
+                <div className="text-lg font-bold text-gray-700">
+                  {data.name}
+                </div>
+                <div className="text-2xl font-semibold text-primary mt-2">
+                  ${data.value.toFixed(2)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
         <HeaderText label="All Expense" />
         <div className="px-5 flex flex-row gap-5">
           <SelectInput
-            label="Sort By:"
-            labelPosition="top"
             value={category}
             onChange={(value) => setCategory(value)}
             placeholderText="Select Category"
             divClassName="w-fit"
           />
           <div className="">
-            <h1 className="text-primary font-semibold text-lg text-left w-fit">
-              Filters :
-            </h1>
             <div className="flex flex-row gap-2">
               <SliderInput
                 label="Amount"

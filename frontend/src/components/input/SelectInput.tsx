@@ -3,7 +3,7 @@ import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 
 export interface SelectInputProps {
   label?: string;
-  labelPosition: "top" | "left";
+  labelPosition?: "top" | "left";
   placeholderText?: string;
   value?: string;
   divClassName?: string;
@@ -25,13 +25,15 @@ const SelectInput = ({
           labelPosition === "top" ? "flex-col" : "flex-row"
         } ${divClassName}`}
       >
-        <h1
-          className={`text-primary font-semibold text-lg text-left ${
-            labelPosition === "top" ? "mb-1" : ""
-          }`}
-        >
-          {label}
-        </h1>
+        {label && (
+          <h1
+            className={`text-primary font-semibold text-lg text-left ${
+              labelPosition === "top" ? "mb-1" : ""
+            }`}
+          >
+            {label}
+          </h1>
+        )}
         <select
           className="h-12 w-full rounded-md border-2 border-primaryHover px-2 focus:outline-primary"
           value={value}

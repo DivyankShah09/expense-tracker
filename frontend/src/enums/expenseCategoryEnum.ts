@@ -1,16 +1,12 @@
 export enum ExpenseCategoryEnum {
   BILLS = "bills",
-  ELECTRONICS = "electronics",
-  HOME_APPLIANCES = "home_appliances",
+  APPLIANCES = "appliances",
   FASHION = "fashion",
   GROCERY = "grocery",
-  GROCERY_PERSONAL = "grocery_personal",
   ENTERTAINMENT = "entertainment",
   TRANSPORTATION = "transportation",
   DINING_OUT = "dining_out",
   SAVINGS_INVESTMENTS = "savings_investments",
   LOANS_DEBTS = "loans_debts",
   DONATIONS = "donations",
-  PETS = "pets",
-  PERSONAL_CARE = "personal_care",
 }
