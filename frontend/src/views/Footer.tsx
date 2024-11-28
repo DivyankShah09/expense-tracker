@@ -6,7 +6,9 @@ const Footer = () => {
   const { pathname } = location;
   const footerClass = pathname === "/login" ? "absolute bottom-0 w-screen" : "";
   return (
-    <footer className={`body-font ${footerClass} bg-[#24262b] text-[#bbbbbb]`}>
+    <footer
+      className={`body-font ${footerClass} bg-[#24262b] text-[#bbbbbb] h-[15vh]`}
+    >
       <div className="container mx-auto flex flex-col items-center px-5 py-8 sm:flex-row">
         <a
           className="title-font flex items-center justify-center font-medium text-gray-900 md:justify-start"

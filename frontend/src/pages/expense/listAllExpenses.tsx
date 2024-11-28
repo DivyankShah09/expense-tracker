@@ -7,6 +7,7 @@ import SliderInput from "../../components/input/SliderInput";
 import DatePickerInput from "../../components/input/DatePickerInput";
 import { toast } from "react-toastify";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
+import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
 
 interface Expense {
   title: string;
@@ -83,73 +84,78 @@ const ListAllExpenses = () => {
 
   return (
     <>
-      <div className="my-5 text-center">
-        <div className="my-3">
-          <HeaderText label="Total Expense per Category" />
-          <div className="px-5 flex flex-wrap justify-center gap-4 my-3">
-            {overallExpenseCategoryData.map((data, index) => (
-              <div
-                key={index}
-                className="bg-white border border-gray-200 rounded-lg shadow-md p-5 w-64 text-center hover:scale-105 transform transition-transform duration-200"
-              >
-                <div className="text-lg font-bold text-gray-700">
-                  {data.name}
+      {expenseLoading ? (
+        // Default values shown
+        <HourGlassLoader />
+      ) : (
+        <div className="my-5 text-center">
+          <div className="my-3">
+            <HeaderText label="Total Expense per Category" />
+            <div className="px-5 flex flex-wrap justify-center gap-4 my-3">
+              {overallExpenseCategoryData.map((data, index) => (
+                <div
+                  key={index}
+                  className="bg-white border border-gray-200 rounded-lg shadow-md p-5 w-64 text-center hover:scale-105 transform transition-transform duration-200"
+                >
+                  <div className="text-lg font-bold text-gray-700">
+                    {data.name}
+                  </div>
+                  <div className="text-2xl font-semibold text-primary mt-2">
+                    ${data.value.toFixed(2)}
+                  </div>
                 </div>
-                <div className="text-2xl font-semibold text-primary mt-2">
-                  ${data.value.toFixed(2)}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-        <HeaderText label="All Expense" />
-        <div className="px-5 flex flex-row gap-5">
-          <SelectInput
-            value={category}
-            onChange={(value) => setCategory(value)}
-            placeholderText="Select Category"
-            divClassName="w-fit"
-          />
-          <div className="">
-            <div className="flex flex-row gap-2">
-              <SliderInput
-                label="Amount"
-                value={amount}
-                minValue={0}
-                maxValue={1000}
-                onChange={(value: number) => setAmount(value)}
-              />
-              <div className="flex flex-row">
-                <label className="block text-lg font-medium h-12 m-2 p-2">
-                  From
-                </label>
-                <DatePickerInput
-                  labelPosition="top"
-                  value={startDate}
-                  onChange={(value) => setStartDate(value)}
+          <HeaderText label="All Expense" />
+          <div className="px-5 flex flex-row gap-5">
+            <SelectInput
+              value={category}
+              onChange={(value) => setCategory(value)}
+              placeholderText="Select Category"
+              divClassName="w-fit"
+            />
+            <div className="">
+              <div className="flex flex-row gap-2">
+                <SliderInput
+                  label="Amount"
+                  value={amount}
+                  minValue={0}
+                  maxValue={1000}
+                  onChange={(value: number) => setAmount(value)}
                 />
-              </div>
-              <div className="flex flex-row">
-                <label className="block text-lg font-medium h-12 m-2 p-2">
-                  To
-                </label>
-                <DatePickerInput
-                  labelPosition="top"
-                  value={endDate}
-                  onChange={(value) => setEndDate(value)}
-                />
+                <div className="flex flex-row">
+                  <label className="block text-lg font-medium h-12 m-2 p-2">
+                    From
+                  </label>
+                  <DatePickerInput
+                    labelPosition="top"
+                    value={startDate}
+                    onChange={(value) => setStartDate(value)}
+                  />
+                </div>
+                <div className="flex flex-row">
+                  <label className="block text-lg font-medium h-12 m-2 p-2">
+                    To
+                  </label>
+                  <DatePickerInput
+                    labelPosition="top"
+                    value={endDate}
+                    onChange={(value) => setEndDate(value)}
+                  />
+                </div>
               </div>
             </div>
           </div>
+          <div className="px-5 py-1">
+            <ExpenseTable
+              expenseAllData={filteredData} // Use filteredData here
+              headerRequired={false}
+              colSpan={5}
+            />
+          </div>
         </div>
-        <div className="px-5 py-1">
-          <ExpenseTable
-            expenseAllData={filteredData} // Use filteredData here
-            headerRequired={false}
-            colSpan={5}
-          />
-        </div>
-      </div>
+      )}
     </>
   );
 };

@@ -4,7 +4,8 @@ import { IncomeTable } from "../../components/table/IncomeTable";
 import { HeaderText } from "../../components/text/HeaderText";
 import { useGetIncome } from "../../hooks/getIncomeHook";
 import DatePickerInput from "../../components/input/DatePickerInput";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
 
 const ListAllIncomes = () => {
   const userId = localStorage.getItem("userId") || "0";
@@ -42,46 +43,49 @@ const ListAllIncomes = () => {
   } // Sort by date descending
   return (
     <>
-      <ToastContainer />
-      <div className="my-5 text-center">
-        <HeaderText label="All Income" />
-        <div className="px-5 flex flex-row gap-5">
-          <div className="flex flex-row gap-2">
-            <SliderInput
-              label="Amount"
-              value={amount}
-              minValue={0}
-              maxValue={1000}
-              onChange={(value: number) => setAmount(value)}
-            />
-            <div className="flex flex-row">
-              <label className="block text-lg font-medium h-12 m-2 p-2">
-                From
-              </label>
-              <DatePickerInput
-                value={startDate}
-                onChange={(value) => setStartDate(value)}
+      {incomeLoading ? (
+        <HourGlassLoader />
+      ) : (
+        <div className="my-5 text-center">
+          <HeaderText label="All Income" />
+          <div className="px-5 flex flex-row gap-5">
+            <div className="flex flex-row gap-2">
+              <SliderInput
+                label="Amount"
+                value={amount}
+                minValue={0}
+                maxValue={1000}
+                onChange={(value: number) => setAmount(value)}
               />
-            </div>
-            <div className="flex flex-row">
-              <label className="block text-lg font-medium h-12 m-2 p-2">
-                To
-              </label>
-              <DatePickerInput
-                value={endDate}
-                onChange={(value) => setEndDate(value)}
-              />
+              <div className="flex flex-row">
+                <label className="block text-lg font-medium h-12 m-2 p-2">
+                  From
+                </label>
+                <DatePickerInput
+                  value={startDate}
+                  onChange={(value) => setStartDate(value)}
+                />
+              </div>
+              <div className="flex flex-row">
+                <label className="block text-lg font-medium h-12 m-2 p-2">
+                  To
+                </label>
+                <DatePickerInput
+                  value={endDate}
+                  onChange={(value) => setEndDate(value)}
+                />
+              </div>
             </div>
           </div>
+          <div className="px-5 py-1">
+            <IncomeTable
+              incomeAllData={filteredData}
+              headerRequired={false}
+              colSpan={5}
+            />
+          </div>
         </div>
-        <div className="px-5 py-1">
-          <IncomeTable
-            incomeAllData={filteredData}
-            headerRequired={false}
-            colSpan={5}
-          />
-        </div>
-      </div>
+      )}
     </>
   );
 };

@@ -14,6 +14,7 @@ import DatePickerInput from "../../components/input/DatePickerInput";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import ExpenseCategoryPieChart from "../../components/chart/ExpenseCategoryPieChart";
+import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
 
 interface Expense {
   title: string;
@@ -183,103 +184,111 @@ const Dashboard = () => {
     overallExpenseCategoryPieChartData.push(pieChartEntry);
   });
 
-
   return (
     <>
-      <div className="p-4">
-        <div className="px-5 flex flex-row">
-          <div>
-            <h1 className="w-fit text-3xl font-bold mr-1 py-3">
-              Hello {userName}
-            </h1>
-          </div>
-          <div className="flex flex-row ml-auto">
-            <div className="flex flex-row">
-              <label className="block text-lg font-medium h-12 m-2 p-2">
-                From
-              </label>
-              <DatePickerInput
-                value={startDate}
-                onChange={(value) => setStartDate(value)}
-              />
+      {incomeLoading || expenseLoading || expenseMonthCategoryLoading ? (
+        // Default values shown
+        <HourGlassLoader />
+      ) : (
+        <>
+          <div className="p-4">
+            <div className="px-5 flex flex-row">
+              <div>
+                <h1 className="w-fit text-3xl font-bold mr-1 py-3">
+                  Hello {userName}
+                </h1>
+              </div>
+              <div className="flex flex-row ml-auto">
+                <div className="flex flex-row">
+                  <label className="block text-lg font-medium h-12 m-2 p-2">
+                    From
+                  </label>
+                  <DatePickerInput
+                    value={startDate}
+                    onChange={(value) => setStartDate(value)}
+                  />
+                </div>
+                <div className="flex flex-row">
+                  <label className="block text-lg font-medium h-12 m-2 p-2">
+                    To
+                  </label>
+                  <DatePickerInput
+                    value={endDate}
+                    onChange={(value) => setEndDate(value)}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="flex flex-row">
-              <label className="block text-lg font-medium h-12 m-2 p-2">
-                To
-              </label>
-              <DatePickerInput
-                value={endDate}
-                onChange={(value) => setEndDate(value)}
-              />
-            </div>
-          </div>
-        </div>
 
-        <div className="flex flex-row w-full gap-4 p-2">
-          <div className="w-1/2 p-5 bg-primaryBackground rounded-xl">
-            <p>Overall Balance</p>
-            <SubHeaderText
-              label={
-                totalIncome && totalExpense
-                  ? `$ ${(totalIncome - totalExpense).toString()}`
-                  : `$ 0`
-              }
-            />
+            <div className="flex flex-row w-full gap-4 p-2">
+              <div className="w-1/2 p-5 bg-primaryBackground rounded-xl">
+                <p>Overall Balance</p>
+                <SubHeaderText
+                  label={
+                    totalIncome && totalExpense
+                      ? `$ ${(totalIncome - totalExpense).toString()}`
+                      : `$ 0`
+                  }
+                />
+              </div>
+              <div className="w-1/2 p-5 bg-positiveBackground rounded-xl">
+                <p>Total Income</p>
+                <SubHeaderText label={`$ ${totalIncome}`} />
+              </div>
+              <div className="w-1/2 p-5 bg-negativeBackground rounded-xl">
+                <p className="text-xl">Total Expense</p>
+                <SubHeaderText label={`$ ${totalExpense}`} />
+              </div>
+            </div>
+            <div className="p-2 w-full">
+              <IncomeExpenseYearlyBarChart
+                overallIncomeExpenseData={overallIncomeExpenseData}
+              />
+            </div>
+            <div className="flex p-2 gap-4">
+              <div className="w-1/2">
+                <ExpenseCategoryYearlyBarChart
+                  overallMonthlyExpenseData={overallMonthlyExpenseData}
+                  categories={categories}
+                />
+              </div>
+              <div className="w-1/2">
+                <ExpenseCategoryPieChart
+                  overallExpenseCategoryData={
+                    overallExpenseCategoryPieChartData
+                  }
+                />
+              </div>
+            </div>
+            <div className="p-2">
+              <ExpenseTable
+                expenseAllData={filteredExpenseData
+                  ?.sort(
+                    (a, b) =>
+                      new Date(b.date).getTime() - new Date(a.date).getTime()
+                  )
+                  ?.slice(0, 5)}
+                headerRequired={true}
+                headerLabel="Latest Transactions - Expense"
+                colSpan={5}
+              />
+            </div>
+            <div className="p-2">
+              <IncomeTable
+                incomeAllData={filteredIncomeData
+                  ?.sort(
+                    (a, b) =>
+                      new Date(b.date).getTime() - new Date(a.date).getTime()
+                  )
+                  ?.slice(0, 5)}
+                headerRequired={true}
+                headerLabel="Latest Transactions - Income"
+                colSpan={4}
+              />
+            </div>
           </div>
-          <div className="w-1/2 p-5 bg-positiveBackground rounded-xl">
-            <p>Total Income</p>
-            <SubHeaderText label={`$ ${totalIncome}`} />
-          </div>
-          <div className="w-1/2 p-5 bg-negativeBackground rounded-xl">
-            <p className="text-xl">Total Expense</p>
-            <SubHeaderText label={`$ ${totalExpense}`} />
-          </div>
-        </div>
-        <div className="p-2 w-full">
-          <IncomeExpenseYearlyBarChart
-            overallIncomeExpenseData={overallIncomeExpenseData}
-          />
-        </div>
-        <div className="flex p-2 gap-4">
-          <div className="w-1/2">
-            <ExpenseCategoryYearlyBarChart
-              overallMonthlyExpenseData={overallMonthlyExpenseData}
-              categories={categories}
-            />
-          </div>
-          <div className="w-1/2">
-            <ExpenseCategoryPieChart
-              overallExpenseCategoryData={overallExpenseCategoryPieChartData}
-            />
-          </div>
-        </div>
-        <div className="p-2">
-          <ExpenseTable
-            expenseAllData={filteredExpenseData
-              ?.sort(
-                (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime()
-              )
-              ?.slice(0, 5)}
-            headerRequired={true}
-            headerLabel="Latest Transactions - Expense"
-            colSpan={5}
-          />
-        </div>
-        <div className="p-2">
-          <IncomeTable
-            incomeAllData={filteredIncomeData
-              ?.sort(
-                (a, b) =>
-                  new Date(b.date).getTime() - new Date(a.date).getTime()
-              )
-              ?.slice(0, 5)}
-            headerRequired={true}
-            headerLabel="Latest Transactions - Income"
-            colSpan={4}
-          />
-        </div>
-      </div>
+        </>
+      )}
     </>
   );
 };
