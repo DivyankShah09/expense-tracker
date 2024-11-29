@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expensetracker-frontend-deployment
+  labels:
+    app: expensetracker-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: expensetracker-frontend
+  template:
+    metadata:
+      labels:
+        app: expensetracker-frontend
+    spec:
+      containers:
+        - name: expensetracker-frontend
+          image: divyankshah09/expensetracker-frontend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: REACT_APP_BACKEND_URL
+              value: http://localhost:8000

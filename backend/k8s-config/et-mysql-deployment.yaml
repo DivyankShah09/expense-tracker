@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: et-mysql-deployment
+spec:
+  selector:
+    matchLabels:
+      app: et-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: et-mysql
+    spec:
+      containers:
+        - image: mysql:latest
+          name: et-mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: et-mysql-secret
+                  key: password
+          ports:
+            - containerPort: 3306
+              name: et-mysql
+          volumeMounts:
+            - name: et-mysql-pv-volume
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: et-mysql-pv-volume
+          persistentVolumeClaim:
+            claimName: et-mysql-pv-claim

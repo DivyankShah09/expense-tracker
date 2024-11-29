@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: et-backend-service
+  labels:
+    app: et-backend
+spec:
+  selector:
+    app: et-backend
+  ports:
+    - protocol: TCP
+      port: 8000 # The port exposed by the service
+      targetPort: 8000 # The port the backend container listens on
+  type: ClusterIP # Default type for internal communication

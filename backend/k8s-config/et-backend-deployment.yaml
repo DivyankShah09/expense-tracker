@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: et-backend-deployment
+  labels:
+    app: et-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: et-backend
+  template:
+    metadata:
+      labels:
+        app: et-backend
+    spec:
+      containers:
+        - name: et-backend
+          image: divyankshah09/expensetracker-backend:latest # Replace with your actual backend Docker image
+          ports:
+            - containerPort: 8000 # The port your backend app listens on
+          env:
+            - name: MYSQL_HOST
+              value: et-mysql-service.default.svc.cluster.local # Service name of MySQL in Kubernetes
+            - name: MYSQL_PORT
+              value: '3306' # MySQL default port
+            - name: MYSQL_USERNAME
+              value: root # Replace with the username if different
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: et-mysql-secret
+                  key: password
+            - name: MYSQL_DATABASE
+              value: expense_tracker # Replace with your database name if different
+            - name: JWT_SECRET
+              value: 7d14d34497e1fdf76d7067303633a03786adb296b20d9d60766332f107f1d629cdba6f8ffc6f476f3121873bd5bc35dea763a5c5d8611d65fd79e0dbb386563388e366cd08262ce77a8d2776dfd09ee53ae7e7704fc73f54420e200873f7324f28e837eff684b869dbea4b5a7aaa733e0195429170edfd63c8bfd8101cf92b763b07fa096a703a73120369739d00935b8b571768a1b659123fbf543889b8599aad4f35576211532c32d7748a2410669d5ed6bc3d11a12bf7734700d4114bc23fe7897da6ed6a2815dca0283005b64b5995409679b0976bf193298e0cbeae7a23b93dbb0893e477b7c97ab55171a404e0fb862f6c07fd47ea851f546ee251d176

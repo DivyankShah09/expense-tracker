@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'src/user/user.service';
 import { SignupCredentialsDto } from './dto/signup-credentials.dto';
-import * as bcrypt from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from '../common/utils/api-response.util';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
@@ -26,10 +25,9 @@ export class AuthService {
       });
     }
 
-    const hashedPassword = await bcrypt.hash(signupCredentialsDto.password, 10);
+    // const hashedPassword = await bcrypt.hash(signupCredentialsDto.password, 10);
     const user = new User({
       ...signupCredentialsDto,
-      password: hashedPassword,
     });
 
     await this.userService.create(user); // Use UserService to create user
@@ -61,11 +59,12 @@ export class AuthService {
       });
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      loginCredentialsDto.password,
-      user.password,
-    );
-    if (!isPasswordValid) {
+    // const isPasswordValid = await bcrypt.compare(
+    //   loginCredentialsDto.password,
+    //   user.password,
+    // );
+    // if (!isPasswordValid) {
+    if (loginCredentialsDto.password === user.password) {
       return ApiResponse({
         statusCode: 401,
         statusMessage: 'Invalid login credentials.',
