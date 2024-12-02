@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: expensetracker-frontend-deployment
+  name: et-frontend-deployment
   labels:
-    app: expensetracker-frontend
+    app: et-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: expensetracker-frontend
+      app: et-frontend
   template:
     metadata:
       labels:
-        app: expensetracker-frontend
+        app: et-frontend
     spec:
       containers:
-        - name: expensetracker-frontend
-          image: divyankshah09/expensetracker-frontend:latest
+        - name: et-frontend
+          image: divyankshah09/et-frontend:latest
           ports:
             - containerPort: 3000
           env:

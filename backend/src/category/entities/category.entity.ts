@@ -1,4 +1,5 @@
 import { Expense } from 'src/expense/entities/expense.entity';
+import { RecurringExpense } from 'src/recurring-expense/entities/recurring-expense.entity';
 import {
   Column,
   Entity,
@@ -21,6 +22,13 @@ export class Category {
   // One category can have many expenses
   @ManyToMany(() => Expense, (expense) => expense.category, { cascade: true })
   expenses: Expense[];
+
+  @ManyToMany(
+    () => RecurringExpense,
+    (recurringExpense) => recurringExpense.category,
+    { cascade: true },
+  )
+  recurringExpenses: RecurringExpense[];
 
   constructor(category: Partial<Category>) {
     Object.assign(this, category);

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: et-backend
-          image: divyankshah09/expensetracker-backend:latest # Replace with your actual backend Docker image
+          image: divyankshah09/et-backend:latest # Replace with your actual backend Docker image
           ports:
             - containerPort: 8000 # The port your backend app listens on
           env:

@@ -22,7 +22,10 @@ const SideBar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   const handleSignOut = () => {
-    localStorage.clear();
+    localStorage.removeItem("email");
+    localStorage.removeItem("name");
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
     navigate("/");
   };
 

@@ -37,7 +37,7 @@ export class ExpenseService {
     return ApiResponse({
       statusCode: 201,
       statusMessage: 'Expense Added Successfully',
-      data: { expenseId: response.id },
+      data: { expenseId: 'response.id' },
     });
   }
 

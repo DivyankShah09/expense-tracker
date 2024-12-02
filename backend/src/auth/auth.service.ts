@@ -5,6 +5,7 @@ import { SignupCredentialsDto } from './dto/signup-credentials.dto';
 import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from '../common/utils/api-response.util';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -25,9 +26,10 @@ export class AuthService {
       });
     }
 
-    // const hashedPassword = await bcrypt.hash(signupCredentialsDto.password, 10);
+    const hashedPassword = await bcrypt.hash(signupCredentialsDto.password, 10);
     const user = new User({
       ...signupCredentialsDto,
+      password: hashedPassword,
     });
 
     await this.userService.create(user); // Use UserService to create user
@@ -59,12 +61,11 @@ export class AuthService {
       });
     }
 
-    // const isPasswordValid = await bcrypt.compare(
-    //   loginCredentialsDto.password,
-    //   user.password,
-    // );
-    // if (!isPasswordValid) {
-    if (loginCredentialsDto.password === user.password) {
+    const isPasswordValid = await bcrypt.compare(
+      loginCredentialsDto.password,
+      user.password,
+    );
+    if (!isPasswordValid) {
       return ApiResponse({
         statusCode: 401,
         statusMessage: 'Invalid login credentials.',

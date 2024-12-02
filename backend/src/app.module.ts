@@ -6,6 +6,7 @@ import { IncomeModule } from './income/income.module';
 import { ExpenseModule } from './expense/expense.module';
 import { CategoryModule } from './category/category.module';
 import { AuthModule } from './auth/auth.module';
+import { RecurringExpenseModule } from './recurring-expense/recurring-expense.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     ExpenseModule,
     CategoryModule,
     AuthModule,
+    RecurringExpenseModule,
   ],
   controllers: [],
   providers: [],
