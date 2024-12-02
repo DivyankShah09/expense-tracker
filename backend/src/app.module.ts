@@ -7,12 +7,15 @@ import { ExpenseModule } from './expense/expense.module';
 import { CategoryModule } from './category/category.module';
 import { AuthModule } from './auth/auth.module';
 import { RecurringExpenseModule } from './recurring-expense/recurring-expense.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronService } from './cron/cron.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    ScheduleModule.forRoot(),
     DatabaseModule,
     UserModule,
     IncomeModule,
@@ -22,6 +25,6 @@ import { RecurringExpenseModule } from './recurring-expense/recurring-expense.mo
     RecurringExpenseModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [CronService],
 })
 export class AppModule {}

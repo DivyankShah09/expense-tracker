@@ -17,5 +17,6 @@ import { ExpenseModule } from 'src/expense/expense.module';
   ],
   controllers: [RecurringExpenseController],
   providers: [RecurringExpenseService],
+  exports: [RecurringExpenseService],
 })
 export class RecurringExpenseModule {}
