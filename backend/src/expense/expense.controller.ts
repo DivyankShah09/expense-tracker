@@ -10,6 +10,7 @@ import {
 import { ExpenseService } from './expense.service';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
 import { ExpenseDto } from './dto/expense.dto';
+import { ApiResponse } from 'src/common/utils/api-response.util';
 
 @Controller('expense')
 export class ExpenseController {
@@ -19,7 +20,12 @@ export class ExpenseController {
   @Post('/add-expense')
   async addExpense(@Body() expenseDto: ExpenseDto, @Request() req) {
     const user = req.user;
-    return this.expenseService.addExpense(expenseDto, user);
+    const response = this.expenseService.addExpense(expenseDto, user);
+    return ApiResponse({
+      statusCode: 201,
+      statusMessage: 'Expense Added Successfully',
+      data: { expenseId: response },
+    });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -30,12 +36,17 @@ export class ExpenseController {
     @Param('startDate') startDate: Date,
     @Param('endDate') endDate: Date,
   ) {
-    return this.expenseService.getGroupedExpenseData(
+    const expenseData = this.expenseService.getGroupedExpenseData(
       id,
       year,
       startDate,
       endDate,
     );
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: `Expense Data for Year ${year} Retrieved Successfully`,
+      data: expenseData,
+    });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -44,12 +55,23 @@ export class ExpenseController {
     @Param('id') id: number,
     @Param('year') year: number,
   ) {
-    return this.expenseService.getExpenseByUserIdAndYear(id, year);
+    const expenseData = this.expenseService.getExpenseByUserIdAndYear(id, year);
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: `Expense Records for ${year} Retrieved Successfully`,
+      data: expenseData,
+    });
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getExpenseByUserId(@Param('id') id: number) {
-    return this.expenseService.getExpenseByUserId(id);
+    const expenseData = this.expenseService.getExpenseByUserId(id);
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'expense Records Retrieved Successfully',
+      data: expenseData,
+    });
   }
 }

@@ -30,11 +30,7 @@ export class IncomeService {
 
     const response = await this.entityManager.save(income);
 
-    return ApiResponse({
-      statusCode: 201,
-      statusMessage: 'Income Added Successfully',
-      data: { incomeId: response.id },
-    });
+    return response.id;
   }
 
   async getIncomeByUserId(userId: number) {
@@ -50,11 +46,7 @@ export class IncomeService {
       date: record.date,
     }));
 
-    return ApiResponse({
-      statusCode: 200,
-      statusMessage: 'Income Records Retrieved Successfully',
-      data: incomeData,
-    });
+    return incomeData;
   }
 
   async getIncomeByUserIdAndYear(userId: number, year: number) {
@@ -76,10 +68,6 @@ export class IncomeService {
       date: record.date,
     }));
 
-    return ApiResponse({
-      statusCode: 200,
-      statusMessage: 'Income Records Retrieved Successfully',
-      data: incomeData,
-    });
+    return incomeData;
   }
 }

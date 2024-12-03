@@ -2,6 +2,7 @@ import { Controller, Post, Body, Request, UseGuards } from '@nestjs/common';
 import { RecurringExpenseService } from './recurring-expense.service';
 import { RecurringExpenseDto } from './dto/recurring-expense.dto';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { ApiResponse } from 'src/common/utils/api-response.util';
 
 @Controller('recurring-expense')
 export class RecurringExpenseController {
@@ -12,12 +13,18 @@ export class RecurringExpenseController {
   @UseGuards(JwtAuthGuard)
   @Post('/add-recurring-expense')
   create(@Body() recurringExpenseDto: RecurringExpenseDto, @Request() req) {
-    // console.log(req);
 
     const user = req.user;
-    return this.recurringExpenseService.addRecurringExpense(
+
+    const response = this.recurringExpenseService.addRecurringExpense(
       recurringExpenseDto,
       user,
     );
+
+    return ApiResponse({
+      statusCode: 201,
+      statusMessage: 'Recurring Expense Added Successfully',
+      data: { expenseId: response },
+    });
   }
 }

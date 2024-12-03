@@ -10,6 +10,7 @@ import {
 import { IncomeService } from './income.service';
 import { IncomeDto } from './dto/income.dto';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
+import { ApiResponse } from 'src/common/utils/api-response.util';
 
 @Controller('income')
 export class IncomeController {
@@ -19,7 +20,13 @@ export class IncomeController {
   @Post('/add-income')
   async addIncome(@Body() createIncomeDto: IncomeDto, @Request() req) {
     const user = req.user;
-    return this.incomeService.addIncome(createIncomeDto, user);
+    const response = this.incomeService.addIncome(createIncomeDto, user);
+
+    return ApiResponse({
+      statusCode: 201,
+      statusMessage: 'Income Added Successfully',
+      data: { incomeId: response },
+    });
   }
 
   @UseGuards(JwtAuthGuard)
@@ -28,12 +35,23 @@ export class IncomeController {
     @Param('id') id: number,
     @Param('year') year: number,
   ) {
-    return this.incomeService.getIncomeByUserIdAndYear(id, year);
+    const incomeData = this.incomeService.getIncomeByUserIdAndYear(id, year);
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Income Records Retrieved Successfully',
+      data: incomeData,
+    });
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getIncomeByUserId(@Param('id') id: number) {
-    return this.incomeService.getIncomeByUserId(id);
+    const incomeData = this.incomeService.getIncomeByUserId(id);
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Income Records Retrieved Successfully',
+      data: incomeData,
+    });
   }
 }

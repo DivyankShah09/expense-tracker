@@ -34,11 +34,7 @@ export class ExpenseService {
 
     const response = await this.entityManager.save(expense);
 
-    return ApiResponse({
-      statusCode: 201,
-      statusMessage: 'Expense Added Successfully',
-      data: { expenseId: 'response.id' },
-    });
+    return response.id;
   }
 
   async getExpenseByUserId(userId: number) {
@@ -55,11 +51,7 @@ export class ExpenseService {
       category: record.category.name,
     }));
 
-    return ApiResponse({
-      statusCode: 200,
-      statusMessage: 'expense Records Retrieved Successfully',
-      data: expenseData,
-    });
+    return expenseData;
   }
 
   async getExpenseByUserIdAndYear(userId: number, year: number) {
@@ -82,11 +74,7 @@ export class ExpenseService {
       category: record.category.name,
     }));
 
-    return ApiResponse({
-      statusCode: 200,
-      statusMessage: `Expense Records for ${year} Retrieved Successfully`,
-      data: expenseData,
-    });
+    return expenseData;
   }
 
   formatDate = (date: string | Date) => {
@@ -130,10 +118,6 @@ export class ExpenseService {
     // Execute the query
     const expenseData = await queryBuilder.getRawMany();
 
-    return ApiResponse({
-      statusCode: 200,
-      statusMessage: `Expense Data for Year ${year} Retrieved Successfully`,
-      data: expenseData,
-    });
+    return expenseData;
   }
 }

@@ -84,11 +84,6 @@ export class RecurringExpenseService {
       const response = await this.entityManager.save(recurringExpense);
 
       return { expenseId: response.id };
-      // return ApiResponse({
-      //   statusCode: 201,
-      //   statusMessage: 'Recurring Expense Added Successfully',
-      //   data: { expenseId: response.id },
-      // });
     } catch (error) {
       throw new Error(`Error adding recurring expense: ${error.message}`);
     }
@@ -114,10 +109,6 @@ export class RecurringExpenseService {
     );
 
     recurringExpense.nextDate = updatedNextDate;
-
-    console.log('====================================');
-    console.log(recurringExpense);
-    console.log('====================================');
 
     const updatedRecord =
       await this.recurringExpenseRepository.save(recurringExpense);
