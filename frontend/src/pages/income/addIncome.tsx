@@ -8,8 +8,10 @@ import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePickerInput from "../../components/input/DatePickerInput";
+import { useNavigate } from "react-router-dom";
 
 const AddIncome = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
@@ -48,13 +50,14 @@ const AddIncome = () => {
           amount: amount,
           date: date,
         });
+        toast.success("Income added successfully");
+        navigate("/dashboard");
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.statusText);
         } else {
           toast.error("Unkonw error occured !!");
         }
-        // navigate based on the response status code
       }
     }
   };

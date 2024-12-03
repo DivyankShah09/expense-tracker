@@ -113,6 +113,7 @@ const ListAllExpenses = () => {
               value={category}
               onChange={(value) => setCategory(value)}
               placeholderText="Select Category"
+              options={ExpenseCategoryEnum}
               divClassName="w-fit"
             />
             <div className="">

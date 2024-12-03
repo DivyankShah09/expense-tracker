@@ -3,6 +3,7 @@ export const ReactQueryNames = {
   SIGNUP: "signup",
   ADD_INCOME: "add_income",
   ADD_EXPENSE: "add_expense",
+  ADD_RECURRING_EXPENSE: "add_recurring_expense",
   GET_INCOME: "get_income",
   GET_INCOME_BY_YEAR: "get_income_by_year",
   GET_EXPENSE: "get_expense",

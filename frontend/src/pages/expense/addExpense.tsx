@@ -7,15 +7,24 @@ import DatePickerInput from "../../components/input/DatePickerInput";
 import SelectInput from "../../components/input/SelectInput";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { useAddExpense } from "./hook/addExpenseHook";
+import { useAddExpense, useAddRecurringExpense } from "./hook/addExpenseHook";
+import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
+import { CheckBoxInput } from "../../components/input/CkeckBoxInput";
+import { ExpenseFrequencyEnum } from "../../enums/expenseFrequencyEnum";
+import { useNavigate } from "react-router-dom";
 
 const AddExpense = () => {
+  const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [date, setDate] = useState<string>("");
   const [category, setCategory] = useState<string>("");
-  const { mutateAsync } = useAddExpense();
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [frequency, setFrequency] = useState<string>("");
+  const { mutateAsync: addExpenseMutateAsync } = useAddExpense();
+  const { mutateAsync: addRecurringExpenseMutateAsync } =
+    useAddRecurringExpense();
 
   const validate = () => {
     if (!title) {
@@ -49,13 +58,27 @@ const AddExpense = () => {
   const callAddExpense = async () => {
     if (validate()) {
       try {
-        await mutateAsync({
-          title: title,
-          description: description,
-          amount: amount,
-          date: date,
-          category: category,
-        });
+        if (isRecurring) {
+          await addRecurringExpenseMutateAsync({
+            title: title,
+            description: description,
+            amount: amount,
+            date: date,
+            category: category,
+            frequency: frequency,
+          });
+          toast.success("Recurring expense added successfully");
+        } else {
+          await addExpenseMutateAsync({
+            title: title,
+            description: description,
+            amount: amount,
+            date: date,
+            category: category,
+          });
+          toast.success("Expense added successfully");
+        }
+        navigate("/dashboard");
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.statusText);
@@ -107,9 +130,29 @@ const AddExpense = () => {
             label="Category"
             labelPosition="top"
             value={category}
-            onChange={(value) => setCategory(value)}
+            options={ExpenseCategoryEnum}
             placeholderText="Select Category"
+            onChange={(value) => setCategory(value)}
           />
+
+          <CheckBoxInput
+            label="Recurring Expense"
+            value={isRecurring}
+            onClick={(value) => setIsRecurring(value)}
+          />
+
+          {isRecurring ? (
+            <SelectInput
+              label="Frequency"
+              labelPosition="top"
+              value={frequency}
+              options={ExpenseFrequencyEnum}
+              placeholderText="Select Frequency"
+              onChange={(value) => setFrequency(value)}
+            />
+          ) : (
+            <></>
+          )}
 
           <PrimaryButton
             buttonText="Add Expense"

@@ -1,5 +1,4 @@
 import React from "react";
-import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 
 export interface SelectInputProps {
   label?: string;
@@ -7,6 +6,7 @@ export interface SelectInputProps {
   placeholderText?: string;
   value?: string;
   divClassName?: string;
+  options: Record<string, string>;
   onChange?: (value: string) => void;
 }
 
@@ -16,6 +16,7 @@ const SelectInput = ({
   value,
   placeholderText,
   divClassName = "",
+  options,
   onChange,
 }: SelectInputProps) => {
   return (
@@ -44,7 +45,7 @@ const SelectInput = ({
           <option value="" disabled hidden>
             {placeholderText}
           </option>
-          {Object.values(ExpenseCategoryEnum).map((category) => (
+          {Object.values(options).map((category) => (
             <option key={category} value={category}>
               {category
                 .replace(/_/g, " ")

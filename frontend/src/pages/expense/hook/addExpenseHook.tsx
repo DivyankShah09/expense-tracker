@@ -11,6 +11,15 @@ interface AddExpenseRequest {
   category: string;
 }
 
+interface AddRecurringExpenseREquest {
+  title: string;
+  description: string;
+  amount: number;
+  date: string;
+  category: string;
+  frequency: string;
+}
+
 interface AddExpenseResponse {
   id: number;
 }
@@ -23,9 +32,25 @@ const callAddExpenseApi = async (request: AddExpenseRequest) => {
   return response.data;
 };
 
+const callAddRecurringExpenseApi = async (
+  request: AddRecurringExpenseREquest
+) => {
+  const response = await postRequest<
+    ApiSuccessResponse<AddRecurringExpenseREquest>
+  >(ApiEndpoints.ADD_RECURRING_EXPENSE, request);
+  return response.data;
+};
+
 export const useAddExpense = () => {
   return useMutation({
     mutationFn: callAddExpenseApi,
     mutationKey: [ReactQueryNames.ADD_EXPENSE],
+  });
+};
+
+export const useAddRecurringExpense = () => {
+  return useMutation({
+    mutationFn: callAddRecurringExpenseApi,
+    mutationKey: [ReactQueryNames.ADD_RECURRING_EXPENSE],
   });
 };
