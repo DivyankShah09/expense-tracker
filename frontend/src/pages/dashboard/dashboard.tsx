@@ -78,10 +78,6 @@ const Dashboard = () => {
     endDate
   );
 
-  console.log("====================================");
-  console.log(expenseDataByMonthCategory);
-  console.log("====================================");
-
   // Filtering Income Data
   let filteredIncomeData: Income[] | undefined;
   let filteredExpenseData: Expense[] | undefined;
@@ -195,7 +191,7 @@ const Dashboard = () => {
         <HourGlassLoader />
       ) : (
         <>
-          <div className="p-4">
+          <div className="p-4  min-h-[90vh]">
             <div className="px-5 flex flex-row">
               <div>
                 <h1 className="w-fit text-3xl font-bold mr-1 py-3">
