@@ -22,10 +22,10 @@ function App() {
   return (
     <>
       <ToastContainer />
-      <div className="overflow-x-hidden">
+      <div className="overflow-x-hidden  overflow-y-hidden">
         <Router>
           <ConditionalHeader />
-          <div className="w-screen bg-white flex flex-col overflow-y-auto">
+          <div className="w-screen bg-white flex flex-col">
             <div className="relative flex flex-row">
               <ConditionalSideBar />
               <div className="w-full">

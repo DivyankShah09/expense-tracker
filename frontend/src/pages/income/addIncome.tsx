@@ -60,7 +60,7 @@ const AddIncome = () => {
   };
   return (
     <>
-      <div className="my-5 text-center w-full">
+      <div className="py-5 text-center w-full min-h-[90vh]">
         <HeaderText label="Add Income" />
         <div className="w-1/3 text-center p-2 mx-auto my-2">
           <TextInput

@@ -20,7 +20,7 @@ export class IncomeController {
   @Post('/add-income')
   async addIncome(@Body() createIncomeDto: IncomeDto, @Request() req) {
     const user = req.user;
-    const response = this.incomeService.addIncome(createIncomeDto, user);
+    const response = await this.incomeService.addIncome(createIncomeDto, user);
 
     return ApiResponse({
       statusCode: 201,
@@ -35,7 +35,10 @@ export class IncomeController {
     @Param('id') id: number,
     @Param('year') year: number,
   ) {
-    const incomeData = this.incomeService.getIncomeByUserIdAndYear(id, year);
+    const incomeData = await this.incomeService.getIncomeByUserIdAndYear(
+      id,
+      year,
+    );
     return ApiResponse({
       statusCode: 200,
       statusMessage: 'Income Records Retrieved Successfully',
@@ -46,7 +49,7 @@ export class IncomeController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getIncomeByUserId(@Param('id') id: number) {
-    const incomeData = this.incomeService.getIncomeByUserId(id);
+    const incomeData = await this.incomeService.getIncomeByUserId(id);
 
     return ApiResponse({
       statusCode: 200,

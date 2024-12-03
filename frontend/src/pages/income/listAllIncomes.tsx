@@ -46,7 +46,7 @@ const ListAllIncomes = () => {
       {incomeLoading ? (
         <HourGlassLoader />
       ) : (
-        <div className="my-5 text-center">
+        <div className="py-5 text-center w-full min-h-[90vh]">
           <HeaderText label="All Income" />
           <div className="px-5 flex flex-row gap-5">
             <div className="flex flex-row gap-2">

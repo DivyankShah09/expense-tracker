@@ -78,6 +78,10 @@ const Dashboard = () => {
     endDate
   );
 
+  console.log("====================================");
+  console.log(expenseDataByMonthCategory);
+  console.log("====================================");
+
   // Filtering Income Data
   let filteredIncomeData: Income[] | undefined;
   let filteredExpenseData: Expense[] | undefined;

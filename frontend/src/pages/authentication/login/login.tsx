@@ -27,7 +27,6 @@ const Login = () => {
   };
 
   const callLogin = async () => {
-
     if (validateForm()) {
       const response = await mutateAsync({
         email: email,
@@ -35,7 +34,6 @@ const Login = () => {
       });
 
       if (response.statusCode === 201) {
-
         localStorage.setItem("token", response.data.access_token);
         localStorage.setItem("userId", response.data.id);
         localStorage.setItem("email", response.data.email);
@@ -50,7 +48,7 @@ const Login = () => {
   };
 
   return (
-    <div className="my-5 text-center">
+    <div className="text-center min-h-[80vh] py-16">
       <HeaderText label="Login" />
       <div className="w-1/3 text-center p-2 mx-auto my-2">
         <TextInput

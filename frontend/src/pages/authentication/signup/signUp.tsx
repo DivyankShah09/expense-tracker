@@ -102,7 +102,7 @@ const SignUp = () => {
   };
 
   return (
-    <div className="my-5 text-center">
+    <div className="text-center min-h-[80vh] py-16">
       <HeaderText label="Signup" />
       <div className="w-1/3 text-center p-2 mx-auto my-2">
         <TextInput

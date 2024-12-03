@@ -10,8 +10,8 @@ export const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="sticky top-0">
-      <div className="flex w-full p-4 border-b-primary shadow-primary shadow-sm z-20 border-2 bg-white justify">
+    <div className="sticky top-0 h-[10vh]">
+      <div className="flex w-full h-full p-4 border-b-primary shadow-primary shadow-sm z-20 border-2 bg-white justify">
         <div className="flex w-full justify">
           <a href="/home">
             <div className="relative inset-x-0 top-0 flex flex-row items-center">

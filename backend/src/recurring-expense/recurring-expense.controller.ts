@@ -12,11 +12,13 @@ export class RecurringExpenseController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/add-recurring-expense')
-  create(@Body() recurringExpenseDto: RecurringExpenseDto, @Request() req) {
-
+  async addRecurringExpensae(
+    @Body() recurringExpenseDto: RecurringExpenseDto,
+    @Request() req,
+  ) {
     const user = req.user;
 
-    const response = this.recurringExpenseService.addRecurringExpense(
+    const response = await this.recurringExpenseService.addRecurringExpense(
       recurringExpenseDto,
       user,
     );

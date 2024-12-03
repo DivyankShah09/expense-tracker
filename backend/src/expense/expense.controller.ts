@@ -20,7 +20,7 @@ export class ExpenseController {
   @Post('/add-expense')
   async addExpense(@Body() expenseDto: ExpenseDto, @Request() req) {
     const user = req.user;
-    const response = this.expenseService.addExpense(expenseDto, user);
+    const response = await this.expenseService.addExpense(expenseDto, user);
     return ApiResponse({
       statusCode: 201,
       statusMessage: 'Expense Added Successfully',
@@ -36,12 +36,14 @@ export class ExpenseController {
     @Param('startDate') startDate: Date,
     @Param('endDate') endDate: Date,
   ) {
-    const expenseData = this.expenseService.getGroupedExpenseData(
+    const expenseData = await this.expenseService.getGroupedExpenseData(
       id,
       year,
       startDate,
       endDate,
     );
+    console.log(expenseData);
+
     return ApiResponse({
       statusCode: 200,
       statusMessage: `Expense Data for Year ${year} Retrieved Successfully`,
@@ -55,7 +57,10 @@ export class ExpenseController {
     @Param('id') id: number,
     @Param('year') year: number,
   ) {
-    const expenseData = this.expenseService.getExpenseByUserIdAndYear(id, year);
+    const expenseData = await this.expenseService.getExpenseByUserIdAndYear(
+      id,
+      year,
+    );
 
     return ApiResponse({
       statusCode: 200,
@@ -67,7 +72,7 @@ export class ExpenseController {
   @UseGuards(JwtAuthGuard)
   @Get('/:id')
   async getExpenseByUserId(@Param('id') id: number) {
-    const expenseData = this.expenseService.getExpenseByUserId(id);
+    const expenseData = await this.expenseService.getExpenseByUserId(id);
     return ApiResponse({
       statusCode: 200,
       statusMessage: 'expense Records Retrieved Successfully',
