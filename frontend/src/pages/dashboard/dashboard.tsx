@@ -25,11 +25,10 @@ interface Expense {
 }
 
 interface ExpenseByMonthCategory {
-  year: number;
   month: number;
-  categoryName: string;
+  categoryId: number;
+  categoryname: string;
   amount: number;
-  date: string;
 }
 
 interface Income {
@@ -77,6 +76,8 @@ const Dashboard = () => {
     startDate,
     endDate
   );
+
+  console.log(expenseDataByMonthCategory);
 
   // Filtering Income Data
   let filteredIncomeData: Income[] | undefined;
@@ -156,7 +157,9 @@ const Dashboard = () => {
 
     if (expensesForMonth && expensesForMonth.length > 0) {
       expensesForMonth.forEach((expense) => {
-        const formattedCategory = expense.categoryName
+        console.log(expense.categoryname);
+
+        const formattedCategory = expense.categoryname
           .replace(/_/g, " ")
           .replace(/\b\w/g, (char) => char.toUpperCase());
         monthlyData[formattedCategory] = expense.amount;
@@ -167,6 +170,8 @@ const Dashboard = () => {
       overallMonthlyExpenseData.push(monthlyData);
     }
   }
+
+  console.log("overallMonthlyExpenseData: ", overallMonthlyExpenseData);
 
   // Preparing Data for Expense Category Pie Chart
   const overallExpenseCategoryPieChartData: any[] = [];

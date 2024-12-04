@@ -14,11 +14,10 @@ interface Expense {
 }
 
 interface ExpenseByMonthCategory {
-  year: number;
   month: number;
-  categoryName: string;
+  categoryId: number;
+  categoryname: string;
   amount: number;
-  date: string;
 }
 
 export const formatExpenseData = (data: any[]) => {
@@ -59,6 +58,51 @@ const callGetExpenseByYearApi = async (id: string, year: string) => {
   }
 };
 
+// const callGetExpenseByMonthCategoryApi = async (
+//   id: string,
+//   year: string,
+//   startDate?: string,
+//   endDate?: string
+// ) => {
+//   try {
+//     const start = startDate ? new Date(startDate).getTime() : null; // Start date as timestamp
+//     const end = endDate
+//       ? new Date(new Date(endDate).setHours(23, 59, 59, 999) + 1).getTime() // End date set to the end of the day
+//       : null;
+//     // Set default startDate to 1st January of the given year if not provided
+//     if (!startDate) {
+//       startDate = "2024-01-01";
+//     }
+
+//     // Set default endDate to today's date if not provided
+//     if (!endDate) {
+//       endDate = "2024-11-20"; // Today's date
+//     }
+
+//     if (start && end && start >= end) {
+//       startDate = "2024-01-01";
+//       endDate = "2024-11-20";
+//     }
+
+//     const response = await getRequest<
+//       ApiSuccessResponse<ExpenseByMonthCategory[]>
+//     >(
+//       ApiEndpoints.GET_EXPENSE_BY_MONTH_CATEGORY +
+//         "/" +
+//         id +
+//         "/" +
+//         year +
+//         "/" +
+//         startDate +
+//         "/" +
+//         endDate
+//     );
+
+//     return response.data;
+//   } catch (error) {
+//     console.log("Expense Api error: ", error);
+//   }
+// };
 const callGetExpenseByMonthCategoryApi = async (
   id: string,
   year: string,
@@ -66,23 +110,28 @@ const callGetExpenseByMonthCategoryApi = async (
   endDate?: string
 ) => {
   try {
+    // Get the current year and today's date
+    const currentYear = new Date().getFullYear();
+    const today = new Date();
+
+    // Set the default start date to the 1st January of the current year
+    if (!startDate) {
+      startDate = `${currentYear}-01-01`;
+    }
+
+    // Set the default end date to today's date if not provided
+    if (!endDate) {
+      endDate = today.toISOString().split("T")[0]; // Convert today to YYYY-MM-DD format
+    }
+
     const start = startDate ? new Date(startDate).getTime() : null; // Start date as timestamp
     const end = endDate
       ? new Date(new Date(endDate).setHours(23, 59, 59, 999) + 1).getTime() // End date set to the end of the day
       : null;
-    // Set default startDate to 1st January of the given year if not provided
-    if (!startDate) {
-      startDate = "2024-01-01";
-    }
-
-    // Set default endDate to today's date if not provided
-    if (!endDate) {
-      endDate = "2024-11-20"; // Today's date
-    }
 
     if (start && end && start >= end) {
-      startDate = "2024-01-01";
-      endDate = "2024-11-20";
+      startDate = `${currentYear}-01-01`; // Reset to 1st January if the start date is greater than the end date
+      endDate = today.toISOString().split("T")[0]; // Reset to today's date
     }
 
     const response = await getRequest<
@@ -98,6 +147,8 @@ const callGetExpenseByMonthCategoryApi = async (
         "/" +
         endDate
     );
+
+    console.log(response.data.data);
 
     return response.data;
   } catch (error) {

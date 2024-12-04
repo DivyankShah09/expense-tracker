@@ -93,30 +93,55 @@ export class ExpenseService {
   ) {
     const formattedStartDate = this.formatDate(startDate);
     const formattedEndDate = this.formatDate(endDate);
+    // const queryBuilder = this.expenseRepository
+    //   .createQueryBuilder('expense')
+    //   .select([
+    //     'MONTH(expense.date) AS month',
+    //     'expense.categoryID',
+    //     'category.name AS categoryName', // Select category name
+    //     'SUM(expense.amount) AS amount',
+    //   ])
+    //   .leftJoin('expense.category', 'category') // Join with category table
+    //   .where('expense.userId = :userId', { userId })
+    //   .andWhere('YEAR(expense.date) = :year', { year }) // Filter by year
+    //   .andWhere(formattedStartDate ? 'expense.date >= :startDate' : '1=1', {
+    //     startDate: formattedStartDate,
+    //   }) // Add start date filter if valid
+    //   .andWhere(formattedEndDate ? 'expense.date <= :endDate' : '1=1', {
+    //     endDate: formattedEndDate,
+    //   }) // Add end date filter if valid
+    //   .addGroupBy('MONTH(expense.date)')
+    //   .addGroupBy('expense.categoryID')
+    //   .addGroupBy('category.name') // Group by category name as well
+    //   .orderBy('month', 'ASC');
     const queryBuilder = this.expenseRepository
       .createQueryBuilder('expense')
       .select([
-        'MONTH(expense.date) AS month',
-        'expense.categoryID',
+        'CAST(EXTRACT(MONTH FROM expense.date) AS INTEGER) AS month', // Explicitly cast to integer
+        'expense.categoryId',
         'category.name AS categoryName', // Select category name
         'SUM(expense.amount) AS amount',
       ])
       .leftJoin('expense.category', 'category') // Join with category table
       .where('expense.userId = :userId', { userId })
-      .andWhere('YEAR(expense.date) = :year', { year }) // Filter by year
+      .andWhere('EXTRACT(YEAR FROM expense.date) = :year', { year }) // Use EXTRACT for year
       .andWhere(formattedStartDate ? 'expense.date >= :startDate' : '1=1', {
         startDate: formattedStartDate,
       }) // Add start date filter if valid
       .andWhere(formattedEndDate ? 'expense.date <= :endDate' : '1=1', {
         endDate: formattedEndDate,
       }) // Add end date filter if valid
-      .addGroupBy('MONTH(expense.date)')
-      .addGroupBy('expense.categoryID')
+      .groupBy('EXTRACT(MONTH FROM expense.date)')
+      .addGroupBy('expense.categoryId')
       .addGroupBy('category.name') // Group by category name as well
       .orderBy('month', 'ASC');
 
     // Execute the query
     const expenseData = await queryBuilder.getRawMany();
+    console.log('start date: ', formattedStartDate);
+    console.log('end date: ', formattedEndDate);
+
+    console.log('Group expense data: ', expenseData);
 
     return expenseData;
   }
