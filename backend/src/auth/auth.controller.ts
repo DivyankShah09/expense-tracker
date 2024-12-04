@@ -16,4 +16,9 @@ export class AuthController {
   async login(@Body() loginCredentialsDto: LoginCredentialsDto) {
     return this.authService.login(loginCredentialsDto);
   }
+
+  @Post('/forgot-password')
+  async updatePassword(@Body() loginCredentialsDto: LoginCredentialsDto) {
+    return this.authService.updatePassword(loginCredentialsDto);
+  }
 }

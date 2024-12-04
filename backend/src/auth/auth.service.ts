@@ -87,4 +87,47 @@ export class AuthService {
       },
     });
   }
+
+  async updatePassword(loginCredentialsDto: LoginCredentialsDto) {
+    try {
+      const user = await this.userService.findByEmail(
+        loginCredentialsDto.email,
+      );
+
+      if (!user) {
+        return ApiResponse({
+          statusCode: 401,
+          statusMessage: 'Email Id doesnot exists',
+          data: null,
+        });
+      }
+
+      const hashedPassword = await bcrypt.hash(
+        loginCredentialsDto.password,
+        10,
+      );
+
+      this.userService.updatePassword(user.id, hashedPassword);
+
+      const payload = { sub: user.id, email: user.email };
+      const token = this.jwtService.sign(payload);
+
+      return ApiResponse({
+        statusCode: 201,
+        statusMessage: 'Login Successful',
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          access_token: token,
+        },
+      });
+    } catch (error) {
+      return ApiResponse({
+        statusCode: 404,
+        statusMessage: 'Error',
+        data: error,
+      });
+    }
+  }
 }

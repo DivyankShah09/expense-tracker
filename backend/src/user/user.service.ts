@@ -28,4 +28,8 @@ export class UserService {
   async findByEmail(email: string): Promise<User | null> {
     return this.userRepository.findOneBy({ email });
   }
+
+  async updatePassword(userId: number, newPassword: string) {
+    return this.userRepository.update(userId, { password: newPassword });
+  }
 }

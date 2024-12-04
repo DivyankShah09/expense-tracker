@@ -17,6 +17,7 @@ import Dashboard from "./pages/dashboard/dashboard";
 import SideBar from "./components/sidebar/SideBar";
 import ListAllExpenses from "./pages/expense/listAllExpenses";
 import ListAllIncomes from "./pages/income/listAllIncomes";
+import ForgotPassword from "./pages/authentication/forgotpassword/forgotPassword";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                 <Routes>
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/add-income" element={<AddIncome />} />
                   <Route path="/add-expense" element={<AddExpense />} />
                   <Route path="/dashboard" element={<Dashboard />} />
@@ -57,7 +59,13 @@ function App() {
 const ConditionalHeader = () => {
   const location = useLocation();
 
-  const includedRoutes = ["/login", "/signup", "/", "/about-us"];
+  const includedRoutes = [
+    "/login",
+    "/signup",
+    "/",
+    "/about-us",
+    "/forgot-password",
+  ];
 
   if (!includedRoutes.includes(location.pathname)) {
     return null;
@@ -69,7 +77,13 @@ const ConditionalHeader = () => {
 const ConditionalSideBar = () => {
   const location = useLocation();
 
-  const excludedRoutes = ["/login", "/signup", "/", "/about-us"];
+  const excludedRoutes = [
+    "/login",
+    "/signup",
+    "/",
+    "/about-us",
+    "/forgot-password",
+  ];
 
   if (excludedRoutes.includes(location.pathname)) {
     return null;

@@ -1,6 +1,7 @@
 export const ReactQueryNames = {
   LOGIN: "login",
   SIGNUP: "signup",
+  FORGOT_PASSWORD: "forgot_password",
   ADD_INCOME: "add_income",
   ADD_EXPENSE: "add_expense",
   ADD_RECURRING_EXPENSE: "add_recurring_expense",
