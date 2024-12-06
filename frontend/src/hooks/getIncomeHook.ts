@@ -4,13 +4,7 @@ import { ApiEndpoints } from "../utils/api-endpoints";
 import { getRequest } from "../utils/axios";
 import { ReactQueryNames } from "../utils/react-query-names";
 import { dateFormat } from "../utils/date-util";
-
-interface GetIncomeResponse {
-  title: string;
-  description: string;
-  amount: number;
-  date: string;
-}
+import { Income } from "../interfaces/Income";
 
 export const formatIncomeData = (data: any[]) => {
   return data?.map((item) => ({
@@ -20,7 +14,7 @@ export const formatIncomeData = (data: any[]) => {
 };
 
 const callGetIncomeApi = async (id: string) => {
-  const response = await getRequest<ApiSuccessResponse<GetIncomeResponse[]>>(
+  const response = await getRequest<ApiSuccessResponse<Income[]>>(
     ApiEndpoints.GET_INCOME + "/" + id
   );
 
@@ -30,7 +24,7 @@ const callGetIncomeApi = async (id: string) => {
 };
 
 const callGetIncomeByYearApi = async (id: string, year: string) => {
-  const response = await getRequest<ApiSuccessResponse<GetIncomeResponse[]>>(
+  const response = await getRequest<ApiSuccessResponse<Income[]>>(
     ApiEndpoints.GET_INCOME + "/" + id + "/" + year
   );
 

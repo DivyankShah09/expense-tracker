@@ -4,21 +4,7 @@ import { ApiEndpoints } from "../utils/api-endpoints";
 import { getRequest } from "../utils/axios";
 import { ReactQueryNames } from "../utils/react-query-names";
 import { dateFormat } from "../utils/date-util";
-
-interface Expense {
-  title: string;
-  description: string;
-  amount: number;
-  date: string;
-  category: string;
-}
-
-interface ExpenseByMonthCategory {
-  month: number;
-  categoryId: number;
-  categoryname: string;
-  amount: number;
-}
+import { Expense, ExpenseByMonthCategory } from "../interfaces/Expense";
 
 export const formatExpenseData = (data: any[]) => {
   return data?.map((item) => ({
@@ -58,51 +44,6 @@ const callGetExpenseByYearApi = async (id: string, year: string) => {
   }
 };
 
-// const callGetExpenseByMonthCategoryApi = async (
-//   id: string,
-//   year: string,
-//   startDate?: string,
-//   endDate?: string
-// ) => {
-//   try {
-//     const start = startDate ? new Date(startDate).getTime() : null; // Start date as timestamp
-//     const end = endDate
-//       ? new Date(new Date(endDate).setHours(23, 59, 59, 999) + 1).getTime() // End date set to the end of the day
-//       : null;
-//     // Set default startDate to 1st January of the given year if not provided
-//     if (!startDate) {
-//       startDate = "2024-01-01";
-//     }
-
-//     // Set default endDate to today's date if not provided
-//     if (!endDate) {
-//       endDate = "2024-11-20"; // Today's date
-//     }
-
-//     if (start && end && start >= end) {
-//       startDate = "2024-01-01";
-//       endDate = "2024-11-20";
-//     }
-
-//     const response = await getRequest<
-//       ApiSuccessResponse<ExpenseByMonthCategory[]>
-//     >(
-//       ApiEndpoints.GET_EXPENSE_BY_MONTH_CATEGORY +
-//         "/" +
-//         id +
-//         "/" +
-//         year +
-//         "/" +
-//         startDate +
-//         "/" +
-//         endDate
-//     );
-
-//     return response.data;
-//   } catch (error) {
-//     console.log("Expense Api error: ", error);
-//   }
-// };
 const callGetExpenseByMonthCategoryApi = async (
   id: string,
   year: string,
@@ -147,8 +88,6 @@ const callGetExpenseByMonthCategoryApi = async (
         "/" +
         endDate
     );
-
-    console.log(response.data.data);
 
     return response.data;
   } catch (error) {
