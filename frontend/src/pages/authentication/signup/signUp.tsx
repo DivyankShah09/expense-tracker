@@ -153,14 +153,6 @@ const SignUp = () => {
           onChange={(value) => setConfirmPassword(value)}
           type="password"
         />
-        <p
-          className="text-right underline cursor-pointer hover:text-primary"
-          onClick={() => {
-            navigate("/forgot-password");
-          }}
-        >
-          Forgot Password?
-        </p>
         <PrimaryButton
           buttonText="Signup"
           onClick={async () => {

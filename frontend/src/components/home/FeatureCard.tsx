@@ -1,5 +1,5 @@
-import React from 'react';
-import { LucideIcon } from 'lucide-react';
+import React from "react";
+import { LucideIcon } from "lucide-react";
 
 interface FeatureCardProps {
   icon: LucideIcon;
@@ -7,7 +7,11 @@ interface FeatureCardProps {
   description: string;
 }
 
-export function FeatureCard({ icon: Icon, title, description }: FeatureCardProps) {
+export function FeatureCard({
+  icon: Icon,
+  title,
+  description,
+}: FeatureCardProps) {
   return (
     <div className="group bg-white p-8 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 border border-primary/10 hover:border-primary/30">
       <div className="bg-primaryBackground w-14 h-14 rounded-lg flex items-center justify-center mb-6 group-hover:bg-primary transition-colors duration-300">

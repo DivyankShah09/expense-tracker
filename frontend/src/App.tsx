@@ -61,31 +61,24 @@ function App() {
 const ConditionalHeader = () => {
   const location = useLocation();
 
-  const includedRoutes = [
-    "/login",
-    "/signup",
-    "/",
-    "/about-us",
-    "/forgot-password",
-  ];
+  const includedRoutes = ["/login", "/signup", "/forgot-password"];
 
   if (!includedRoutes.includes(location.pathname)) {
     return null;
   }
 
-  return <Header />;
+  return (
+    <Header
+      className="bg-white border-b-primary shadow-primary shadow-sm z-20 border-2"
+      logoColor="text-logo"
+    />
+  );
 };
 
 const ConditionalSideBar = () => {
   const location = useLocation();
 
-  const excludedRoutes = [
-    "/login",
-    "/signup",
-    "/",
-    "/about-us",
-    "/forgot-password",
-  ];
+  const excludedRoutes = ["/login", "/signup", "/forgot-password", "/"];
 
   if (excludedRoutes.includes(location.pathname)) {
     return null;

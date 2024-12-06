@@ -50,7 +50,7 @@ export function Features() {
   ];
 
   return (
-    <section className="py-20 bg-primaryBackground">
+    <section className="py-20">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl font-bold text-primary mb-4">
