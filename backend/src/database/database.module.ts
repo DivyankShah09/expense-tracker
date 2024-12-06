@@ -54,7 +54,7 @@ import { User } from 'src/user/entities/user.entity';
           synchronize: configService.get<boolean>('MYSQL_SYNCHRONIZE', true),
           autoLoadEntities: true,
           entities: [Category, User, RecurringExpense, Expense, Income],
-          timezone: 'Z', // Use UTC timezone for consistency
+          timezone: 'UTC', // Use UTC timezone for consistency
           ssl: {
             rejectUnauthorized: false, // Allow self-signed certificates
           },

@@ -18,6 +18,7 @@ import SideBar from "./components/sidebar/SideBar";
 import ListAllExpenses from "./pages/expense/listAllExpenses";
 import ListAllIncomes from "./pages/income/listAllIncomes";
 import ForgotPassword from "./pages/authentication/forgotpassword/forgotPassword";
+import Home from "./pages/home/Home";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <ConditionalSideBar />
               <div className="w-full">
                 <Routes>
+                  <Route path="/" element={<Home />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />

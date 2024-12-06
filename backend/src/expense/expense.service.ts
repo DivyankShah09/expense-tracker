@@ -138,10 +138,6 @@ export class ExpenseService {
 
     // Execute the query
     const expenseData = await queryBuilder.getRawMany();
-    console.log('start date: ', formattedStartDate);
-    console.log('end date: ', formattedEndDate);
-
-    console.log('Group expense data: ', expenseData);
 
     return expenseData;
   }
