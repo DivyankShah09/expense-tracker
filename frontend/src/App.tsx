@@ -18,6 +18,7 @@ import SideBar from "./components/sidebar/SideBar";
 import ListAllExpenses from "./pages/expense/listAllExpenses";
 import ListAllIncomes from "./pages/income/listAllIncomes";
 import ForgotPassword from "./pages/authentication/forgotpassword/forgotPassword";
+import Home from "./pages/home/Home";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <ConditionalSideBar />
               <div className="w-full">
                 <Routes>
+                  <Route path="/" element={<Home />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -59,31 +61,24 @@ function App() {
 const ConditionalHeader = () => {
   const location = useLocation();
 
-  const includedRoutes = [
-    "/login",
-    "/signup",
-    "/",
-    "/about-us",
-    "/forgot-password",
-  ];
+  const includedRoutes = ["/login", "/signup", "/forgot-password"];
 
   if (!includedRoutes.includes(location.pathname)) {
     return null;
   }
 
-  return <Header />;
+  return (
+    <Header
+      className="bg-white border-b-primary shadow-primary shadow-sm z-20 border-2"
+      logoColor="text-logo"
+    />
+  );
 };
 
 const ConditionalSideBar = () => {
   const location = useLocation();
 
-  const excludedRoutes = [
-    "/login",
-    "/signup",
-    "/",
-    "/about-us",
-    "/forgot-password",
-  ];
+  const excludedRoutes = ["/login", "/signup", "/forgot-password", "/"];
 
   if (excludedRoutes.includes(location.pathname)) {
     return null;

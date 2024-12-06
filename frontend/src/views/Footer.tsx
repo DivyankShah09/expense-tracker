@@ -9,7 +9,7 @@ const Footer = () => {
           href="/"
         >
           <span className="ml-3 cursor-pointer text-xl text-[#bbbbbb] hover:text-white">
-            Expense Manager
+            Expense Tracker
           </span>
         </a>
         <p className="mt-4 text-sm text-[#bbbbbb] sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:pl-4 hover:text-white">

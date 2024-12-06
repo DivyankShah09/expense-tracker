@@ -42,7 +42,6 @@ export class ExpenseController {
       startDate,
       endDate,
     );
-    console.log(expenseData);
 
     return ApiResponse({
       statusCode: 200,

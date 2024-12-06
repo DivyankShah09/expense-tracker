@@ -93,7 +93,7 @@ const SignUp = () => {
         localStorage.setItem("email", response.data.email);
         localStorage.setItem("name", response.data.name);
 
-        navigate("/dashbboard");
+        navigate("/dashboard");
       } else {
         toast.error(response.statusMessage);
         return false;
@@ -153,14 +153,6 @@ const SignUp = () => {
           onChange={(value) => setConfirmPassword(value)}
           type="password"
         />
-        <p
-          className="text-right underline cursor-pointer hover:text-primary"
-          onClick={() => {
-            navigate("/forgot-password");
-          }}
-        >
-          Forgot Password?
-        </p>
         <PrimaryButton
           buttonText="Signup"
           onClick={async () => {
