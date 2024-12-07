@@ -153,7 +153,7 @@ const Dashboard = () => {
                 <p>Overall Balance</p>
                 <SubHeaderText
                   label={
-                    totalIncome && totalExpense
+                    totalIncome
                       ? `$ ${(totalIncome - totalExpense).toString()}`
                       : `$ 0`
                   }

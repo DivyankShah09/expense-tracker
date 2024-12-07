@@ -34,18 +34,13 @@ export class AuthService {
 
     await this.userService.create(user); // Use UserService to create user
 
-    const payload = { sub: user.id, email: user.email };
-    const token = this.jwtService.sign(payload);
-
     // Return custom response for successful signup
     return ApiResponse({
       statusCode: 201,
       statusMessage: 'User successfully created.',
       data: {
-        id: user.id,
         name: user.name,
         email: user.email,
-        access_token: token,
       },
     });
   }
