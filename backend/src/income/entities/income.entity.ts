@@ -12,7 +12,7 @@ export class Income {
   @Column()
   description: string;
 
-  @Column()
+  @Column('double precision')
   amount: number;
 
   @Column({ type: Date })
