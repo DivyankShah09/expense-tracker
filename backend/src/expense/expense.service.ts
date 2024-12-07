@@ -23,6 +23,8 @@ export class ExpenseService {
     const currentUser = await this.userService.findByEmail(user.email);
     const expenseCategory = await this.categoryService.findByName(category);
 
+    console.log(typeof amount);
+
     const expense = this.expenseRepository.create({
       title,
       description,
