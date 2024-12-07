@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { Header } from "../../views/Header";
 
 export function Hero() {
+  const userEmail = localStorage.getItem("email");
   const navigate = useNavigate();
 
   const callLogin = () => {
-    navigate("/login");
+    navigate(userEmail ? "/dashboard" : "/login");
   };
   return (
     <div className="relative overflow-hidden">

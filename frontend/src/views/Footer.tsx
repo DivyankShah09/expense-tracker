@@ -12,9 +12,6 @@ const Footer = () => {
             Expense Tracker
           </span>
         </a>
-        <p className="mt-4 text-sm text-[#bbbbbb] sm:ml-4 sm:mt-0 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:pl-4 hover:text-white">
-          © 2024 by Divyank Shah
-        </p>
         <span className="mt-4 inline-flex justify-center sm:ml-auto sm:mt-0 sm:justify-start">
           <a
             className="ml-3 text-white rounded-full bg-[rgba(255,255,255,0.2)] p-2 hover:bg-white hover:text-[#24262b]"

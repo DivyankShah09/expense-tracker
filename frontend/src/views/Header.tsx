@@ -9,6 +9,7 @@ interface HeaderProps {
 }
 
 export const Header = ({ className, logoColor }: HeaderProps) => {
+  const userEmail = localStorage.getItem("email");
   const navigate = useNavigate();
 
   return (
@@ -32,12 +33,12 @@ export const Header = ({ className, logoColor }: HeaderProps) => {
         </div>
         <div className="flex justify-end w-full">
           <PrimaryButton
-            className={`mr-4`}
+            className="mr-4"
             rounded="rounded-lg"
             onClick={() => {
-              navigate("/login");
+              navigate(userEmail ? "/dashboard" : "/login");
             }}
-            buttonText="Login"
+            buttonText={userEmail ? "Dashboard" : "Login"}
           />
         </div>
       </div>

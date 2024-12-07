@@ -16,8 +16,8 @@ import { User } from 'src/user/entities/user.entity';
 
         return {
           // TODO: change type to 'postgres' for production db
-          type: 'mysql', // dev - db
-          // type: 'postgres', // prod - db
+          // type: 'mysql', // dev - db
+          type: 'postgres', // prod - db
           host: parsedUrl.hostname,
           port: parseInt(parsedUrl.port, 10),
           username: parsedUrl.username,

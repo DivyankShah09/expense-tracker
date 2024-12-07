@@ -97,8 +97,9 @@ export class ExpenseService {
     const queryBuilder = this.expenseRepository
       .createQueryBuilder('expense')
       .select([
-        'EXTRACT(MONTH FROM expense.date) AS month', // mysql
-        // 'CAST(EXTRACT(MONTH FROM expense.date) AS INTEGER) AS month', // postgres sql
+        // 'EXTRACT(MONTH FROM expense.date) AS month', // mysql
+        // TODO:
+        'CAST(EXTRACT(MONTH FROM expense.date) AS INTEGER) AS month', // postgres sql
         'expense.categoryId',
         'category.name AS "categoryName"', // Select category name
         'SUM(expense.amount) AS amount',
