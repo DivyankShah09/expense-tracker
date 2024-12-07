@@ -13,7 +13,7 @@ export class Expense {
   @Column()
   description: string;
 
-  @Column({ type: 'integer' })
+  @Column('double precision')
   amount: number;
 
   @Column()
