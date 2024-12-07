@@ -94,8 +94,8 @@ const Dashboard = () => {
   const monthlyExpenseSum = aggregateDataByMonth(filteredExpenseData || []);
 
   // Calculating Total Income and Expense
-  const totalExpense = calculateTotal(filteredIncomeData || []);
-  const totalIncome = calculateTotal(filteredExpenseData || []);
+  const totalIncome = calculateTotal(filteredIncomeData || []);
+  const totalExpense = calculateTotal(filteredExpenseData || []);
 
   // Prepare Overall Income and Expense Data for Bar Chart
   const overallIncomeExpenseData = generateIncomeExpenseData(
