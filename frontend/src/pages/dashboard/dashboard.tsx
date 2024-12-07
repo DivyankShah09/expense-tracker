@@ -73,8 +73,6 @@ const Dashboard = () => {
   let filteredIncomeData: Income[] | undefined = incomeData?.data;
   let filteredExpenseData: Expense[] | undefined = expenseData?.data;
 
-  console.log("Filtered Income data intial: ", filteredIncomeData);
-
   // UseEffect to handle validation of start and end dates
   useEffect(() => {
     if (start && end && start >= end) {
