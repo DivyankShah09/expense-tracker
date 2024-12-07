@@ -11,7 +11,7 @@ interface AddExpenseRequest {
   category: string;
 }
 
-interface AddRecurringExpenseREquest {
+interface AddRecurringExpenseRequest {
   title: string;
   description: string;
   amount: number;
@@ -33,10 +33,10 @@ const callAddExpenseApi = async (request: AddExpenseRequest) => {
 };
 
 const callAddRecurringExpenseApi = async (
-  request: AddRecurringExpenseREquest
+  request: AddRecurringExpenseRequest
 ) => {
   const response = await postRequest<
-    ApiSuccessResponse<AddRecurringExpenseREquest>
+    ApiSuccessResponse<AddRecurringExpenseRequest>
   >(ApiEndpoints.ADD_RECURRING_EXPENSE, request);
   return response.data;
 };

@@ -22,14 +22,14 @@ export class ExpenseService {
     const { title, description, amount, date, category } = expenseDto;
     const currentUser = await this.userService.findByEmail(user.email);
     const expenseCategory = await this.categoryService.findByName(category);
-
-    console.log(typeof amount);
+    const currentDate = new Date(date);
+    currentDate.setUTCHours(10, 0, 0, 0);
 
     const expense = this.expenseRepository.create({
       title,
       description,
       amount,
-      date,
+      date: currentDate,
       category: expenseCategory,
       user: currentUser,
     });
