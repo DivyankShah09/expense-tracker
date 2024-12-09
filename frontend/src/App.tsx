@@ -37,7 +37,9 @@ function App() {
                   <Route path="/signup" element={<SignUp />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/add-income" element={<AddIncome />} />
+                  <Route path="/edit-income/:id" element={<AddIncome />} />
                   <Route path="/add-expense" element={<AddExpense />} />
+                  <Route path="/edit-expense/:id" element={<AddExpense />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route
                     path="/list-all-expenses"

@@ -46,11 +46,11 @@ axios.interceptors.response.use(
       // Redirect to login if unauthorized
       if (status === 401) {
         console.warn("Unauthorized access. Redirecting to login...");
-        window.location.href = "/login"; // Adjust this to your login route
-        localStorage.removeItem("userId");
         localStorage.removeItem("email");
         localStorage.removeItem("name");
         localStorage.removeItem("token");
+        localStorage.removeItem("userId");
+        window.location.href = "/login";
       }
     } else if (error.request) {
       console.error("No Response Received: ", error.request);

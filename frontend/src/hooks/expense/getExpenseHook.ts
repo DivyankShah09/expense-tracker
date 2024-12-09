@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { ApiSuccessResponse } from "../model/api-success-response";
-import { ApiEndpoints } from "../utils/api-endpoints";
-import { getRequest } from "../utils/axios";
-import { ReactQueryNames } from "../utils/react-query-names";
-import { dateFormat } from "../utils/date-util";
-import { Expense, ExpenseByMonthCategory } from "../interfaces/Expense";
+import { ApiSuccessResponse } from "../../model/api-success-response";
+import { ApiEndpoints } from "../../utils/api-endpoints";
+import { getRequest } from "../../utils/axios";
+import { ReactQueryNames } from "../../utils/react-query-names";
+import { dateFormat } from "../../utils/date-util";
+import { Expense, ExpenseByMonthCategory } from "../../interfaces/Expense";
 
 export const formatExpenseData = (data: any[]) => {
   return data?.map((item) => ({
@@ -16,10 +16,29 @@ export const formatExpenseData = (data: any[]) => {
   }));
 };
 
-const callGetExpenseApi = async (id: string) => {
+const callGetExpenseById = async (id: string | undefined) => {
+  try {
+    const response = await getRequest<ApiSuccessResponse<Expense>>(
+      ApiEndpoints.GET_EXPENSE + "/" + id
+    );
+    const formattedData = {
+      ...response.data.data,
+      date: dateFormat(new Date(response.data.data.date)), // Format the date
+      category: response.data.data.category
+        .replace(/_/g, " ") // Replace underscores with spaces
+        .replace(/\b\w/g, (char: any) => char.toUpperCase()), // Capitalize each word
+    };
+
+    return { ...response, data: formattedData };
+  } catch (error) {
+    console.log("Expense Api error: ", error);
+  }
+};
+
+const callGetExpenseByUserIdApi = async (userId: string) => {
   try {
     const response = await getRequest<ApiSuccessResponse<Expense[]>>(
-      ApiEndpoints.GET_EXPENSE + "/" + id
+      ApiEndpoints.GET_EXPENSE_USER + "/" + userId
     );
 
     const formattedData = formatExpenseData(response.data.data);
@@ -30,10 +49,13 @@ const callGetExpenseApi = async (id: string) => {
   }
 };
 
-const callGetExpenseByYearApi = async (id: string, year: string) => {
+const callGetExpenseByYearAndUserIdApi = async (
+  userId: string,
+  year: string
+) => {
   try {
     const response = await getRequest<ApiSuccessResponse<Expense[]>>(
-      ApiEndpoints.GET_EXPENSE + "/" + id + "/" + year
+      ApiEndpoints.GET_EXPENSE_USER + "/" + userId + "/" + year
     );
 
     const formattedData = formatExpenseData(response.data.data);
@@ -45,7 +67,7 @@ const callGetExpenseByYearApi = async (id: string, year: string) => {
 };
 
 const callGetExpenseByMonthCategoryApi = async (
-  id: string,
+  userId: string,
   year: string,
   startDate?: string,
   endDate?: string
@@ -80,7 +102,7 @@ const callGetExpenseByMonthCategoryApi = async (
     >(
       ApiEndpoints.GET_EXPENSE_BY_MONTH_CATEGORY +
         "/" +
-        id +
+        userId +
         "/" +
         year +
         "/" +
@@ -95,28 +117,36 @@ const callGetExpenseByMonthCategoryApi = async (
   }
 };
 
-export const useGetExpense = (id: string, enabled: boolean) => {
+export const useGetExpenseById = (id: string | undefined, enabled: boolean) => {
   return useQuery({
-    queryFn: () => callGetExpenseApi(id),
+    queryFn: () => callGetExpenseById(id),
     queryKey: [ReactQueryNames.GET_EXPENSE],
     enabled: enabled,
   });
 };
 
-export const useGetExpenseByYear = (
-  id: string,
+export const useGetExpenseByUserId = (userId: string, enabled: boolean) => {
+  return useQuery({
+    queryFn: () => callGetExpenseByUserIdApi(userId),
+    queryKey: [ReactQueryNames.GET_EXPENSE_BY_USERID],
+    enabled: enabled,
+  });
+};
+
+export const useGetExpenseByYearAndUserId = (
+  userId: string,
   year: string,
   enabled: boolean
 ) => {
   return useQuery({
-    queryFn: () => callGetExpenseByYearApi(id, year),
+    queryFn: () => callGetExpenseByYearAndUserIdApi(userId, year),
     queryKey: [ReactQueryNames.GET_EXPENSE_BY_YEAR],
     enabled: enabled,
   });
 };
 
 export const useGetExpenseByMonthCategory = (
-  id: string,
+  userId: string,
   year: string,
   enabled: boolean,
   startDate?: string,
@@ -124,7 +154,7 @@ export const useGetExpenseByMonthCategory = (
 ) => {
   return useQuery({
     queryFn: () =>
-      callGetExpenseByMonthCategoryApi(id, year, startDate, endDate),
+      callGetExpenseByMonthCategoryApi(userId, year, startDate, endDate),
     queryKey: [
       ReactQueryNames.GET_EXPENSE_BY_MONTH_CATEGORY,
       startDate,

@@ -6,9 +6,9 @@ import { SubHeaderText } from "../../components/text/SubHeaderText";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 import {
   useGetExpenseByMonthCategory,
-  useGetExpenseByYear,
-} from "../../hooks/getExpenseHook";
-import { useGetIncomeByYear } from "../../hooks/getIncomeHook";
+  useGetExpenseByYearAndUserId,
+} from "../../hooks/expense/getExpenseHook";
+import { useGetIncomeByYearAndUserId } from "../../hooks/income/getIncomeHook";
 import DatePickerInput from "../../components/input/DatePickerInput";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -44,18 +44,20 @@ const Dashboard = () => {
   );
 
   // Get Income api
-  const { data: incomeData, isLoading: incomeLoading } = useGetIncomeByYear(
-    userId,
-    new Date().getFullYear().toString(),
-    true
-  );
+  const { data: incomeData, isLoading: incomeLoading } =
+    useGetIncomeByYearAndUserId(
+      userId,
+      new Date().getFullYear().toString(),
+      true
+    );
 
   // Get Expense api
-  const { data: expenseData, isLoading: expenseLoading } = useGetExpenseByYear(
-    userId,
-    new Date().getFullYear().toString(),
-    true
-  );
+  const { data: expenseData, isLoading: expenseLoading } =
+    useGetExpenseByYearAndUserId(
+      userId,
+      new Date().getFullYear().toString(),
+      true
+    );
 
   // Get Expense by month and category api
   const {

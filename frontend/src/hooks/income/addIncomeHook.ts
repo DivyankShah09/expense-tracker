@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { ApiEndpoints } from "../../../utils/api-endpoints";
-import { postRequest } from "../../../utils/axios";
-import { ReactQueryNames } from "../../../utils/react-query-names";
-import { ApiSuccessResponse } from "../../../model/api-success-response";
+import { ApiEndpoints } from "../../utils/api-endpoints";
+import { postRequest } from "../../utils/axios";
+import { ReactQueryNames } from "../../utils/react-query-names";
+import { ApiSuccessResponse } from "../../model/api-success-response";
 
 interface AddIncomeRequest {
   title: string;

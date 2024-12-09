@@ -7,6 +7,8 @@ import { CategoryService } from 'src/category/category.service';
 import { ExpenseDto } from './dto/expense.dto';
 import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from 'src/common/utils/api-response.util';
+import { UpdateExpenseDto } from './dto/update-expense.dto';
+import { response } from 'express';
 
 @Injectable()
 export class ExpenseService {
@@ -34,7 +36,7 @@ export class ExpenseService {
       user: currentUser,
     });
 
-    const response = await this.entityManager.save(expense);
+    const response = await this.expenseRepository.save(expense);
 
     return response.id;
   }
@@ -46,6 +48,7 @@ export class ExpenseService {
     });
 
     const expenseData: ExpenseDto[] = expenseRecords.map((record) => ({
+      id: record.id,
       title: record.title,
       description: record.description,
       amount: record.amount,
@@ -124,5 +127,45 @@ export class ExpenseService {
     const expenseData = await queryBuilder.getRawMany();
 
     return expenseData;
+  }
+
+  async updateExpenseById(updateExpenseDto: UpdateExpenseDto) {
+    const { id, title, description, amount, date, category } = updateExpenseDto;
+    const expenseCategory = await this.categoryService.findByName(category);
+    const currentDate = new Date(date);
+    currentDate.setUTCHours(10, 0, 0, 0);
+
+    const response = await this.expenseRepository.update(id, {
+      title,
+      description,
+      amount,
+      date: currentDate,
+      category: expenseCategory,
+    });
+
+    return response.affected;
+  }
+
+  async getExpenseById(id: number) {
+    const record = await this.expenseRepository.findOne({
+      where: { id },
+      relations: ['user', 'category'],
+    });
+
+    const expense: ExpenseDto = {
+      id: record.id,
+      title: record.title,
+      description: record.description,
+      amount: record.amount,
+      date: record.date,
+      category: record.category.name,
+    };
+
+    return expense;
+  }
+
+  async deleteExpenseById(id: number) {
+    const record = await this.expenseRepository.delete(id);
+    return record.affected;
   }
 }
