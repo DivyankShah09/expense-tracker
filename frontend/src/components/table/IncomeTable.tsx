@@ -1,19 +1,25 @@
 import React from "react";
 import { Header2Text } from "../../components/text/Header2Text";
 import { useNavigate } from "react-router-dom";
-
-interface IncomeTransaction {
-  title: string;
-  date: string;
-  amount: number;
-  description: string;
-}
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import { Income } from "../../interfaces/Income";
+import { PrimaryButton } from "../button/PrimaryButton";
 
 interface LatestIncomeTransactionsTableProps {
-  incomeAllData: IncomeTransaction[] | undefined;
+  incomeAllData: Income[] | undefined;
   headerRequired?: boolean;
   headerLabel?: string;
   colSpan?: number | undefined;
+  updateBtnRequired?: boolean;
+  onClick?: (id: number | undefined) => void;
 }
 
 export const IncomeTable = ({
@@ -21,51 +27,94 @@ export const IncomeTable = ({
   headerRequired = false,
   headerLabel = "",
   colSpan = undefined,
+  updateBtnRequired = false,
+  onClick,
 }: LatestIncomeTransactionsTableProps) => {
   const navigate = useNavigate();
 
   const handleViewAllClick = () => {
     navigate("/list-all-incomes");
   };
+
+  const callEditIncome = (id: number | undefined) => {
+    navigate(`/edit-income/${id}`);
+  };
+
   return (
     <>
-      <table className="table-auto w-full border-separate rounded-lg border-2 overflow-hidden">
-        <thead>
-          {headerRequired && (
-            <tr>
-              <th colSpan={colSpan}>
-                <Header2Text label={headerLabel} className="m-2 text-left" />
-              </th>
-
-              <td className="text-right">
-                <p className="m-2" onClick={handleViewAllClick}>
-                  <u className="font-semibold hover:text-primary cursor-pointer">
-                    View All
-                  </u>
-                </p>
-              </td>
-            </tr>
-          )}
-          <tr className="bg-gray-200">
-            <th className="p-2">Sr. No</th>
-            <th className="p-2">Title</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Amount</th>
-            <th className="p-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {incomeAllData?.map((income: IncomeTransaction, index: number) => (
-            <tr key={index} className="bg-white rounded-md shadow-md">
-              <td className="text-center p-2">{index + 1}</td>
-              <td className="p-2">{income.title}</td>
-              <td className="text-center p-2">{income.date}</td>
-              <td className="text-center p-2">${income.amount}</td>
-              <td className="p-2">{income.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            {headerRequired && (
+              <TableRow>
+                <TableCell colSpan={colSpan}>
+                  <Header2Text label={headerLabel} className="m-2 text-left" />
+                </TableCell>
+                <TableCell align="right">
+                  <p className="m-2" onClick={handleViewAllClick}>
+                    <u className="font-semibold hover:text-primary cursor-pointer">
+                      View All
+                    </u>
+                  </p>
+                </TableCell>
+              </TableRow>
+            )}
+            <TableRow>
+              <TableCell>
+                <span className="font-bold">Sr. no</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Title</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Date</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Amount</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Description</span>
+              </TableCell>
+              {updateBtnRequired && (
+                <>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </>
+              )}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {incomeAllData?.map((income: Income, index: number) => (
+              <TableRow>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{income.title}</TableCell>
+                <TableCell>{income.date}</TableCell>
+                <TableCell>{income.amount}</TableCell>
+                <TableCell>{income.description}</TableCell>
+                {updateBtnRequired && (
+                  <>
+                    <TableCell>
+                      <PrimaryButton
+                        buttonText="Edit"
+                        onClick={async () => {
+                          callEditIncome(income.id);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <PrimaryButton
+                        buttonText="Delete"
+                        onClick={() => onClick && onClick(income.id)}
+                        className="bg-red-400 hover:bg-red-600"
+                      />
+                    </TableCell>
+                  </>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };

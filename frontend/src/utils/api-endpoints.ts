@@ -3,9 +3,13 @@ export const ApiEndpoints = {
   SIGNUP: "/auth/signup",
   FORGOT_PASSWORD: "/auth/forgot-password",
   ADD_INCOME: "/income/add-income",
+  UPDATE_INCOME: "/income/update-income",
   ADD_EXPENSE: "/expense/add-expense",
+  UPDATE_EXPENSE: "/expense/update-expense",
   ADD_RECURRING_EXPENSE: "/recurring-expense/add-recurring-expense",
   GET_INCOME: "/income",
+  GET_INCOME_USER: "/income/user",
   GET_EXPENSE: "/expense",
+  GET_EXPENSE_USER: "/expense/user",
   GET_EXPENSE_BY_MONTH_CATEGORY: "/expense/expense-month-category",
 };
