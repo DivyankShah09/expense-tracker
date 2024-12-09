@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -101,6 +102,18 @@ export class ExpenseController {
       statusCode: 200,
       statusMessage: 'Expense Retrieved Successfully',
       data: expense,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteExpenseById(@Param('id') id: number) {
+    const record = await this.expenseService.deleteExpenseById(id);
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Expense deleted successfully',
+      data: { noOfExpensesDeleted: record },
     });
   }
 }

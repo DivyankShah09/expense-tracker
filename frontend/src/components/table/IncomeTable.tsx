@@ -19,6 +19,7 @@ interface LatestIncomeTransactionsTableProps {
   headerLabel?: string;
   colSpan?: number | undefined;
   updateBtnRequired?: boolean;
+  onClick?: (id: number | undefined) => void;
 }
 
 export const IncomeTable = ({
@@ -27,6 +28,7 @@ export const IncomeTable = ({
   headerLabel = "",
   colSpan = undefined,
   updateBtnRequired = false,
+  onClick,
 }: LatestIncomeTransactionsTableProps) => {
   const navigate = useNavigate();
 
@@ -37,7 +39,6 @@ export const IncomeTable = ({
   const callEditIncome = (id: number | undefined) => {
     navigate(`/edit-income/${id}`);
   };
-  const callDeleteIncome = () => {};
 
   return (
     <>
@@ -103,9 +104,7 @@ export const IncomeTable = ({
                     <TableCell>
                       <PrimaryButton
                         buttonText="Delete"
-                        onClick={async () => {
-                          await callDeleteIncome();
-                        }}
+                        onClick={() => onClick && onClick(income.id)}
                         className="bg-red-400 hover:bg-red-600"
                       />
                     </TableCell>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SelectInput from "../../components/input/SelectInput";
 import { ExpenseTable } from "../../components/table/ExpenseTable";
 import { HeaderText } from "../../components/text/HeaderText";
@@ -8,14 +8,8 @@ import DatePickerInput from "../../components/input/DatePickerInput";
 import { toast } from "react-toastify";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
-
-interface Expense {
-  title: string;
-  description: string;
-  amount: number;
-  date: string;
-  category: string;
-}
+import { useDeleteExpense } from "../../hooks/expense/deleteExpenseHook";
+import { Expense } from "../../interfaces/Expense";
 
 const ListAllExpenses = () => {
   const userId = localStorage.getItem("userId") || "0";
@@ -23,6 +17,8 @@ const ListAllExpenses = () => {
   const [amount, setAmount] = useState<number>(0);
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [filteredExpenseData, setFilteredExpenseData] = useState<Expense[]>([]);
+  const { mutateAsync: deleteExpenseMutateAsync } = useDeleteExpense();
 
   // Get Expense API
   const { data: expenseData, isLoading: expenseLoading } =
@@ -33,33 +29,39 @@ const ListAllExpenses = () => {
     ? new Date(new Date(endDate).setHours(23, 59, 59, 999) + 1).getTime() // End date set to the end of the day
     : null;
 
-  let filteredData: any;
-
   // Check if start date is after end date
-  if (start && end && start > end) {
-    toast.error("From date cannot be after To date.");
-    filteredData = expenseData?.data; // Return empty array or handle as needed
-  } else {
-    // Filter and sort data
-    filteredData = expenseData?.data
-      ?.filter((expense) => {
-        const formattedCategory = category
-          ? category
-              .replace(/_/g, " ") // Replace underscores with spaces
-              .replace(/\b\w/g, (char: any) => char.toUpperCase())
-          : null;
+  useEffect(() => {
+    let filteredData: any;
+    if (start && end && start > end) {
+      toast.error("From date cannot be after To date.");
+      filteredData = expenseData?.data; // Return empty array or handle as needed
+      setFilteredExpenseData(filteredData);
+    } else {
+      // Filter and sort data
+      filteredData = expenseData?.data
+        ?.filter((expense) => {
+          const formattedCategory = category
+            ? category
+                .replace(/_/g, " ") // Replace underscores with spaces
+                .replace(/\b\w/g, (char: any) => char.toUpperCase())
+            : null;
 
-        const expenseDate = new Date(expense.date).getTime(); // Use the original expense date timestamp
+          const expenseDate = new Date(expense.date).getTime(); // Use the original expense date timestamp
 
-        return (
-          (!formattedCategory || expense.category === formattedCategory) && // Filter by category
-          (Number(amount) === 0 || expense.amount <= amount) && // Filter by max amount
-          (!start || expenseDate >= start) && // Filter by start date
-          (!end || expenseDate <= end) // Filter by end date (inclusive)
+          return (
+            (!formattedCategory || expense.category === formattedCategory) && // Filter by category
+            (Number(amount) === 0 || expense.amount <= amount) && // Filter by max amount
+            (!start || expenseDate >= start) && // Filter by start date
+            (!end || expenseDate <= end) // Filter by end date (inclusive)
+          );
+        })
+        .sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         );
-      })
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-  }
+
+      setFilteredExpenseData(filteredData);
+    }
+  }, [expenseData, category, amount, startDate, endDate, start, end]);
 
   const categories = Object.values(ExpenseCategoryEnum).map((category) =>
     category.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
@@ -79,6 +81,22 @@ const ListAllExpenses = () => {
     });
     overallExpenseCategoryData.push(pieChartEntry);
   });
+
+  const handleDelete = async (id: number | undefined) => {
+    console.log("id: ", id);
+
+    if (!id) return;
+
+    try {
+      await deleteExpenseMutateAsync(id.toString());
+      toast.success("Expense deleted successfully!");
+      setFilteredExpenseData((prevData) => {
+        return prevData.filter((expense: Expense) => expense.id !== id);
+      });
+    } catch (error) {
+      toast.error("Error occured");
+    }
+  };
 
   return (
     <>
@@ -148,10 +166,11 @@ const ListAllExpenses = () => {
           </div>
           <div className="px-5 py-1">
             <ExpenseTable
-              expenseAllData={filteredData} // Use filteredData here
+              expenseAllData={filteredExpenseData} // Use filteredData here
               headerRequired={false}
               colSpan={5}
               updateBtnRequired={true}
+              onClick={handleDelete}
             />
           </div>
         </div>

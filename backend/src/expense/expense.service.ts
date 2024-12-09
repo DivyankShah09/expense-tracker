@@ -163,4 +163,9 @@ export class ExpenseService {
 
     return expense;
   }
+
+  async deleteExpenseById(id: number) {
+    const record = await this.expenseRepository.delete(id);
+    return record.affected;
+  }
 }

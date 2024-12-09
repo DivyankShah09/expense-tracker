@@ -18,6 +18,7 @@ interface LatestExpenseTransactionsTableProps {
   headerLabel?: string;
   colSpan?: number | undefined;
   updateBtnRequired?: boolean;
+  onClick?: (id: number | undefined) => void;
 }
 export const ExpenseTable = ({
   expenseAllData,
@@ -25,6 +26,7 @@ export const ExpenseTable = ({
   headerLabel = "",
   colSpan = undefined,
   updateBtnRequired = false,
+  onClick,
 }: LatestExpenseTransactionsTableProps) => {
   const navigate = useNavigate();
 
@@ -35,7 +37,6 @@ export const ExpenseTable = ({
   const callEditExpense = (id: number | undefined) => {
     navigate(`/edit-expense/${id}`);
   };
-  const callDeleteExpense = () => {};
 
   return (
     <>
@@ -105,9 +106,7 @@ export const ExpenseTable = ({
                     <TableCell>
                       <PrimaryButton
                         buttonText="Delete"
-                        onClick={async () => {
-                          await callDeleteExpense();
-                        }}
+                        onClick={() => onClick && onClick(expense.id)}
                         className="bg-red-400 hover:bg-red-600"
                       />
                     </TableCell>

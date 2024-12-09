@@ -7,6 +7,7 @@ import {
   Get,
   Param,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { IncomeService } from './income.service';
 import { IncomeDto } from './dto/income.dto';
@@ -80,6 +81,18 @@ export class IncomeController {
       statusCode: 200,
       statusMessage: 'Income Retrieved Successfully',
       data: income,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteExpenseById(@Param('id') id: number) {
+    const record = await this.incomeService.deleteIncomeById(id);
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Income deleted successfully',
+      data: { noOfExpensesDeleted: record },
     });
   }
 }

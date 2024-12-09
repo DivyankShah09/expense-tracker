@@ -105,4 +105,9 @@ export class IncomeService {
 
     return income;
   }
+
+  async deleteIncomeById(id: number) {
+    const record = await this.incomeRepository.delete(id);
+    return record.affected;
+  }
 }
