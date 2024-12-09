@@ -17,6 +17,7 @@ import { ExpenseFrequencyEnum } from "../../enums/expenseFrequencyEnum";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetExpenseById } from "../../hooks/expense/getExpenseHook";
 import { useUpdateExpenseById } from "../../hooks/expense/updateExpenseHook";
+import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
 
 const AddExpense = () => {
   const { id } = useParams();
@@ -136,79 +137,83 @@ const AddExpense = () => {
 
   return (
     <>
-      <div className="py-5 text-center w-full min-h-[90vh]">
-        <HeaderText label="Add Expense" />
-        <div className="w-1/3 text-center p-2 mx-auto my-2">
-          <TextInput
-            label="Title"
-            labelPosition="top"
-            placeholderText="Title"
-            value={title}
-            onChange={(value) => setTitle(value)}
-            type="string"
-          />
-          <TextInput
-            label="Description"
-            labelPosition="top"
-            placeholderText="Description"
-            value={description}
-            onChange={(value) => setDescription(value)}
-            type="string"
-          />
-          <NumberInput
-            label="Amount"
-            labelPosition="top"
-            placeholderText="Amount"
-            value={amount}
-            onChange={(value) => setAmount(value)}
-            type="number"
-          />
-
-          <DatePickerInput
-            label="Date"
-            labelPosition="top"
-            value={date}
-            onChange={(value) => setDate(value)}
-          />
-
-          <SelectInput
-            label="Category"
-            labelPosition="top"
-            value={category}
-            options={ExpenseCategoryEnum}
-            placeholderText="Select Category"
-            onChange={(value) => setCategory(value)}
-          />
-
-          {!id && (
-            <CheckBoxInput
-              label="Recurring Expense"
-              value={isRecurring}
-              onClick={(value) => setIsRecurring(value)}
-            />
-          )}
-
-          {isRecurring ? (
-            <SelectInput
-              label="Frequency"
+      {expenseLoading ? (
+        <HourGlassLoader />
+      ) : (
+        <div className="py-5 text-center w-full min-h-[90vh]">
+          <HeaderText label={id ? "Edit Expense" : "Add Expense"} />
+          <div className="w-1/3 text-center p-2 mx-auto my-2">
+            <TextInput
+              label="Title"
               labelPosition="top"
-              value={frequency}
-              options={ExpenseFrequencyEnum}
-              placeholderText="Select Frequency"
-              onChange={(value) => setFrequency(value)}
+              placeholderText="Title"
+              value={title}
+              onChange={(value) => setTitle(value)}
+              type="string"
             />
-          ) : (
-            <></>
-          )}
+            <TextInput
+              label="Description"
+              labelPosition="top"
+              placeholderText="Description"
+              value={description}
+              onChange={(value) => setDescription(value)}
+              type="string"
+            />
+            <NumberInput
+              label="Amount"
+              labelPosition="top"
+              placeholderText="Amount"
+              value={amount}
+              onChange={(value) => setAmount(value)}
+              type="number"
+            />
 
-          <PrimaryButton
-            buttonText={id ? "Edit Expense" : "Add Expense"}
-            onClick={async () => {
-              await callAddExpense();
-            }}
-          />
+            <DatePickerInput
+              label="Date"
+              labelPosition="top"
+              value={date}
+              onChange={(value) => setDate(value)}
+            />
+
+            <SelectInput
+              label="Category"
+              labelPosition="top"
+              value={category}
+              options={ExpenseCategoryEnum}
+              placeholderText="Select Category"
+              onChange={(value) => setCategory(value)}
+            />
+
+            {!id && (
+              <CheckBoxInput
+                label="Recurring Expense"
+                value={isRecurring}
+                onClick={(value) => setIsRecurring(value)}
+              />
+            )}
+
+            {isRecurring ? (
+              <SelectInput
+                label="Frequency"
+                labelPosition="top"
+                value={frequency}
+                options={ExpenseFrequencyEnum}
+                placeholderText="Select Frequency"
+                onChange={(value) => setFrequency(value)}
+              />
+            ) : (
+              <></>
+            )}
+
+            <PrimaryButton
+              buttonText={id ? "Edit Expense" : "Add Expense"}
+              onClick={async () => {
+                await callAddExpense();
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

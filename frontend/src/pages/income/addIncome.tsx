@@ -11,6 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAddIncome } from "../../hooks/income/addIncomeHook";
 import { useGetIncomeById } from "../../hooks/income/getIncomeHook";
 import { useUpdateIncomeById } from "../../hooks/income/updateIncomeHook";
+import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
 
 const AddIncome = () => {
   const { id } = useParams();
@@ -26,8 +27,6 @@ const AddIncome = () => {
     id,
     !!id
   );
-
-  console.log("id: ", id);
 
   // Add this useEffect block in your component
   useEffect(() => {
@@ -100,49 +99,53 @@ const AddIncome = () => {
   };
   return (
     <>
-      <div className="py-5 text-center w-full min-h-[90vh]">
-        <HeaderText label="Add Income" />
-        <div className="w-1/3 text-center p-2 mx-auto my-2">
-          <TextInput
-            label="Title"
-            labelPosition="top"
-            placeholderText="Title"
-            value={title}
-            onChange={(value) => setTitle(value)}
-            type="string"
-          />
-          <TextInput
-            label="Description"
-            labelPosition="top"
-            placeholderText="Description"
-            value={description}
-            onChange={(value) => setDescription(value)}
-            type="string"
-          />
-          <NumberInput
-            label="Amount"
-            labelPosition="top"
-            placeholderText="Amount"
-            value={amount}
-            onChange={(value) => setAmount(value)}
-            type="number"
-          />
+      {incomeLoading ? (
+        <HourGlassLoader />
+      ) : (
+        <div className="py-5 text-center w-full min-h-[90vh]">
+          <HeaderText label={id ? "Edit Income" : "Add Income"} />
+          <div className="w-1/3 text-center p-2 mx-auto my-2">
+            <TextInput
+              label="Title"
+              labelPosition="top"
+              placeholderText="Title"
+              value={title}
+              onChange={(value) => setTitle(value)}
+              type="string"
+            />
+            <TextInput
+              label="Description"
+              labelPosition="top"
+              placeholderText="Description"
+              value={description}
+              onChange={(value) => setDescription(value)}
+              type="string"
+            />
+            <NumberInput
+              label="Amount"
+              labelPosition="top"
+              placeholderText="Amount"
+              value={amount}
+              onChange={(value) => setAmount(value)}
+              type="number"
+            />
 
-          <DatePickerInput
-            label="Date"
-            labelPosition="top"
-            value={date}
-            onChange={(value) => setDate(value)}
-          />
+            <DatePickerInput
+              label="Date"
+              labelPosition="top"
+              value={date}
+              onChange={(value) => setDate(value)}
+            />
 
-          <PrimaryButton
-            buttonText={id ? "Edit Income" : "Add Income"}
-            onClick={async () => {
-              await callAddIncome();
-            }}
-          />
+            <PrimaryButton
+              buttonText={id ? "Edit Income" : "Add Income"}
+              onClick={async () => {
+                await callAddIncome();
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
