@@ -46,10 +46,6 @@ export class CronService {
           );
         }
       }
-
-      console.log(
-        'Cron job executed every minute \n -------------------------',
-      );
     } catch (error) {
       console.error('Error during cron job execution: ', error);
     }

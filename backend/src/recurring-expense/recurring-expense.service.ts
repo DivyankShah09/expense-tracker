@@ -8,6 +8,7 @@ import { CategoryService } from 'src/category/category.service';
 import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from 'src/common/utils/api-response.util';
 import { ExpenseService } from 'src/expense/expense.service';
+import { UpdateRecurringExpenseDto } from './dto/update-recurring-expense.dto';
 
 @Injectable()
 export class RecurringExpenseService {
@@ -15,8 +16,6 @@ export class RecurringExpenseService {
   calculateNextDate = (currentDate: Date, frequency: string) => {
     const nextDate = new Date(currentDate);
     nextDate.setUTCHours(10, 0, 0, 0);
-
-    console.log('Current Date: ', nextDate);
 
     switch (frequency) {
       case 'daily':
@@ -116,5 +115,27 @@ export class RecurringExpenseService {
 
     const updatedRecord =
       await this.recurringExpenseRepository.save(recurringExpense);
+  }
+
+  async updateRecurringExpenseById(
+    updateRecurringExpenseDto: UpdateRecurringExpenseDto,
+  ) {
+    const { id, title, description, amount, date, category, frequency } =
+      updateRecurringExpenseDto;
+
+    const expenseCategory = await this.categoryService.findByName(category);
+    const updatedNextDate = this.calculateNextDate(date, frequency);
+
+    const recurringExpenseResponse =
+      await this.recurringExpenseRepository.update(id, {
+        title,
+        description,
+        amount,
+        nextDate: updatedNextDate,
+        frequency,
+        category: expenseCategory,
+      });
+
+    return recurringExpenseResponse.affected;
   }
 }

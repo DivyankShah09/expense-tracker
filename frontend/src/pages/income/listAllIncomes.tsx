@@ -2,10 +2,10 @@ import { useState } from "react";
 import SliderInput from "../../components/input/SliderInput";
 import { IncomeTable } from "../../components/table/IncomeTable";
 import { HeaderText } from "../../components/text/HeaderText";
-import { useGetIncome } from "../../hooks/getIncomeHook";
 import DatePickerInput from "../../components/input/DatePickerInput";
 import { toast } from "react-toastify";
 import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
+import { useGetIncomeByUserId } from "../../hooks/income/getIncomeHook";
 
 const ListAllIncomes = () => {
   const userId = localStorage.getItem("userId") || "0";
@@ -13,7 +13,7 @@ const ListAllIncomes = () => {
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
 
-  const { data: incomeData, isLoading: incomeLoading } = useGetIncome(
+  const { data: incomeData, isLoading: incomeLoading } = useGetIncomeByUserId(
     userId,
     true
   );
@@ -81,6 +81,7 @@ const ListAllIncomes = () => {
             <IncomeTable
               incomeAllData={filteredData}
               headerRequired={false}
+              updateBtnRequired={true}
               colSpan={5}
             />
           </div>

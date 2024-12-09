@@ -1,25 +1,30 @@
 import { useNavigate } from "react-router-dom";
 import { Header2Text } from "../../components/text/Header2Text";
-
-interface ExpenseTransaction {
-  title: string;
-  date: string;
-  amount: number;
-  description: string;
-  category: string;
-}
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import { Expense } from "../../interfaces/Expense";
+import { PrimaryButton } from "../button/PrimaryButton";
 
 interface LatestExpenseTransactionsTableProps {
-  expenseAllData: ExpenseTransaction[] | undefined;
+  expenseAllData: Expense[] | undefined;
   headerRequired?: boolean;
   headerLabel?: string;
   colSpan?: number | undefined;
+  updateBtnRequired?: boolean;
 }
 export const ExpenseTable = ({
   expenseAllData,
   headerRequired = false,
   headerLabel = "",
   colSpan = undefined,
+  updateBtnRequired = false,
 }: LatestExpenseTransactionsTableProps) => {
   const navigate = useNavigate();
 
@@ -27,47 +32,92 @@ export const ExpenseTable = ({
     navigate("/list-all-expenses");
   };
 
+  const callEditExpense = (id: number | undefined) => {
+    navigate(`/edit-expense/${id}`);
+  };
+  const callDeleteExpense = () => {};
+
   return (
     <>
-      <table className="table-auto w-full border-separate rounded-lg border-2 overflow-hidden">
-        <thead>
-          {headerRequired && (
-            <tr>
-              <th colSpan={colSpan}>
-                <Header2Text label={headerLabel} className="m-2 text-left" />
-              </th>
-
-              <td className="text-right">
-                <p className="m-2" onClick={handleViewAllClick}>
-                  <u className="font-semibold hover:text-primary cursor-pointer">
-                    View All
-                  </u>
-                </p>
-              </td>
-            </tr>
-          )}
-          <tr className="bg-gray-200">
-            <th className="p-2">Sr. No</th>
-            <th className="p-2">Title</th>
-            <th className="p-2">Date</th>
-            <th className="p-2">Amount</th>
-            <th className="p-2">Category</th>
-            <th className="p-2">Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenseAllData?.map((expense: ExpenseTransaction, index: number) => (
-            <tr key={index} className="bg-white rounded-md shadow-md">
-              <td className="text-center p-2">{index + 1}</td>
-              <td className="p-2">{expense.title}</td>
-              <td className="text-center p-2">{expense.date}</td>
-              <td className="text-center p-2">${expense.amount}</td>
-              <td className="text-center p-2">{expense.category}</td>
-              <td className="p-2">{expense.description}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            {headerRequired && (
+              <TableRow>
+                <TableCell colSpan={colSpan}>
+                  <Header2Text label={headerLabel} className="m-2 text-left" />
+                </TableCell>
+                <TableCell align="right">
+                  <p className="m-2" onClick={handleViewAllClick}>
+                    <u className="font-semibold hover:text-primary cursor-pointer">
+                      View All
+                    </u>
+                  </p>
+                </TableCell>
+              </TableRow>
+            )}
+            <TableRow>
+              <TableCell>
+                <span className="font-bold">Sr. no</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Title</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Date</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Amount</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Category</span>
+              </TableCell>
+              <TableCell>
+                <span className="font-bold">Description</span>
+              </TableCell>
+              {updateBtnRequired && (
+                <>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </>
+              )}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {expenseAllData?.map((expense: Expense, index: number) => (
+              <TableRow>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{expense.title}</TableCell>
+                <TableCell>{expense.date}</TableCell>
+                <TableCell>{expense.amount}</TableCell>
+                <TableCell>{expense.category}</TableCell>
+                <TableCell>{expense.description}</TableCell>
+                {updateBtnRequired && (
+                  <>
+                    <TableCell>
+                      <PrimaryButton
+                        buttonText="Edit"
+                        onClick={async () => {
+                          callEditExpense(expense.id);
+                        }}
+                      />
+                    </TableCell>
+                    <TableCell>
+                      <PrimaryButton
+                        buttonText="Delete"
+                        onClick={async () => {
+                          await callDeleteExpense();
+                        }}
+                        className="bg-red-400 hover:bg-red-600"
+                      />
+                    </TableCell>
+                  </>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };

@@ -2,7 +2,7 @@ import { useState } from "react";
 import SelectInput from "../../components/input/SelectInput";
 import { ExpenseTable } from "../../components/table/ExpenseTable";
 import { HeaderText } from "../../components/text/HeaderText";
-import { useGetExpense } from "../../hooks/getExpenseHook";
+import { useGetExpenseByUserId } from "../../hooks/expense/getExpenseHook";
 import SliderInput from "../../components/input/SliderInput";
 import DatePickerInput from "../../components/input/DatePickerInput";
 import { toast } from "react-toastify";
@@ -25,10 +25,8 @@ const ListAllExpenses = () => {
   const [endDate, setEndDate] = useState<string>("");
 
   // Get Expense API
-  const { data: expenseData, isLoading: expenseLoading } = useGetExpense(
-    userId,
-    true
-  );
+  const { data: expenseData, isLoading: expenseLoading } =
+    useGetExpenseByUserId(userId, true);
 
   const start = startDate ? new Date(startDate).getTime() : null; // Start date as timestamp
   const end = endDate
@@ -153,6 +151,7 @@ const ListAllExpenses = () => {
               expenseAllData={filteredData} // Use filteredData here
               headerRequired={false}
               colSpan={5}
+              updateBtnRequired={true}
             />
           </div>
         </div>

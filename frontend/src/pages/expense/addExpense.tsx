@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HeaderText } from "../../components/text/HeaderText";
 import { TextInput } from "../../components/input/TextInput";
 import { PrimaryButton } from "../../components/button/PrimaryButton";
@@ -7,13 +7,19 @@ import DatePickerInput from "../../components/input/DatePickerInput";
 import SelectInput from "../../components/input/SelectInput";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import { useAddExpense, useAddRecurringExpense } from "./hook/addExpenseHook";
+import {
+  useAddExpense,
+  useAddRecurringExpense,
+} from "../../hooks/expense/addExpenseHook";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 import { CheckBoxInput } from "../../components/input/CkeckBoxInput";
 import { ExpenseFrequencyEnum } from "../../enums/expenseFrequencyEnum";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetExpenseById } from "../../hooks/expense/getExpenseHook";
+import { useUpdateExpenseById } from "../../hooks/expense/updateExpenseHook";
 
 const AddExpense = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -25,6 +31,33 @@ const AddExpense = () => {
   const { mutateAsync: addExpenseMutateAsync } = useAddExpense();
   const { mutateAsync: addRecurringExpenseMutateAsync } =
     useAddRecurringExpense();
+  const { mutateAsync: updateExpenseMutateAsync } = useUpdateExpenseById();
+
+  const { data: expenseData, isLoading: expenseLoading } = useGetExpenseById(
+    id,
+    !!id
+  );
+
+  // Add this useEffect block in your component
+  useEffect(() => {
+    if (id && expenseData) {
+      setTitle(expenseData?.data?.title || "");
+      setDescription(expenseData?.data?.description || "");
+      setAmount(expenseData?.data?.amount || 0);
+      setDate(expenseData?.data?.date || "");
+      setCategory(
+        expenseData?.data?.category
+          .toLowerCase() // Convert the string to lowercase
+          .replace(/\s+/g, "_") || ""
+      );
+    } else {
+      setTitle("");
+      setDescription("");
+      setAmount(0);
+      setDate("");
+      setCategory("");
+    }
+  }, [id, expenseData]);
 
   const validate = () => {
     if (!title) {
@@ -58,25 +91,37 @@ const AddExpense = () => {
   const callAddExpense = async () => {
     if (validate()) {
       try {
-        if (isRecurring) {
-          await addRecurringExpenseMutateAsync({
+        if (id && expenseData) {
+          await updateExpenseMutateAsync({
+            id: expenseData.data.id,
             title: title,
             description: description,
             amount: amount,
             date: date,
             category: category,
-            frequency: frequency,
           });
-          toast.success("Recurring expense added successfully");
+          toast.success("Expense updated successfully");
         } else {
-          await addExpenseMutateAsync({
-            title: title,
-            description: description,
-            amount: amount,
-            date: date,
-            category: category,
-          });
-          toast.success("Expense added successfully");
+          if (isRecurring) {
+            await addRecurringExpenseMutateAsync({
+              title: title,
+              description: description,
+              amount: amount,
+              date: date,
+              category: category,
+              frequency: frequency,
+            });
+            toast.success("Recurring expense added successfully");
+          } else {
+            await addExpenseMutateAsync({
+              title: title,
+              description: description,
+              amount: amount,
+              date: date,
+              category: category,
+            });
+            toast.success("Expense added successfully");
+          }
         }
         navigate("/dashboard");
       } catch (error: unknown) {
@@ -135,11 +180,13 @@ const AddExpense = () => {
             onChange={(value) => setCategory(value)}
           />
 
-          <CheckBoxInput
-            label="Recurring Expense"
-            value={isRecurring}
-            onClick={(value) => setIsRecurring(value)}
-          />
+          {!id && (
+            <CheckBoxInput
+              label="Recurring Expense"
+              value={isRecurring}
+              onClick={(value) => setIsRecurring(value)}
+            />
+          )}
 
           {isRecurring ? (
             <SelectInput
@@ -155,7 +202,7 @@ const AddExpense = () => {
           )}
 
           <PrimaryButton
-            buttonText="Add Expense"
+            buttonText={id ? "Edit Expense" : "Add Expense"}
             onClick={async () => {
               await callAddExpense();
             }}

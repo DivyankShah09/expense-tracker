@@ -6,6 +6,7 @@ import { Between, EntityManager, Repository } from 'typeorm';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { ApiResponse } from 'src/common/utils/api-response.util';
+import { UpdateIncomeDto } from './dto/update-income.dto';
 
 @Injectable()
 export class IncomeService {
@@ -40,6 +41,7 @@ export class IncomeService {
     });
 
     const incomeData: IncomeDto[] = incomeRecords.map((record) => ({
+      id: record.id,
       title: record.title,
       description: record.description,
       amount: record.amount,
@@ -69,5 +71,38 @@ export class IncomeService {
     }));
 
     return incomeData;
+  }
+
+  async updateIncomeById(updateIncomeDto: UpdateIncomeDto) {
+    const { id, title, description, amount, date } = updateIncomeDto;
+    const currentDate = new Date(date);
+    currentDate.setUTCHours(10, 0, 0, 0);
+
+    const response = await this.incomeRepository.update(id, {
+      id,
+      title,
+      description,
+      amount,
+      date: currentDate,
+    });
+
+    return response.affected;
+  }
+
+  async getIncomeById(id: number) {
+    const record = await this.incomeRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    const income: IncomeDto = {
+      id: record.id,
+      title: record.title,
+      description: record.description,
+      amount: record.amount,
+      date: record.date,
+    };
+
+    return income;
   }
 }

@@ -1,22 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HeaderText } from "../../components/text/HeaderText";
 import { TextInput } from "../../components/input/TextInput";
 import { PrimaryButton } from "../../components/button/PrimaryButton";
 import { NumberInput } from "../../components/input/NumberInput";
-import { useAddIncome } from "./hook/addIncomeHook";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePickerInput from "../../components/input/DatePickerInput";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAddIncome } from "../../hooks/income/addIncomeHook";
+import { useGetIncomeById } from "../../hooks/income/getIncomeHook";
+import { useUpdateIncomeById } from "../../hooks/income/updateIncomeHook";
 
 const AddIncome = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
   const [date, setDate] = useState<string>("");
-  const { mutateAsync } = useAddIncome();
+  const { mutateAsync: addIncomeMutateAync } = useAddIncome();
+  const { mutateAsync: updateIncomeMutateAsync } = useUpdateIncomeById();
+
+  const { data: incomeData, isLoading: incomeLoading } = useGetIncomeById(
+    id,
+    !!id
+  );
+
+  console.log("id: ", id);
+
+  // Add this useEffect block in your component
+  useEffect(() => {
+    if (id && incomeData) {
+      setTitle(incomeData?.data?.title || "");
+      setDescription(incomeData?.data?.description || "");
+      setAmount(incomeData?.data?.amount || 0);
+      setDate(incomeData?.data?.date || "");
+    } else {
+      setTitle("");
+      setDescription("");
+      setAmount(0);
+      setDate("");
+    }
+  }, [id, incomeData]);
 
   const validate = () => {
     if (!title) {
@@ -44,13 +70,24 @@ const AddIncome = () => {
   const callAddIncome = async () => {
     if (validate()) {
       try {
-        await mutateAsync({
-          title: title,
-          description: description,
-          amount: amount,
-          date: date,
-        });
-        toast.success("Income added successfully");
+        if (id && incomeData) {
+          await updateIncomeMutateAsync({
+            id: incomeData.data.id,
+            title: title,
+            description: description,
+            amount: amount,
+            date: date,
+          });
+          toast.success("Income updated successfully");
+        } else {
+          await addIncomeMutateAync({
+            title: title,
+            description: description,
+            amount: amount,
+            date: date,
+          });
+          toast.success("Income added successfully");
+        }
         navigate("/dashboard");
       } catch (error: unknown) {
         if (error instanceof AxiosError) {
@@ -99,7 +136,7 @@ const AddIncome = () => {
           />
 
           <PrimaryButton
-            buttonText="Add Income"
+            buttonText={id ? "Edit Income" : "Add Income"}
             onClick={async () => {
               await callAddIncome();
             }}
