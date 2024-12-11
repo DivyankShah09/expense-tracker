@@ -9,6 +9,7 @@ import { User } from 'src/user/entities/user.entity';
 import { ApiResponse } from 'src/common/utils/api-response.util';
 import { ExpenseService } from 'src/expense/expense.service';
 import { UpdateRecurringExpenseDto } from './dto/update-recurring-expense.dto';
+import { title } from 'process';
 
 @Injectable()
 export class RecurringExpenseService {
@@ -137,5 +138,25 @@ export class RecurringExpenseService {
       });
 
     return recurringExpenseResponse.affected;
+  }
+
+  async getRecurringExpenseByUserId(userID: number) {
+    const recurringExpenseRecords = await this.recurringExpenseRepository.find({
+      where: { user: { id: userID } },
+      relations: ['user', 'category'],
+    });
+
+    const recurringExpenseData: RecurringExpenseDto[] =
+      recurringExpenseRecords.map((record) => ({
+        id: record.id,
+        title: record.title,
+        description: record.description,
+        amount: record.amount,
+        date: record.nextDate,
+        category: record.category.name,
+        frequency: record.frequency,
+      }));
+
+    return recurringExpenseData;
   }
 }

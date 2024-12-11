@@ -1,4 +1,12 @@
-import { Controller, Post, Body, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Request,
+  UseGuards,
+  Get,
+  Param,
+} from '@nestjs/common';
 import { RecurringExpenseService } from './recurring-expense.service';
 import { RecurringExpenseDto } from './dto/recurring-expense.dto';
 import { JwtAuthGuard } from 'src/jwt/jwt-auth.guard';
@@ -27,6 +35,19 @@ export class RecurringExpenseController {
       statusCode: 201,
       statusMessage: 'Recurring Expense Added Successfully',
       data: { expenseId: response },
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/user/:userId')
+  async getRecurringExpenseByUserId(@Param('userId') userId: number) {
+    const recurringExpenseData =
+      await this.recurringExpenseService.getRecurringExpenseByUserId(userId);
+
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Recurring expense data retrived.',
+      data: recurringExpenseData,
     });
   }
 }
