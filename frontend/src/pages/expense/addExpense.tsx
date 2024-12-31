@@ -7,10 +7,7 @@ import DatePickerInput from "../../components/input/DatePickerInput";
 import SelectInput from "../../components/input/SelectInput";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
-import {
-  useAddExpense,
-  useAddRecurringExpense,
-} from "../../hooks/expense/addExpenseHook";
+import { useAddExpense } from "../../hooks/expense/addExpenseHook";
 import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 import { CheckBoxInput } from "../../components/input/CkeckBoxInput";
 import { ExpenseFrequencyEnum } from "../../enums/expenseFrequencyEnum";
@@ -18,6 +15,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useGetExpenseById } from "../../hooks/expense/getExpenseHook";
 import { useUpdateExpenseById } from "../../hooks/expense/updateExpenseHook";
 import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
+import { useAddRecurringExpense } from "../../hooks/recurringexpense/addRecurringExpenseHook";
 
 const AddExpense = () => {
   const { id } = useParams();

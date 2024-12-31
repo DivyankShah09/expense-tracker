@@ -5,15 +5,6 @@ import { postRequest } from "../../utils/axios";
 import { ReactQueryNames } from "../../utils/react-query-names";
 import { Expense } from "../../interfaces/Expense";
 
-interface AddRecurringExpenseRequest {
-  title: string;
-  description: string;
-  amount: number;
-  date: string;
-  category: string;
-  frequency: string;
-}
-
 interface AddExpenseResponse {
   id: number;
 }
@@ -26,25 +17,9 @@ const callAddExpenseApi = async (request: Expense) => {
   return response.data;
 };
 
-const callAddRecurringExpenseApi = async (
-  request: AddRecurringExpenseRequest
-) => {
-  const response = await postRequest<
-    ApiSuccessResponse<AddRecurringExpenseRequest>
-  >(ApiEndpoints.ADD_RECURRING_EXPENSE, request);
-  return response.data;
-};
-
 export const useAddExpense = () => {
   return useMutation({
     mutationFn: callAddExpenseApi,
     mutationKey: [ReactQueryNames.ADD_EXPENSE],
-  });
-};
-
-export const useAddRecurringExpense = () => {
-  return useMutation({
-    mutationFn: callAddRecurringExpenseApi,
-    mutationKey: [ReactQueryNames.ADD_RECURRING_EXPENSE],
   });
 };

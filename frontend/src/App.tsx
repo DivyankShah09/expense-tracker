@@ -19,6 +19,7 @@ import ListAllExpenses from "./pages/expense/listAllExpenses";
 import ListAllIncomes from "./pages/income/listAllIncomes";
 import ForgotPassword from "./pages/authentication/forgotpassword/forgotPassword";
 import Home from "./pages/home/Home";
+import ListAllRecurringExpense from "./pages/expense/ListAllRecurringExpense";
 
 function App() {
   return (
@@ -44,6 +45,10 @@ function App() {
                   <Route
                     path="/list-all-expenses"
                     element={<ListAllExpenses />}
+                  />
+                  <Route
+                    path="/list-all-recurring-expenses"
+                    element={<ListAllRecurringExpense />}
                   />
                   <Route
                     path="/list-all-incomes"

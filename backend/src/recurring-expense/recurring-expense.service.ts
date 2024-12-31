@@ -159,4 +159,9 @@ export class RecurringExpenseService {
 
     return recurringExpenseData;
   }
+
+  async deleteRecurringExpenseById(id: number) {
+    const record = await this.recurringExpenseRepository.delete(id);
+    return record.affected;
+  }
 }

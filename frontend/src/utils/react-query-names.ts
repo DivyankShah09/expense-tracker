@@ -7,6 +7,7 @@ export const ReactQueryNames = {
   ADD_EXPENSE: "add_expense",
   UPDATE_EXPENSE: "update_expense",
   ADD_RECURRING_EXPENSE: "add_recurring_expense",
+  UPDATE_RECURRING_EXPENSE: "update_recurring_expense",
   GET_INCOME: "get_income",
   GET_INCOME_BY_USERID: "get_income_by_userid",
   GET_INCOME_BY_YEAR: "get_income_by_year",
@@ -14,4 +15,5 @@ export const ReactQueryNames = {
   GET_EXPENSE_BY_USERID: "get_expense_by_userid",
   GET_EXPENSE_BY_YEAR: "get_expense_by_year",
   GET_EXPENSE_BY_MONTH_CATEGORY: "get_expense_by_month_category",
+  GET_RECURRING_EXPENSE: "get_recurring_expense",
 };

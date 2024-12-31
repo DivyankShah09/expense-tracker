@@ -9,7 +9,7 @@ interface UpdateExpenseResponse {
   noOfUpdatedExpense: number;
 }
 
-const callUpdateExpenseByIdApi = async (request: Expense) => {
+const callUpdateExpenseById = async (request: Expense) => {
   const response = await putRequest<ApiSuccessResponse<UpdateExpenseResponse>>(
     ApiEndpoints.UPDATE_EXPENSE,
     request
@@ -19,7 +19,7 @@ const callUpdateExpenseByIdApi = async (request: Expense) => {
 
 export const useUpdateExpenseById = () => {
   return useMutation({
-    mutationFn: callUpdateExpenseByIdApi,
+    mutationFn: callUpdateExpenseById,
     mutationKey: [ReactQueryNames.UPDATE_EXPENSE],
   });
 };

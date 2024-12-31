@@ -13,7 +13,7 @@ import {
 import { Income } from "../../interfaces/Income";
 import { PrimaryButton } from "../button/PrimaryButton";
 
-interface LatestIncomeTransactionsTableProps {
+interface IncomeTableProps {
   incomeAllData: Income[] | undefined;
   headerRequired?: boolean;
   headerLabel?: string;
@@ -29,7 +29,7 @@ export const IncomeTable = ({
   colSpan = undefined,
   updateBtnRequired = false,
   onClick,
-}: LatestIncomeTransactionsTableProps) => {
+}: IncomeTableProps) => {
   const navigate = useNavigate();
 
   const handleViewAllClick = () => {

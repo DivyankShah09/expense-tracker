@@ -12,7 +12,7 @@ import {
 import { Expense } from "../../interfaces/Expense";
 import { PrimaryButton } from "../button/PrimaryButton";
 
-interface LatestExpenseTransactionsTableProps {
+interface ExpenseTableProps {
   expenseAllData: Expense[] | undefined;
   headerRequired?: boolean;
   headerLabel?: string;
@@ -27,7 +27,7 @@ export const ExpenseTable = ({
   colSpan = undefined,
   updateBtnRequired = false,
   onClick,
-}: LatestExpenseTransactionsTableProps) => {
+}: ExpenseTableProps) => {
   const navigate = useNavigate();
 
   const handleViewAllClick = () => {

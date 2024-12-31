@@ -89,7 +89,7 @@ export class ExpenseController {
       await this.expenseService.updateExpenseById(updateExpenseDto);
     return ApiResponse({
       statusCode: 201,
-      statusMessage: 'Income Updates Successfully',
+      statusMessage: 'Expense Updates Successfully',
       data: { noOfIncomesUpdated: response },
     });
   }
