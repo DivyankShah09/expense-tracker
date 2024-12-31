@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Header2Text } from "../../components/text/Header2Text";
 import { useNavigate } from "react-router-dom";
 import {
@@ -8,6 +8,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
 } from "@mui/material";
 import { Income } from "../../interfaces/Income";
@@ -23,7 +24,7 @@ interface IncomeTableProps {
 }
 
 export const IncomeTable = ({
-  incomeAllData,
+  incomeAllData = [],
   headerRequired = false,
   headerLabel = "",
   colSpan = undefined,
@@ -31,6 +32,8 @@ export const IncomeTable = ({
   onClick,
 }: IncomeTableProps) => {
   const navigate = useNavigate();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleViewAllClick = () => {
     navigate("/list-all-incomes");
@@ -39,6 +42,22 @@ export const IncomeTable = ({
   const callEditIncome = (id: number | undefined) => {
     navigate(`/edit-income/${id}`);
   };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = incomeAllData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <>
@@ -84,7 +103,7 @@ export const IncomeTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {incomeAllData?.map((income: Income, index: number) => (
+            {paginatedData?.map((income: Income, index: number) => (
               <TableRow>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{income.title}</TableCell>
@@ -114,6 +133,15 @@ export const IncomeTable = ({
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={incomeAllData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
     </>
   );

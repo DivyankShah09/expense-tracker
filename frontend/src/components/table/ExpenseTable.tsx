@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header2Text } from "../../components/text/Header2Text";
 import {
@@ -8,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TablePagination,
 } from "@mui/material";
 import { Expense } from "../../interfaces/Expense";
 import { PrimaryButton } from "../button/PrimaryButton";
@@ -21,7 +23,7 @@ interface ExpenseTableProps {
   onClick?: (id: number | undefined) => void;
 }
 export const ExpenseTable = ({
-  expenseAllData,
+  expenseAllData = [],
   headerRequired = false,
   headerLabel = "",
   colSpan = undefined,
@@ -29,6 +31,8 @@ export const ExpenseTable = ({
   onClick,
 }: ExpenseTableProps) => {
   const navigate = useNavigate();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleViewAllClick = () => {
     navigate("/list-all-expenses");
@@ -37,6 +41,22 @@ export const ExpenseTable = ({
   const callEditExpense = (id: number | undefined) => {
     navigate(`/edit-expense/${id}`);
   };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = expenseAllData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <>
@@ -85,9 +105,9 @@ export const ExpenseTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {expenseAllData?.map((expense: Expense, index: number) => (
-              <TableRow>
-                <TableCell>{index + 1}</TableCell>
+            {paginatedData.map((expense: Expense, index: number) => (
+              <TableRow key={expense.id}>
+                <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                 <TableCell>{expense.title}</TableCell>
                 <TableCell>{expense.date}</TableCell>
                 <TableCell>{expense.amount}</TableCell>
@@ -116,6 +136,15 @@ export const ExpenseTable = ({
             ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={expenseAllData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
     </>
   );

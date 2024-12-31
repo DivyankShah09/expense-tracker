@@ -5,11 +5,13 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
 } from "@mui/material";
 import { PrimaryButton } from "../button/PrimaryButton";
 import { RecurringExpense } from "../../interfaces/RecurringExpense";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface RecurringExpenseTableProps {
   recurringExpenseAllData: RecurringExpense[] | undefined;
@@ -17,13 +19,31 @@ interface RecurringExpenseTableProps {
 }
 
 const RecurringExpenseTable = ({
-  recurringExpenseAllData,
+  recurringExpenseAllData = [],
   onClick,
 }: RecurringExpenseTableProps) => {
   const navigate = useNavigate();
   const callEditRecurringExpense = (id: number | undefined) => {
     navigate(`/edit-recurring-expense/${id}`);
   };
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedData = recurringExpenseAllData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <>
@@ -57,7 +77,7 @@ const RecurringExpenseTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {recurringExpenseAllData?.map(
+            {paginatedData?.map(
               (recurringExpense: RecurringExpense, index: number) => (
                 <TableRow>
                   <TableCell>{index + 1}</TableCell>
@@ -88,6 +108,15 @@ const RecurringExpenseTable = ({
             )}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={recurringExpenseAllData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
     </>
   );
