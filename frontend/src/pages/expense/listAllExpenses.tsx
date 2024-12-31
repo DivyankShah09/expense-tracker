@@ -10,8 +10,11 @@ import { ExpenseCategoryEnum } from "../../enums/expenseCategoryEnum";
 import { HourGlassLoader } from "../../components/loader/HourGlassLoader";
 import { useDeleteExpense } from "../../hooks/expense/deleteExpenseHook";
 import { Expense } from "../../interfaces/Expense";
+import { PrimaryButton } from "../../components/button/PrimaryButton";
+import { useNavigate } from "react-router-dom";
 
 const ListAllExpenses = () => {
+  const navigate = useNavigate();
   const userId = localStorage.getItem("userId") || "0";
   const [category, setCategory] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
@@ -132,7 +135,7 @@ const ListAllExpenses = () => {
               options={ExpenseCategoryEnum}
               divClassName="w-fit"
             />
-            <div className="">
+            <div className="flex flex-row gap-6">
               <div className="flex flex-row gap-2">
                 <SliderInput
                   label="Amount"
@@ -161,6 +164,14 @@ const ListAllExpenses = () => {
                     onChange={(value) => setEndDate(value)}
                   />
                 </div>
+              </div>
+              <div className="">
+                <PrimaryButton
+                  buttonText="View Recurring Expenses"
+                  onClick={() => {
+                    navigate("/list-all-recurring-expenses");
+                  }}
+                />
               </div>
             </div>
           </div>
