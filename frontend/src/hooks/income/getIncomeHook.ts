@@ -13,7 +13,7 @@ export const formatIncomeData = (data: any[]) => {
   }));
 };
 
-const callGetIncomeById = async (id: string | undefined) => {
+const callGetIncomeByIdApi = async (id: string | undefined) => {
   try {
     const response = await getRequest<ApiSuccessResponse<Income>>(
       ApiEndpoints.GET_INCOME + "/" + id
@@ -55,7 +55,7 @@ const callGetIncomeByYearAndByUserIdApi = async (
 
 export const useGetIncomeById = (id: string | undefined, enabled: boolean) => {
   return useQuery({
-    queryFn: () => callGetIncomeById(id),
+    queryFn: () => callGetIncomeByIdApi(id),
     queryKey: [ReactQueryNames.GET_INCOME],
     enabled: enabled,
   });

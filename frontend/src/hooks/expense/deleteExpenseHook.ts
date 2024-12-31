@@ -8,7 +8,7 @@ interface DeleteExpenseResponse {
   noOfDeletedExpense: number;
 }
 
-const callDeleteExpenseById = async (id: string | undefined) => {
+const callDeleteExpenseByIdApi = async (id: string | undefined) => {
   try {
     const response = await deleteRequest<
       ApiSuccessResponse<DeleteExpenseResponse>
@@ -21,7 +21,7 @@ const callDeleteExpenseById = async (id: string | undefined) => {
 
 export const useDeleteExpense = () => {
   return useMutation({
-    mutationFn: callDeleteExpenseById,
-    mutationKey: [ReactQueryNames.GET_EXPENSE],
+    mutationFn: callDeleteExpenseByIdApi,
+    mutationKey: [ReactQueryNames.DELETE_EXPENSE],
   });
 };

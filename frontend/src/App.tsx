@@ -19,7 +19,8 @@ import ListAllExpenses from "./pages/expense/listAllExpenses";
 import ListAllIncomes from "./pages/income/listAllIncomes";
 import ForgotPassword from "./pages/authentication/forgotpassword/forgotPassword";
 import Home from "./pages/home/Home";
-import ListAllRecurringExpense from "./pages/expense/ListAllRecurringExpense";
+import ListAllRecurringExpense from "./pages/recurringexpense/listAllRecurringExpense";
+import UpdateRecurringExpense from "./pages/recurringexpense/updateRecurringExpense";
 
 function App() {
   return (
@@ -41,6 +42,10 @@ function App() {
                   <Route path="/edit-income/:id" element={<AddIncome />} />
                   <Route path="/add-expense" element={<AddExpense />} />
                   <Route path="/edit-expense/:id" element={<AddExpense />} />
+                  <Route
+                    path="/edit-recurring-expense/:id"
+                    element={<UpdateRecurringExpense />}
+                  />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route
                     path="/list-all-expenses"

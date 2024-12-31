@@ -9,16 +9,16 @@ interface UpdateRecurringExpenseResponse {
   noOfUpdatedExpense: number;
 }
 
-const callUpdateRecurringExpenseById = async (request: RecurringExpense) => {
+const callUpdateRecurringExpenseByIdApi = async (request: RecurringExpense) => {
   const response = await putRequest<
     ApiSuccessResponse<UpdateRecurringExpenseResponse>
   >(ApiEndpoints.UPDATE_RECURRING_EXPENSE, request);
   return response.data;
 };
 
-export const useUpdateExpenseById = () => {
+export const useUpdateRecurringExpenseById = () => {
   return useMutation({
-    mutationFn: callUpdateRecurringExpenseById,
+    mutationFn: callUpdateRecurringExpenseByIdApi,
     mutationKey: [ReactQueryNames.UPDATE_RECURRING_EXPENSE],
   });
 };

@@ -22,6 +22,6 @@ const callDeleteIncomeByIdApi = async (id: string | undefined) => {
 export const useDeleteIncome = () => {
   return useMutation({
     mutationFn: callDeleteIncomeByIdApi,
-    mutationKey: [ReactQueryNames.GET_INCOME],
+    mutationKey: [ReactQueryNames.DELETE_INCOME],
   });
 };

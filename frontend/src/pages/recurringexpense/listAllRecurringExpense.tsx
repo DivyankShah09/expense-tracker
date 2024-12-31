@@ -78,7 +78,7 @@ const ListAllRecurringExpense = () => {
       name: category,
       value: 0,
     };
-    expenseData?.data.forEach((expense: RecurringExpense) => {
+    expenseData?.data?.forEach((expense: RecurringExpense) => {
       if (expense.category === category) {
         pieChartEntry.value += expense.amount;
       }

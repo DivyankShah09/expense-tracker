@@ -3,7 +3,7 @@ export interface RecurringExpense {
   title: string;
   description: string;
   amount: number;
-  nextDate: string;
+  date: string;
   category: string;
   frequency: string;
 }

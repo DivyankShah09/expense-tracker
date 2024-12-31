@@ -118,6 +118,25 @@ export class RecurringExpenseService {
       await this.recurringExpenseRepository.save(recurringExpense);
   }
 
+  async getRecurringExpenseById(id: number) {
+    const record = await this.recurringExpenseRepository.findOne({
+      where: { id },
+      relations: ['user', 'category'],
+    });
+
+    const recurringExpense: RecurringExpenseDto = {
+      id: record.id,
+      title: record.title,
+      description: record.description,
+      amount: record.amount,
+      date: record.nextDate,
+      category: record.category.name,
+      frequency: record.frequency,
+    };
+
+    return recurringExpense;
+  }
+
   async updateRecurringExpenseById(
     updateRecurringExpenseDto: UpdateRecurringExpenseDto,
   ) {

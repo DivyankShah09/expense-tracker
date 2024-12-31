@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { PrimaryButton } from "../button/PrimaryButton";
 import { RecurringExpense } from "../../interfaces/RecurringExpense";
+import { useNavigate } from "react-router-dom";
 
 interface RecurringExpenseTableProps {
   recurringExpenseAllData: RecurringExpense[] | undefined;
@@ -19,7 +20,10 @@ const RecurringExpenseTable = ({
   recurringExpenseAllData,
   onClick,
 }: RecurringExpenseTableProps) => {
-  const callEditRecurringExpense = (id: number | undefined) => {};
+  const navigate = useNavigate();
+  const callEditRecurringExpense = (id: number | undefined) => {
+    navigate(`/edit-recurring-expense/${id}`);
+  };
 
   return (
     <>
@@ -60,7 +64,7 @@ const RecurringExpenseTable = ({
                   <TableCell>{recurringExpense.title}</TableCell>
                   <TableCell>{recurringExpense.description}</TableCell>
                   <TableCell>{recurringExpense.amount}</TableCell>
-                  <TableCell>{recurringExpense.nextDate}</TableCell>
+                  <TableCell>{recurringExpense.date}</TableCell>
                   <TableCell>{recurringExpense.category}</TableCell>
                   <TableCell>{recurringExpense.frequency}</TableCell>
 

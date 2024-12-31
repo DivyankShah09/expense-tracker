@@ -16,7 +16,7 @@ export const formatExpenseData = (data: any[]) => {
   }));
 };
 
-const callGetExpenseById = async (id: string | undefined) => {
+const callGetExpenseByIdApi = async (id: string | undefined) => {
   try {
     const response = await getRequest<ApiSuccessResponse<Expense>>(
       ApiEndpoints.GET_EXPENSE + "/" + id
@@ -119,7 +119,7 @@ const callGetExpenseByMonthCategoryApi = async (
 
 export const useGetExpenseById = (id: string | undefined, enabled: boolean) => {
   return useQuery({
-    queryFn: () => callGetExpenseById(id),
+    queryFn: () => callGetExpenseByIdApi(id),
     queryKey: [ReactQueryNames.GET_EXPENSE],
     enabled: enabled,
   });

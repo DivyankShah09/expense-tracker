@@ -16,18 +16,20 @@ export const formatExpenseData = (data: any[]) => {
   }));
 };
 
-const callGetRecurringExpenseById = async (id: string | undefined) => {
+const callGetRecurringExpenseByIdApi = async (id: string | undefined) => {
   try {
     const response = await getRequest<ApiSuccessResponse<RecurringExpense>>(
       ApiEndpoints.GET_RECURRING_EXPENSE + "/" + id
     );
     const formattedData = {
       ...response.data.data,
-      date: dateFormat(new Date(response.data.data.nextDate)), // Format the date
+      date: dateFormat(new Date(response.data.data.date)), // Format the date
       category: response.data.data.category
         .replace(/_/g, " ") // Replace underscores with spaces
         .replace(/\b\w/g, (char: any) => char.toUpperCase()), // Capitalize each word
     };
+
+    console.log("recurring expense hook: ", formattedData);
 
     return { ...response, data: formattedData };
   } catch (error) {
@@ -35,13 +37,15 @@ const callGetRecurringExpenseById = async (id: string | undefined) => {
   }
 };
 
-const callGetRecurringExpenseByUserId = async (userId: string) => {
+const callGetRecurringExpenseByUserIdApi = async (userId: string) => {
   try {
     const response = await getRequest<ApiSuccessResponse<RecurringExpense[]>>(
       ApiEndpoints.GET_RECURRING_EXPENSE_USER + "/" + userId
     );
 
     const formattedData = formatExpenseData(response.data.data);
+
+    console.log(response.data.data);
 
     return { ...response, data: formattedData };
   } catch (error) {
@@ -54,7 +58,18 @@ export const useGetRecurringExpenseByUserId = (
   enabled: boolean
 ) => {
   return useQuery({
-    queryFn: () => callGetRecurringExpenseByUserId(userId),
+    queryFn: () => callGetRecurringExpenseByUserIdApi(userId),
+    queryKey: [ReactQueryNames.GET_RECURRING_EXPENSE_BY_USER_ID],
+    enabled: enabled,
+  });
+};
+
+export const useGetRecurringExpenseById = (
+  id: string | undefined,
+  enabled: boolean
+) => {
+  return useQuery({
+    queryFn: () => callGetRecurringExpenseByIdApi(id),
     queryKey: [ReactQueryNames.GET_RECURRING_EXPENSE],
     enabled: enabled,
   });

@@ -56,6 +56,18 @@ export class RecurringExpenseController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  async getRecurringExpenseById(@Param('id') id: number) {
+    const recurringExpense =
+      await this.recurringExpenseService.getRecurringExpenseById(id);
+    return ApiResponse({
+      statusCode: 200,
+      statusMessage: 'Recurring Expense Retrieved Successfully',
+      data: recurringExpense,
+    });
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Put('/update-recurring-expense')
   async updateRecurringExpenseById(
     @Body() updateRecurringEcpenseDto: UpdateRecurringExpenseDto,

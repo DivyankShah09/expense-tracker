@@ -11,9 +11,13 @@ export const ReactQueryNames = {
   GET_INCOME: "get_income",
   GET_INCOME_BY_USERID: "get_income_by_userid",
   GET_INCOME_BY_YEAR: "get_income_by_year",
+  DELETE_INCOME: "delete_income",
   GET_EXPENSE: "get_expense",
   GET_EXPENSE_BY_USERID: "get_expense_by_userid",
   GET_EXPENSE_BY_YEAR: "get_expense_by_year",
   GET_EXPENSE_BY_MONTH_CATEGORY: "get_expense_by_month_category",
+  DELETE_EXPENSE: "delete_expense",
   GET_RECURRING_EXPENSE: "get_recurring_expense",
+  GET_RECURRING_EXPENSE_BY_USER_ID: "get_recurring_expense_userid",
+  DELETE_RECURRING_EXPENSE: "delete_recurring_expense",
 };

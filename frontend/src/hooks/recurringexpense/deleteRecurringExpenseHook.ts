@@ -8,7 +8,7 @@ interface DeleteRecurringExpenseResponse {
   noOfDeletedExpense: number;
 }
 
-const callDeleteRecurringExpenseById = async (id: string | undefined) => {
+const callDeleteRecurringExpenseByIdApi = async (id: string | undefined) => {
   try {
     const response = await deleteRequest<
       ApiSuccessResponse<DeleteRecurringExpenseResponse>
@@ -21,7 +21,7 @@ const callDeleteRecurringExpenseById = async (id: string | undefined) => {
 
 export const useDeleteRecurringExpense = () => {
   return useMutation({
-    mutationFn: callDeleteRecurringExpenseById,
-    mutationKey: [ReactQueryNames.GET_RECURRING_EXPENSE],
+    mutationFn: callDeleteRecurringExpenseByIdApi,
+    mutationKey: [ReactQueryNames.DELETE_RECURRING_EXPENSE],
   });
 };
