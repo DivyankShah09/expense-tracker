@@ -14,15 +14,13 @@ Expense Tracker is a web-based application designed to help users manage and mon
 
 ## Built With
 
-- **Frontend:**
-  - [React](https://react.dev/) - JavaScript library for building user interfaces.
-  - [TypeScript](https://www.typescriptlang.org/) - Superset of JavaScript that adds static typing.
-  - [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework for styling.
-
-- **Backend:**
-  - [Node.js](https://nodejs.org/) - JavaScript runtime environment.
-  - [Express](https://expressjs.com/) - Web application framework for Node.js.
-  - [MongoDB](https://www.mongodb.com/) - NoSQL database for storing user data and expenses.
+- [React](https://react.dev/) - JavaScript library for building user interfaces.
+- [TypeScript](https://www.typescriptlang.org/) - Superset of JavaScript that adds static typing.
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework for styling.
+- [Node.js](https://nodejs.org/) - JavaScript runtime environment.
+- [NestJS](https://nestjs.com/) - Node. js framework for building server-side applications.
+- [Docker](https://docs.docker.com/) - Platform designed to help developers build, share, and run container applications
+- [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine?hl=en) - Kubernetes cluster management
 
 ## Deployment
 
