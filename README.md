@@ -31,7 +31,7 @@ Expense Tracker is a web-based application designed to help users manage and mon
 
 - **Backend:**
   - [Node.js](https://nodejs.org/) - Required for running the Express server.
-  - [MongoDB](https://www.mongodb.com/) - Access to a MongoDB instance, either locally or through a cloud provider like MongoDB Atlas.
+  - [PostgreSQL](https://www.postgresql.org/) - Access to a PostgreSQL instance, either locally or through a cloud provider.
 
 ### Installation
 
