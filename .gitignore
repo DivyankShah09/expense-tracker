@@ -20,6 +20,8 @@ frontend.DS_Store
 .env.development.local
 .env.test.local
 .env.production.local
+/frontend/src/.DS_Store
+.DS_Store
 
 npm-debu g.log*
 yarn-debug.log*
