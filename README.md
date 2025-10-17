@@ -71,7 +71,7 @@ Expense Tracker is a web-based application designed to help users manage and mon
    npm install
    ```
 
-3. Ensure MongoDB is running and accessible. Update the database connection string in the backend configuration if necessary.
+3. Ensure PstgreSQL is running and accessible. Update the database connection string in the backend configuration if necessary.
 
 4. Start the Express server:
 
